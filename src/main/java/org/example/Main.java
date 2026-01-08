@@ -77,6 +77,11 @@ public class Main extends Application {
         TextField phoneField = new TextField();
         phoneField.setPromptText("Phone Number");
 
+        ComboBox<String> genderCombo = new ComboBox<>();
+        genderCombo.getItems().addAll("M", "F", "O");
+        genderCombo.setPromptText("Gender");
+        genderCombo.setValue("M");
+
         DatePicker dobPicker = new DatePicker();
         dobPicker.setPromptText("Date of Birth");
 
@@ -90,11 +95,12 @@ public class Main extends Application {
             }
             try {
                 LocalDate dob = dobPicker.getValue();
+                String gender = genderCombo.getValue() != null ? genderCombo.getValue() : "M";
                 Patient patient = new Patient(
                     firstNameField.getText(),
                     lastNameField.getText(),
                     dob,
-                    "Not Specified",
+                    gender,
                     phoneField.getText(),
                     "",
                     ""
@@ -105,12 +111,14 @@ public class Main extends Application {
                     lastNameField.clear();
                     emailField.clear();
                     phoneField.clear();
+                    genderCombo.setValue("M");
                     dobPicker.setValue(null);
                 } else {
-                    showAlert("Error", "Failed to add patient");
+                    showAlert("Error", "Failed to add patient. Check console for details.");
                 }
             } catch (Exception ex) {
-                showAlert("Error", "Invalid input: " + ex.getMessage());
+                ex.printStackTrace();
+                showAlert("Error", "Failed to add patient: " + ex.getMessage());
             }
         });
 
@@ -130,7 +138,7 @@ public class Main extends Application {
         });
 
         HBox inputBox = new HBox(10);
-        inputBox.getChildren().addAll(firstNameField, lastNameField, emailField, phoneField, dobPicker, addBtn);
+        inputBox.getChildren().addAll(firstNameField, lastNameField, phoneField, genderCombo, dobPicker, addBtn);
 
         root.getChildren().addAll(
             titleLabel,
