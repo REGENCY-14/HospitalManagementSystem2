@@ -9,13 +9,17 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -122,18 +126,47 @@ public class Main extends Application {
             }
         });
 
-        // Patient List
-        ListView<String> patientListView = new ListView<>();
+        // Patient Table
+        TableView<Patient> patientTable = new TableView<>();
+        patientTable.setPrefHeight(400);
+        
+        TableColumn<Patient, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("patientId"));
+        idCol.setPrefWidth(50);
+        
+        TableColumn<Patient, String> firstNameCol = new TableColumn<>("First Name");
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        firstNameCol.setPrefWidth(120);
+        
+        TableColumn<Patient, String> lastNameCol = new TableColumn<>("Last Name");
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        lastNameCol.setPrefWidth(120);
+        
+        TableColumn<Patient, String> genderCol = new TableColumn<>("Gender");
+        genderCol.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        genderCol.setPrefWidth(70);
+        
+        TableColumn<Patient, String> phoneCol = new TableColumn<>("Phone");
+        phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        phoneCol.setPrefWidth(120);
+        
+        TableColumn<Patient, LocalDate> dobCol = new TableColumn<>("Date of Birth");
+        dobCol.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
+        dobCol.setPrefWidth(120);
+        
+        TableColumn<Patient, String> bloodTypeCol = new TableColumn<>("Blood Type");
+        bloodTypeCol.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
+        bloodTypeCol.setPrefWidth(90);
+        
+        patientTable.getColumns().addAll(idCol, firstNameCol, lastNameCol, genderCol, phoneCol, dobCol, bloodTypeCol);
+        
         Button refreshBtn = new Button("Refresh List");
         refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
         refreshBtn.setOnAction(e -> {
-            patientListView.getItems().clear();
+            patientTable.getItems().clear();
             List<Patient> patients = PatientService.getAllPatients();
             if (patients != null) {
-                for (Patient p : patients) {
-                    patientListView.getItems().add("ID: " + p.getPatientId() + " - " + 
-                        p.getFirstName() + " " + p.getLastName() + " (" + p.getPhone() + ")");
-                }
+                patientTable.getItems().addAll(patients);
             }
         });
 
@@ -148,7 +181,7 @@ public class Main extends Application {
             new Separator(),
             new Label("Patient List:"),
             refreshBtn,
-            patientListView
+            patientTable
         );
 
         tab.setContent(root);
@@ -214,18 +247,43 @@ public class Main extends Application {
             }
         });
 
-        // Doctor List
-        ListView<String> doctorListView = new ListView<>();
+        // Doctor Table
+        TableView<Doctor> doctorTable = new TableView<>();
+        doctorTable.setPrefHeight(400);
+        
+        TableColumn<Doctor, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("doctorId"));
+        idCol.setPrefWidth(50);
+        
+        TableColumn<Doctor, String> firstNameCol = new TableColumn<>("First Name");
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        firstNameCol.setPrefWidth(120);
+        
+        TableColumn<Doctor, String> lastNameCol = new TableColumn<>("Last Name");
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        lastNameCol.setPrefWidth(120);
+        
+        TableColumn<Doctor, String> specializationCol = new TableColumn<>("Specialization");
+        specializationCol.setCellValueFactory(new PropertyValueFactory<>("specialization"));
+        specializationCol.setPrefWidth(150);
+        
+        TableColumn<Doctor, String> phoneCol = new TableColumn<>("Phone");
+        phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        phoneCol.setPrefWidth(120);
+        
+        TableColumn<Doctor, Integer> deptCol = new TableColumn<>("Dept ID");
+        deptCol.setCellValueFactory(new PropertyValueFactory<>("departmentId"));
+        deptCol.setPrefWidth(80);
+        
+        doctorTable.getColumns().addAll(idCol, firstNameCol, lastNameCol, specializationCol, phoneCol, deptCol);
+        
         Button refreshBtn = new Button("Refresh List");
         refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
         refreshBtn.setOnAction(e -> {
-            doctorListView.getItems().clear();
+            doctorTable.getItems().clear();
             List<Doctor> doctors = DoctorService.getAllDoctors();
             if (doctors != null) {
-                for (Doctor d : doctors) {
-                    doctorListView.getItems().add("ID: " + d.getDoctorId() + " - " + 
-                        d.getFirstName() + " " + d.getLastName() + " (" + d.getSpecialization() + ")");
-                }
+                doctorTable.getItems().addAll(doctors);
             }
         });
 
@@ -240,7 +298,7 @@ public class Main extends Application {
             new Separator(),
             new Label("Doctor List:"),
             refreshBtn,
-            doctorListView
+            doctorTable
         );
 
         tab.setContent(root);
@@ -312,20 +370,47 @@ public class Main extends Application {
             }
         });
 
-        // Appointment List
-        ListView<String> appointmentListView = new ListView<>();
+        // Appointment Table
+        TableView<Appointment> appointmentTable = new TableView<>();
+        appointmentTable.setPrefHeight(400);
+        
+        TableColumn<Appointment, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        idCol.setPrefWidth(50);
+        
+        TableColumn<Appointment, Integer> patientIdCol = new TableColumn<>("Patient ID");
+        patientIdCol.setCellValueFactory(new PropertyValueFactory<>("patientId"));
+        patientIdCol.setPrefWidth(90);
+        
+        TableColumn<Appointment, Integer> doctorIdCol = new TableColumn<>("Doctor ID");
+        doctorIdCol.setCellValueFactory(new PropertyValueFactory<>("doctorId"));
+        doctorIdCol.setPrefWidth(90);
+        
+        TableColumn<Appointment, LocalDate> dateCol = new TableColumn<>("Date");
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("appointmentDate"));
+        dateCol.setPrefWidth(120);
+        
+        TableColumn<Appointment, LocalTime> timeCol = new TableColumn<>("Time");
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("appointmentTime"));
+        timeCol.setPrefWidth(100);
+        
+        TableColumn<Appointment, String> statusCol = new TableColumn<>("Status");
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusCol.setPrefWidth(100);
+        
+        TableColumn<Appointment, String> notesCol = new TableColumn<>("Notes");
+        notesCol.setCellValueFactory(new PropertyValueFactory<>("notes"));
+        notesCol.setPrefWidth(200);
+        
+        appointmentTable.getColumns().addAll(idCol, patientIdCol, doctorIdCol, dateCol, timeCol, statusCol, notesCol);
+        
         Button refreshBtn = new Button("Refresh List");
         refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
         refreshBtn.setOnAction(e -> {
-            appointmentListView.getItems().clear();
+            appointmentTable.getItems().clear();
             List<Appointment> appointments = AppointmentService.getAllAppointments();
             if (appointments != null) {
-                for (Appointment a : appointments) {
-                    appointmentListView.getItems().add("ID: " + a.getAppointmentId() + " - " + 
-                        "Patient: " + a.getPatientId() + ", Doctor: " + a.getDoctorId() + 
-                        ", Date: " + a.getAppointmentDate() + " " + a.getAppointmentTime() + 
-                        " (" + a.getStatus() + ")");
-                }
+                appointmentTable.getItems().addAll(appointments);
             }
         });
 
@@ -340,7 +425,7 @@ public class Main extends Application {
             new Separator(),
             new Label("Appointment List:"),
             refreshBtn,
-            appointmentListView
+            appointmentTable
         );
 
         tab.setContent(root);

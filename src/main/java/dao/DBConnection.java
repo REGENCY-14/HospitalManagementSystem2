@@ -1,6 +1,10 @@
 package dao;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 /**
@@ -14,7 +18,7 @@ public class DBConnection {
     private static final String DB_NAME = "hospital_db";
     private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = ""; // UPDATE THIS with your MySQL password
+    private static final String DB_PASSWORD = "Hustler,14"; // UPDATE THIS with your MySQL password
     
     // Connection settings
     private static final int MAX_RETRY_ATTEMPTS = 3;
