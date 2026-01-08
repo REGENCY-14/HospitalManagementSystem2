@@ -1,21 +1,30 @@
 package org.example;
 
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import model.Patient;
-import model.Doctor;
-import model.Appointment;
-import service.PatientService;
-import service.DoctorService;
-import service.AppointmentService;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Separator;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import model.Appointment;
+import model.Doctor;
+import model.Patient;
+import service.AppointmentService;
+import service.DoctorService;
+import service.PatientService;
 
 public class Main extends Application {
 
@@ -79,23 +88,29 @@ public class Main extends Application {
                 showAlert("Error", "Please fill in all required fields");
                 return;
             }
-            Patient patient = new Patient();
-            patient.setFirstName(firstNameField.getText());
-            patient.setLastName(lastNameField.getText());
-            patient.setEmail(emailField.getText());
-            patient.setPhoneNumber(phoneField.getText());
-            if (dobPicker.getValue() != null) {
-                patient.setDateOfBirth(dobPicker.getValue().toString());
-            }
-            if (PatientService.createPatient(patient)) {
-                showAlert("Success", "Patient added successfully!");
-                firstNameField.clear();
-                lastNameField.clear();
-                emailField.clear();
-                phoneField.clear();
-                dobPicker.setValue(null);
-            } else {
-                showAlert("Error", "Failed to add patient");
+            try {
+                LocalDate dob = dobPicker.getValue();
+                Patient patient = new Patient(
+                    firstNameField.getText(),
+                    lastNameField.getText(),
+                    dob,
+                    "Not Specified",
+                    phoneField.getText(),
+                    "",
+                    ""
+                );
+                if (PatientService.createPatient(patient)) {
+                    showAlert("Success", "Patient added successfully!");
+                    firstNameField.clear();
+                    lastNameField.clear();
+                    emailField.clear();
+                    phoneField.clear();
+                    dobPicker.setValue(null);
+                } else {
+                    showAlert("Error", "Failed to add patient");
+                }
+            } catch (Exception ex) {
+                showAlert("Error", "Invalid input: " + ex.getMessage());
             }
         });
 
@@ -109,7 +124,7 @@ public class Main extends Application {
             if (patients != null) {
                 for (Patient p : patients) {
                     patientListView.getItems().add("ID: " + p.getPatientId() + " - " + 
-                        p.getFirstName() + " " + p.getLastName() + " (" + p.getEmail() + ")");
+                        p.getFirstName() + " " + p.getLastName() + " (" + p.getPhone() + ")");
                 }
             }
         });
@@ -167,23 +182,27 @@ public class Main extends Application {
                 showAlert("Error", "Please fill in all required fields");
                 return;
             }
-            Doctor doctor = new Doctor();
-            doctor.setFirstName(firstNameField.getText());
-            doctor.setLastName(lastNameField.getText());
-            doctor.setEmail(emailField.getText());
-            doctor.setPhoneNumber(phoneField.getText());
-            doctor.setDepartment(departmentField.getText());
-            doctor.setSpecialization(specializationField.getText());
-            if (DoctorService.createDoctor(doctor)) {
-                showAlert("Success", "Doctor added successfully!");
-                firstNameField.clear();
-                lastNameField.clear();
-                emailField.clear();
-                phoneField.clear();
-                departmentField.clear();
-                specializationField.clear();
-            } else {
-                showAlert("Error", "Failed to add doctor");
+            try {
+                Doctor doctor = new Doctor(
+                    firstNameField.getText(),
+                    lastNameField.getText(),
+                    specializationField.getText(),
+                    phoneField.getText(),
+                    1  // Default department ID
+                );
+                if (DoctorService.createDoctor(doctor)) {
+                    showAlert("Success", "Doctor added successfully!");
+                    firstNameField.clear();
+                    lastNameField.clear();
+                    emailField.clear();
+                    phoneField.clear();
+                    departmentField.clear();
+                    specializationField.clear();
+                } else {
+                    showAlert("Error", "Failed to add doctor");
+                }
+            } catch (Exception ex) {
+                showAlert("Error", "Invalid input: " + ex.getMessage());
             }
         });
 
@@ -254,13 +273,19 @@ public class Main extends Application {
                 return;
             }
             try {
-                Appointment appointment = new Appointment();
-                appointment.setPatientId(Integer.parseInt(patientIdField.getText()));
-                appointment.setDoctorId(Integer.parseInt(doctorIdField.getText()));
-                appointment.setAppointmentDate(appointmentDatePicker.getValue().toString());
-                appointment.setAppointmentTime(timeField.getText());
-                appointment.setReasonForVisit(reasonField.getText());
-                appointment.setStatus("Scheduled");
+                int patientId = Integer.parseInt(patientIdField.getText());
+                int doctorId = Integer.parseInt(doctorIdField.getText());
+                LocalDate date = appointmentDatePicker.getValue();
+                LocalTime time = LocalTime.parse(timeField.getText());
+                
+                Appointment appointment = new Appointment(
+                    patientId,
+                    doctorId,
+                    date,
+                    time,
+                    "Scheduled",
+                    reasonField.getText()
+                );
                 
                 if (AppointmentService.createAppointment(appointment)) {
                     showAlert("Success", "Appointment scheduled successfully!");
@@ -274,6 +299,8 @@ public class Main extends Application {
                 }
             } catch (NumberFormatException ex) {
                 showAlert("Error", "Please enter valid patient and doctor IDs");
+            } catch (Exception ex) {
+                showAlert("Error", "Invalid time format (use HH:MM): " + ex.getMessage());
             }
         });
 
