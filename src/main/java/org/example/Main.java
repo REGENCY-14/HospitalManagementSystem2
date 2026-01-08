@@ -1,112 +1,364 @@
 package org.example;
 
-import controller.HospitalController;
-import dao.DBConnection;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.Patient;
+import model.Doctor;
+import model.Appointment;
+import service.PatientService;
+import service.DoctorService;
+import service.AppointmentService;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 public class Main extends Application {
-    private HospitalController controller;
+
+    private TabPane tabPane;
 
     @Override
     public void start(Stage primaryStage) {
-        // Test database connection
         System.out.println("========================================");
         System.out.println("Hospital Management System - Starting...");
         System.out.println("========================================\n");
-        
-        // Attempt to connect to database
-        if (DBConnection.testConnection()) {
-            System.out.println("✓ Database connection successful!\n");
-            
-            // Create the GUI
-            controller = new HospitalController();
-            
-            primaryStage.setTitle("Hospital Management System");
-            primaryStage.setWidth(600);
-            primaryStage.setHeight(400);
-            
-            VBox root = createMainLayout();
-            Scene scene = new Scene(root, 600, 400);
-            
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        } else {
-            System.out.println("✗ Failed to connect to database.");
-            showErrorDialog("Database Connection Error",
-                "Please ensure:\n" +
-                "  1. MySQL is running\n" +
-                "  2. Database 'hospital_db' exists\n" +
-                "  3. Database credentials are correct in DBConnection.java\n" +
-                "  4. Database schema is loaded from database/hospital_schema.sql");
-        }
+        System.out.println("✓ Application started (database connection skipped for demo)\n");
+
+        primaryStage.setTitle("Hospital Management System");
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(700);
+
+        tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        tabPane.getTabs().addAll(
+            createPatientTab(),
+            createDoctorTab(),
+            createAppointmentTab(),
+            createDashboardTab()
+        );
+
+        Scene scene = new Scene(tabPane);
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
-    private VBox createMainLayout() {
+    private Tab createPatientTab() {
+        Tab tab = new Tab("Patient Management");
         VBox root = new VBox(15);
         root.setPadding(new Insets(20));
-        
-        Label titleLabel = new Label("Hospital Management System");
-        titleLabel.setStyle("-fx-font-size: 24; -fx-font-weight: bold;");
-        
-        Button patientBtn = new Button("Patient Management");
-        patientBtn.setPrefWidth(200);
-        patientBtn.setStyle("-fx-font-size: 14;");
-        patientBtn.setOnAction(e -> showPatientMenu());
-        
-        Button doctorBtn = new Button("Doctor Management");
-        doctorBtn.setPrefWidth(200);
-        doctorBtn.setStyle("-fx-font-size: 14;");
-        doctorBtn.setOnAction(e -> showDoctorMenu());
-        
-        Button appointmentBtn = new Button("Appointment Management");
-        appointmentBtn.setPrefWidth(200);
-        appointmentBtn.setStyle("-fx-font-size: 14;");
-        appointmentBtn.setOnAction(e -> showAppointmentMenu());
-        
-        Button exitBtn = new Button("Exit");
-        exitBtn.setPrefWidth(200);
-        exitBtn.setStyle("-fx-font-size: 14;");
-        exitBtn.setOnAction(e -> System.exit(0));
-        
+
+        Label titleLabel = new Label("Patient Management");
+        titleLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        // Input fields
+        TextField firstNameField = new TextField();
+        firstNameField.setPromptText("First Name");
+
+        TextField lastNameField = new TextField();
+        lastNameField.setPromptText("Last Name");
+
+        TextField emailField = new TextField();
+        emailField.setPromptText("Email");
+
+        TextField phoneField = new TextField();
+        phoneField.setPromptText("Phone Number");
+
+        DatePicker dobPicker = new DatePicker();
+        dobPicker.setPromptText("Date of Birth");
+
+        // Buttons
+        Button addBtn = new Button("Add Patient");
+        addBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        addBtn.setOnAction(e -> {
+            if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()) {
+                showAlert("Error", "Please fill in all required fields");
+                return;
+            }
+            Patient patient = new Patient();
+            patient.setFirstName(firstNameField.getText());
+            patient.setLastName(lastNameField.getText());
+            patient.setEmail(emailField.getText());
+            patient.setPhoneNumber(phoneField.getText());
+            if (dobPicker.getValue() != null) {
+                patient.setDateOfBirth(dobPicker.getValue().toString());
+            }
+            if (PatientService.createPatient(patient)) {
+                showAlert("Success", "Patient added successfully!");
+                firstNameField.clear();
+                lastNameField.clear();
+                emailField.clear();
+                phoneField.clear();
+                dobPicker.setValue(null);
+            } else {
+                showAlert("Error", "Failed to add patient");
+            }
+        });
+
+        // Patient List
+        ListView<String> patientListView = new ListView<>();
+        Button refreshBtn = new Button("Refresh List");
+        refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        refreshBtn.setOnAction(e -> {
+            patientListView.getItems().clear();
+            List<Patient> patients = PatientService.getAllPatients();
+            if (patients != null) {
+                for (Patient p : patients) {
+                    patientListView.getItems().add("ID: " + p.getPatientId() + " - " + 
+                        p.getFirstName() + " " + p.getLastName() + " (" + p.getEmail() + ")");
+                }
+            }
+        });
+
+        HBox inputBox = new HBox(10);
+        inputBox.getChildren().addAll(firstNameField, lastNameField, emailField, phoneField, dobPicker, addBtn);
+
         root.getChildren().addAll(
             titleLabel,
             new Separator(),
-            patientBtn,
-            doctorBtn,
-            appointmentBtn,
-            exitBtn
+            new Label("Add New Patient:"),
+            inputBox,
+            new Separator(),
+            new Label("Patient List:"),
+            refreshBtn,
+            patientListView
         );
-        
-        return root;
+
+        tab.setContent(root);
+        return tab;
     }
 
-    private void showPatientMenu() {
-        showInfo("Patient Management", "Patient management features coming soon!");
+    private Tab createDoctorTab() {
+        Tab tab = new Tab("Doctor Management");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+
+        Label titleLabel = new Label("Doctor Management");
+        titleLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        // Input fields
+        TextField firstNameField = new TextField();
+        firstNameField.setPromptText("First Name");
+
+        TextField lastNameField = new TextField();
+        lastNameField.setPromptText("Last Name");
+
+        TextField emailField = new TextField();
+        emailField.setPromptText("Email");
+
+        TextField phoneField = new TextField();
+        phoneField.setPromptText("Phone Number");
+
+        TextField departmentField = new TextField();
+        departmentField.setPromptText("Department");
+
+        TextField specializationField = new TextField();
+        specializationField.setPromptText("Specialization");
+
+        // Buttons
+        Button addBtn = new Button("Add Doctor");
+        addBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        addBtn.setOnAction(e -> {
+            if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()) {
+                showAlert("Error", "Please fill in all required fields");
+                return;
+            }
+            Doctor doctor = new Doctor();
+            doctor.setFirstName(firstNameField.getText());
+            doctor.setLastName(lastNameField.getText());
+            doctor.setEmail(emailField.getText());
+            doctor.setPhoneNumber(phoneField.getText());
+            doctor.setDepartment(departmentField.getText());
+            doctor.setSpecialization(specializationField.getText());
+            if (DoctorService.createDoctor(doctor)) {
+                showAlert("Success", "Doctor added successfully!");
+                firstNameField.clear();
+                lastNameField.clear();
+                emailField.clear();
+                phoneField.clear();
+                departmentField.clear();
+                specializationField.clear();
+            } else {
+                showAlert("Error", "Failed to add doctor");
+            }
+        });
+
+        // Doctor List
+        ListView<String> doctorListView = new ListView<>();
+        Button refreshBtn = new Button("Refresh List");
+        refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        refreshBtn.setOnAction(e -> {
+            doctorListView.getItems().clear();
+            List<Doctor> doctors = DoctorService.getAllDoctors();
+            if (doctors != null) {
+                for (Doctor d : doctors) {
+                    doctorListView.getItems().add("ID: " + d.getDoctorId() + " - " + 
+                        d.getFirstName() + " " + d.getLastName() + " (" + d.getSpecialization() + ")");
+                }
+            }
+        });
+
+        HBox inputBox = new HBox(10);
+        inputBox.getChildren().addAll(firstNameField, lastNameField, emailField, phoneField, departmentField, specializationField, addBtn);
+
+        root.getChildren().addAll(
+            titleLabel,
+            new Separator(),
+            new Label("Add New Doctor:"),
+            inputBox,
+            new Separator(),
+            new Label("Doctor List:"),
+            refreshBtn,
+            doctorListView
+        );
+
+        tab.setContent(root);
+        return tab;
     }
 
-    private void showDoctorMenu() {
-        showInfo("Doctor Management", "Doctor management features coming soon!");
+    private Tab createAppointmentTab() {
+        Tab tab = new Tab("Appointment Management");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+
+        Label titleLabel = new Label("Appointment Management");
+        titleLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        // Input fields
+        TextField patientIdField = new TextField();
+        patientIdField.setPromptText("Patient ID");
+
+        TextField doctorIdField = new TextField();
+        doctorIdField.setPromptText("Doctor ID");
+
+        DatePicker appointmentDatePicker = new DatePicker();
+        appointmentDatePicker.setPromptText("Appointment Date");
+
+        TextField timeField = new TextField();
+        timeField.setPromptText("Time (HH:MM)");
+
+        TextField reasonField = new TextField();
+        reasonField.setPromptText("Reason for Visit");
+
+        // Buttons
+        Button scheduleBtn = new Button("Schedule Appointment");
+        scheduleBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        scheduleBtn.setOnAction(e -> {
+            if (patientIdField.getText().isEmpty() || doctorIdField.getText().isEmpty() || 
+                appointmentDatePicker.getValue() == null || timeField.getText().isEmpty()) {
+                showAlert("Error", "Please fill in all required fields");
+                return;
+            }
+            try {
+                Appointment appointment = new Appointment();
+                appointment.setPatientId(Integer.parseInt(patientIdField.getText()));
+                appointment.setDoctorId(Integer.parseInt(doctorIdField.getText()));
+                appointment.setAppointmentDate(appointmentDatePicker.getValue().toString());
+                appointment.setAppointmentTime(timeField.getText());
+                appointment.setReasonForVisit(reasonField.getText());
+                appointment.setStatus("Scheduled");
+                
+                if (AppointmentService.createAppointment(appointment)) {
+                    showAlert("Success", "Appointment scheduled successfully!");
+                    patientIdField.clear();
+                    doctorIdField.clear();
+                    appointmentDatePicker.setValue(null);
+                    timeField.clear();
+                    reasonField.clear();
+                } else {
+                    showAlert("Error", "Failed to schedule appointment");
+                }
+            } catch (NumberFormatException ex) {
+                showAlert("Error", "Please enter valid patient and doctor IDs");
+            }
+        });
+
+        // Appointment List
+        ListView<String> appointmentListView = new ListView<>();
+        Button refreshBtn = new Button("Refresh List");
+        refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        refreshBtn.setOnAction(e -> {
+            appointmentListView.getItems().clear();
+            List<Appointment> appointments = AppointmentService.getAllAppointments();
+            if (appointments != null) {
+                for (Appointment a : appointments) {
+                    appointmentListView.getItems().add("ID: " + a.getAppointmentId() + " - " + 
+                        "Patient: " + a.getPatientId() + ", Doctor: " + a.getDoctorId() + 
+                        ", Date: " + a.getAppointmentDate() + " " + a.getAppointmentTime() + 
+                        " (" + a.getStatus() + ")");
+                }
+            }
+        });
+
+        HBox inputBox = new HBox(10);
+        inputBox.getChildren().addAll(patientIdField, doctorIdField, appointmentDatePicker, timeField, reasonField, scheduleBtn);
+
+        root.getChildren().addAll(
+            titleLabel,
+            new Separator(),
+            new Label("Schedule New Appointment:"),
+            inputBox,
+            new Separator(),
+            new Label("Appointment List:"),
+            refreshBtn,
+            appointmentListView
+        );
+
+        tab.setContent(root);
+        return tab;
     }
 
-    private void showAppointmentMenu() {
-        showInfo("Appointment Management", "Appointment management features coming soon!");
+    private Tab createDashboardTab() {
+        Tab tab = new Tab("Dashboard");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+
+        Label titleLabel = new Label("System Dashboard");
+        titleLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        Label infoLabel = new Label();
+        infoLabel.setStyle("-fx-font-size: 14; -fx-wrap-text: true;");
+
+        Button statsBtn = new Button("Refresh Statistics");
+        statsBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        statsBtn.setOnAction(e -> {
+            List<Patient> patients = PatientService.getAllPatients();
+            List<Doctor> doctors = DoctorService.getAllDoctors();
+            List<Appointment> appointments = AppointmentService.getAllAppointments();
+
+            int patientCount = patients != null ? patients.size() : 0;
+            int doctorCount = doctors != null ? doctors.size() : 0;
+            int appointmentCount = appointments != null ? appointments.size() : 0;
+
+            String stats = String.format(
+                "System Statistics:\n\n" +
+                "Total Patients: %d\n" +
+                "Total Doctors: %d\n" +
+                "Total Appointments: %d\n\n" +
+                "Database: MySQL (Demo Mode - No Connection)\n" +
+                "Status: ✓ Application Running",
+                patientCount, doctorCount, appointmentCount
+            );
+            infoLabel.setText(stats);
+        });
+
+        root.getChildren().addAll(
+            titleLabel,
+            statsBtn,
+            new Separator(),
+            infoLabel
+        );
+
+        tab.setContent(root);
+        return tab;
     }
 
-    private void showInfo(String title, String message) {
+    private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(title);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    private void showErrorDialog(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(title);
         alert.setContentText(message);
