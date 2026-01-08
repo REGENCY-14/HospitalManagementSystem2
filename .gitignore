@@ -1,0 +1,22 @@
+# Maven
+target/
+*.class
+.m2/
+.maven/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
