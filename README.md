@@ -1,1 +1,221 @@
-‣潈灳瑩污䴠湡条浥湥⁴祓瑳浥਍਍⨪慄慴慢敳䘠湵慤敭瑮污⁳牐橯捥⩴പഊ⌊‣牐橯捥⁴癏牥楶睥਍਍⁁潣灭敲敨獮癩⁥潨灳瑩污洠湡条浥湥⁴祳瑳浥戠極瑬眠瑩⁨慊慶‬慊慶塆‬湡⁤祍兓⹌吠楨⁳祳瑳浥椠灭敬敭瑮⁳慤慴慢敳搠獥杩Ɱ渠牯慭楬慺楴湯‬剃䑕漠数慲楴湯ⱳ瀠牥潦浲湡散漠瑰浩穩瑡潩Ɱ愠摮椠瑮来慲楴湯眠瑩⁨⁡潭敤湲䨠癡䙡⁘啇⹉਍਍⨪潃灭敬楸祴⨺‪摁慶据摥簠⨠吪浩⁥獅楴慭整⨺‪〱ㄭ′潨牵൳ഊⴊⴭ਍਍⌣倠潲敪瑣传橢捥楴敶൳ഊ䈊⁹桴⁥湥⁤景琠楨⁳牰橯捥ⱴ氠慥湲牥⁳楷汬戠⁥扡敬琠㩯਍਍‭鳢ₓ敄楳湧愠摮渠牯慭楬敺愠爠汥瑡潩慮⁬慤慴慢敳猠档浥⁡㌨䙎ഩⴊ鎜䐠癥汥灯挠湯散瑰慵ⱬ氠杯捩污‬湡⁤桰獹捩污搠瑡扡獡⁥潭敤獬眠瑩⁨剅獄਍‭鳢ₓ浉汰浥湥⁴剃䑕漠数慲楴湯⁳湡⁤潣灭敬⁸畱牥敩⁳獵湩⁧兓⁌湡⁤䑊䍂਍‭鳢ₓ灁汰⁹湩敤楸杮‬慨桳湩Ⱨ猠慥捲楨杮‬湡⁤潳瑲湩⁧污潧楲桴獭਍‭鳢ₓ湉整牧瑡⁥慤慴慢敳漠数慲楴湯⁳楷桴䨠癡䙡⁘灡汰捩瑡潩⁮湩整晲捡൥ⴊ鎜䌠浯慰敲爠汥瑡潩慮⁬湡⁤潎兓⁌敤楳湧⁳潦⁲湵瑳畲瑣牵摥搠瑡ൡⴊ鎜䴠慥畳敲愠摮搠捯浵湥⁴数晲牯慭据⁥浩牰癯浥湥獴਍਍ⴭഭഊ⌊‣敔档潮潬祧匠慴正਍਍‭⨪慂正湥㩤⨪䨠癡⁡ㄱ‬䑊䍂਍‭⨪牆湯整摮⨺‪慊慶塆㈠⸱⸰റⴊ⨠䐪瑡扡獡㩥⨪䴠卹䱑㠠㈮〮਍‭⨪畂汩⁤潔汯⨺‪慍敶⁮⸳൸ⴊ⨠䄪捲楨整瑣牵㩥⨪䴠䍖眠瑩⁨敓癲捩⽥䅄⁏慬敹獲਍਍ⴭഭഊ⌊‣牐橯捥⁴敆瑡牵獥਍਍⌣‣⸱⨠倪瑡敩瑮䴠湡条浥湥⩴പ †‭摁Ɽ瘠敩ⱷ甠摰瑡ⱥ搠汥瑥⁥慰楴湥⁴敲潣摲൳ †‭敓牡档瀠瑡敩瑮⁳祢渠浡⁥牯䤠ൄ †‭瑓牯⁥敭楤慣⁬楨瑳牯⁹湡⁤潣瑮捡⁴湩潦浲瑡潩൮ †‭湉異⁴慶楬慤楴湯愠摮搠瑡⁡湩整牧瑩⁹档捥獫਍਍⌣‣⸲⨠䐪捯潴⁲慍慮敧敭瑮⨪਍†ⴠ䄠摤愠摮洠湡条⁥潤瑣牯瀠潲楦敬൳ †‭牔捡⁫灳捥慩楬慺楴湯愠摮搠灥牡浴湥⁴獡楳湧敭瑮൳ †‭楖睥搠捯潴⁲癡楡慬楢楬祴਍†ⴠ匠慥捲⁨湡⁤楦瑬牥搠捯潴獲戠⁹灳捥慩楬慺楴湯਍਍⌣‣⸳⨠䄪灰楯瑮敭瑮䴠湡条浥湥⩴പ †‭捓敨畤敬愠灰楯瑮敭瑮⁳敢睴敥⁮慰楴湥獴愠摮搠捯潴獲਍†ⴠ吠慲正愠灰楯瑮敭瑮猠慴畴⁳匨档摥汵摥‬潃灭敬整Ɽ䌠湡散汬摥ഩ †‭楖睥愠灰楯瑮敭瑮栠獩潴祲਍†ⴠ䄠灰楯瑮敭瑮搠瑡⁥湡⁤楴敭瘠污摩瑡潩൮ഊ⌊⌣㐠‮⨪敍楤慣⁬湉敶瑮牯⁹慍慮敧敭瑮⨪਍†ⴠ吠慲正洠摥捩污猠灵汰敩⁳湡⁤煥極浰湥൴ †‭潍楮潴⁲湩敶瑮牯⁹敬敶獬਍†ⴠ删捥牯⁤獵条⁥湡⁤敲瑳捯楫杮਍†ⴠ䄠敬瑲猠獹整⁭潦⁲潬⁷瑳捯⁫瑩浥൳ഊ⌊⌣㔠‮⨪牐獥牣灩楴湯䴠湡条浥湥⩴പ †‭牃慥整愠摮洠湡条⁥牰獥牣灩楴湯൳ †‭牔捡⁫牰獥牣扩摥洠摥捩瑡潩獮愠摮搠獯条獥਍†ⴠ䰠湩⁫牰獥牣灩楴湯⁳潴愠灰楯瑮敭瑮⁳湡⁤慰楴湥獴਍†ⴠ倠敲捳楲瑰潩⁮楨瑳牯⁹湡⁤慶楬慤楴湯਍਍⌣‣⸶⨠䐪灥牡浴湥⁴慍慮敧敭瑮⨪਍†ⴠ传杲湡穩⁥潤瑣牯⁳祢搠灥牡浴湥൴ †‭慍慮敧搠灥牡浴湥⁴湩潦浲瑡潩൮ †‭牔捡⁫敤慰瑲敭瑮猭数楣楦⁣灯牥瑡潩獮਍਍⌣‣⸷⨠倪瑡敩瑮䘠敥扤捡⁫祓瑳浥⨪਍†ⴠ䌠汯敬瑣瀠瑡敩瑮映敥扤捡⁫湡⁤慲楴杮൳ †‭牔捡⁫慰楴湥⁴慳楴晳捡楴湯਍†ⴠ䜠湥牥瑡⁥敦摥慢正爠灥牯獴਍਍⌣‣⸸⨠倪牥潦浲湡散䴠湯瑩牯湩⁧…灏楴業慺楴湯⨪਍†ⴠ䤠⵮敭潭祲挠捡楨杮映牯映敲畱湥汴⁹捡散獳摥搠瑡ൡ †‭畑牥⁹灯楴業慺楴湯眠瑩⁨慤慴慢敳椠摮硥湩൧ †‭敐晲牯慭据⁥敭牴捩⁳牴捡楫杮਍†ⴠ䈠晥牯⽥晡整⁲灯楴業慺楴湯挠浯慰楲潳⁮敲潰瑲൳ഊ⌊⌣㤠‮⨪慄桳潢牡⁤…敒潰瑲湩⩧പ †‭祓瑳浥猠慴楴瑳捩⁳湡⁤癯牥楶睥਍†ⴠ儠敵祲瀠牥潦浲湡散洠瑥楲獣਍†ⴠ䐠瑡⁡楶畳污穩瑡潩⁮湡⁤畳浭牡敩൳ഊⴊⴭ਍਍⌣䐠瑡扡獡⁥捓敨慭਍਍⌣‣湅楴祴刭汥瑡潩獮楨⁰楄条慲⁭䔨䑒ഩഊ⨊䌪牯⁥湅楴楴獥⨺പⴊ⨠倪瑡敩瑮⩳‪‭慐楴湥⁴敤潭牧灡楨獣愠摮挠湯慴瑣椠普൯ⴊ⨠䐪捯潴獲⨪ⴠ䐠捯潴⁲牰景汩獥愠摮猠数楣污穩瑡潩獮਍‭⨪敄慰瑲敭瑮⩳‪‭潈灳瑩污搠灥牡浴湥獴਍‭⨪灁潰湩浴湥獴⨪ⴠ倠瑡敩瑮䐭捯潴⁲灡潰湩浴湥獴਍‭⨪牐獥牣灩楴湯⩳‪‭牐獥牣灩楴湯爠捥牯獤਍‭⨪牐獥牣灩楴湯瑉浥⩳‪‭湉楤楶畤污瀠敲捳楲瑰潩⁮敭楤慣楴湯൳ⴊ⨠倪瑡敩瑮敆摥慢正⨪ⴠ倠瑡敩瑮猠瑡獩慦瑣潩⁮敦摥慢正਍‭⨪敍楤慣䥬癮湥潴祲⨪ⴠ䴠摥捩污猠灵汰敩⁳湡⁤煥極浰湥൴ഊ⌊⌣䐠瑡扡獡⁥潎浲污穩瑡潩൮ⴊ䄠汬琠扡敬⁳潮浲污穩摥琠⁯⨪爳⁤潎浲污䘠牯⁭㌨䙎⨩പⴊ倠楲慭祲欠祥⁳湯愠汬攠瑮瑩敩൳ⴊ䘠牯楥湧欠祥⁳潦⁲敲敦敲瑮慩⁬湩整牧瑩൹ⴊ䄠灰潲牰慩整椠摮硥獥漠⁮牦煥敵瑮祬焠敵楲摥挠汯浵獮਍਍⌣‣敋⁹敒慬楴湯桳灩൳怊恠਍慐楴湥獴⠠⤱邆蛢ₒ䴨 灁潰湩浴湥獴邆蛢ₒㄨ 潄瑣牯൳䐊捯潴獲⠠⤱邆蛢ₒ䴨 敄慰瑲敭瑮൳䄊灰楯瑮敭瑮⁳ㄨ 蛢銆⠠⥍倠敲捳楲瑰潩獮਍牐獥牣灩楴湯⁳ㄨ 蛢銆⠠⥍倠敲捳楲瑰潩䥮整獭਍慐楴湥獴⠠⤱邆蛢ₒ䴨 慐楴湥䙴敥扤捡൫怊恠਍਍ⴭഭഊ⌊‣牐橯捥⁴瑓畲瑣牵൥ഊ怊恠਍潈灳瑩污慍慮敧敭瑮祓瑳浥⼲਍铢肔铢₀牳⽣਍铢₂†铢肔铢₀慭湩യ芔†芔†鲔铢肔樠癡⽡਍铢₂†铢₂†铢₂†铢肔铢₀牯⽧硥浡汰⽥਍铢₂†铢₂†铢₂†铢₂†铢肔铢₀慍湩樮癡⁡††††††††‣慊慶塆䄠灰楬慣楴湯䔠瑮祲倠楯瑮਍铢₂†铢₂†铢₂†铢肔铢₀潣瑮潲汬牥യ芔†芔†芔†芔†钔铢肔䠠獯楰慴䍬湯牴汯敬⹲慪慶†⌠䴠楡⁮潃瑮潲汬牥⠠䱃⥉਍铢₂†铢₂†铢₂†铢肔铢₀敳癲捩⽥਍铢₂†铢₂†铢₂†铢₂†铢肔铢₀慐楴湥却牥楶散樮癡⁡†††‣慐楴湥⁴畂楳敮獳䰠杯捩਍铢₂†铢₂†铢₂†铢₂†铢肔铢₀潄瑣牯敓癲捩⹥慪慶††††‣潄瑣牯䈠獵湩獥⁳潌楧ൣ芔†芔†芔†芔†钔铢肔䄠灰楯瑮敭瑮敓癲捩⹥慪慶†⌠䄠灰楯瑮敭瑮䈠獵湩獥⁳潌楧ൣ芔†芔†芔†鲔铢肔搠潡യ芔†芔†芔†芔†鲔铢肔䐠䍂湯敮瑣潩⹮慪慶††††⌠䐠瑡扡獡⁥潃湮捥楴湯䴠湡条牥਍铢₂†铢₂†铢₂†铢₂†铢肔铢₀慐楴湥䑴佁樮癡⁡†††††‣慐楴湥⁴慄慴䄠捣獥൳芔†芔†芔†芔†鲔铢肔䐠捯潴䑲佁樮癡⁡†††††⌠䐠捯潴⁲慄慴䄠捣獥൳芔†芔†芔†芔†鲔铢肔䄠灰楯瑮敭瑮䅄⹏慪慶†††⌠䄠灰楯瑮敭瑮䐠瑡⁡捁散獳਍铢₂†铢₂†铢₂†铢₂†铢肔铢₀敄慰瑲敭瑮䅄⹏慪慶††††‣敄慰瑲敭瑮䐠瑡⁡捁散獳਍铢₂†铢₂†铢₂†铢₂†铢肔铢₀牐獥牣灩楴湯䅄⹏慪慶†††‣牐獥牣灩楴湯䐠瑡⁡捁散獳਍铢₂†铢₂†铢₂†铢₂†铢肔铢₀牐獥牣灩楴湯瑉浥䅄⹏慪慶†‣牐獥牣灩楴湯䤠整⁭慄慴䄠捣獥൳芔†芔†芔†芔†鲔铢肔䴠摥捩污湉敶瑮牯䑹佁樮癡⁡⌠䤠癮湥潴祲䐠瑡⁡捁散獳਍铢₂†铢₂†铢₂†铢₂†铢肔铢₀慐楴湥䙴敥扤捡䑫佁樮癡⁡†‣敆摥慢正䐠瑡⁡捁散獳਍铢₂†铢₂†铢₂†铢肔铢₀潭敤⽬਍铢₂†铢₂†铢₂†铢₂†铢肔铢₀慐楴湥⹴慪慶†††††††‣慐楴湥⁴湅楴祴਍铢₂†铢₂†铢₂†铢₂†铢肔铢₀潄瑣牯樮癡⁡†††††††‣潄瑣牯䔠瑮瑩൹芔†芔†芔†芔†鲔铢肔䄠灰楯瑮敭瑮樮癡⁡††††⌠䄠灰楯瑮敭瑮䔠瑮瑩൹芔†芔†芔†芔†鲔铢肔䐠灥牡浴湥⹴慪慶†††††⌠䐠灥牡浴湥⁴湅楴祴਍铢₂†铢₂†铢₂†铢₂†铢肔铢₀牐獥牣灩楴湯樮癡⁡††††‣牐獥牣灩楴湯䔠瑮瑩൹芔†芔†芔†芔†鲔铢肔倠敲捳楲瑰潩䥮整⹭慪慶††⌠倠敲捳楲瑰潩⁮瑉浥䔠瑮瑩൹芔†芔†芔†芔†鲔铢肔䴠摥捩污湉敶瑮牯⹹慪慶††⌠䤠癮湥潴祲䔠瑮瑩൹芔†芔†芔†芔†钔铢肔倠瑡敩瑮敆摥慢正樮癡⁡††⌠䘠敥扤捡⁫湅楴祴਍铢₂†铢₂†铢₂†铢肔铢₀瑵汩യ芔†芔†芔†††钔铢肔倠牥潦浲湡散潍楮潴⹲慪慶†⌠倠牥潦浲湡散吠慲正湩⁧瑕汩瑩൹芔†芔†钔铢肔爠獥畯捲獥യ芔†芔†††钔铢肔瘠敩⽷††††††††††††⌠䘠䵘⁌楆敬⁳䘨瑵牵⥥਍铢₂†铢肔铢₀整瑳യ芔†††钔铢肔樠癡⽡††††††††††††††⌠唠楮⁴敔瑳൳鲔铢肔搠瑡扡獡⽥਍铢₂†铢肔铢₀潨灳瑩污獟档浥⹡煳⁬†††††††††‣慄慴慢敳匠档浥⁡…慓灭敬䐠瑡ൡ鲔铢肔瀠浯砮汭†††††††††††††††††⌠䴠癡湥䌠湯楦畧慲楴湯਍铢肔铢₀䕒䑁䕍洮⁤††††††††††††††††‣桔獩䘠汩൥鲔铢肔爠湵献⁨†††††††††††††††††⌠䰠湩硵䴯捡删湵匠牣灩൴钔铢肔爠湵戮瑡†††††††††††††††††⌠圠湩潤獷删湵匠牣灩൴怊恠਍਍ⴭഭഊ⌊‣湉瑳污慬楴湯☠匠瑥灵਍਍⌣‣牐牥煥極楳整൳ⴊ䨠癡⁡ㄱ漠⁲楨桧牥਍‭慍敶⁮⸳⬶਍‭祍兓⁌⸸⬰਍‭楇൴ഊ⌊⌣匠整⁰㨱䌠潬敮琠敨删灥獯瑩牯൹怊恠慢桳਍楧⁴汣湯⁥瑨灴㩳⼯楧桴扵挮浯刯䝅久奃ㄭ⼴潈灳瑩污慍慮敧敭瑮祓瑳浥⸲楧൴挊⁤潈灳瑩污慍慮敧敭瑮祓瑳浥ല怊恠਍਍⌣‣瑓灥㈠›慄慴慢敳匠瑥灵਍਍⸱⨠匪慴瑲䴠卹䱑⨺പ †恠扠獡൨ †‣楗摮睯൳ †祭煳⁬甭爠潯⁴瀭਍†ഠ †‣慭佣⽓楌畮൸ †祭煳⁬甭爠潯⁴瀭਍†怠恠਍਍⸲⨠䌪敲瑡⁥慄慴慢敳愠摮䰠慯⁤捓敨慭⨺പ †恠獠汱਍†䌠䕒呁⁅䅄䅔䅂䕓栠獯楰慴彬扤഻ †单⁅潨灳瑩污摟㭢਍†匠問䍒⁅慤慴慢敳栯獯楰慴彬捳敨慭献汱഻ †恠ൠഊ㌊‮⨪敖楲祦䌠湯敮瑣潩⁮湩䐠䍂湯敮瑣潩⹮慪慶⨺പ †恠橠癡ൡ †牰癩瑡⁥瑳瑡捩映湩污匠牴湩⁧䉄啟䱒㴠∠摪换洺獹汱⼺氯捯污潨瑳㌺〳⼶潨灳瑩污摟≢഻ †牰癩瑡⁥瑳瑡捩映湩污匠牴湩⁧䉄啟䕓⁒‽爢潯≴഻ †牰癩瑡⁥瑳瑡捩映湩污匠牴湩⁧䉄偟十坓剏⁄‽∢※⼯夠畯⁲祍兓⁌慰獳潷摲਍†怠恠਍਍⌣‣瑓灥㌠›畂汩⁤桴⁥牐橯捥൴怊恠慢桳਍癭⁮汣慥⁮湩瑳污൬怊恠਍਍⌣‣瑓灥㐠›畒⁮桴⁥灁汰捩瑡潩൮ഊ⨊伪瑰潩⁮㨱䴠癡湥⠠慊慶塆䜠䥕⨩പ怊恠慢桳਍癭⁮慪慶硦爺湵਍恠ൠഊ⨊伪瑰潩⁮㨲䌠浯慭摮䰠湩⁥捓楲瑰⩳പ怊恠慢桳਍‣楗摮睯൳⸊爯湵戮瑡਍਍‣楌畮⽸慭佣൓⸊爯湵献൨怊恠਍਍⨪灏楴湯㌠›楄敲瑣䨠癡⁡硅捥瑵潩⩮പ怊恠慢桳਍癭⁮硥捥樺癡⁡䐭硥捥洮楡䍮慬獳∽牯⹧硥浡汰⹥慍湩ഢ怊恠਍਍ⴭഭഊ⌊‣慄慴匠牴捵畴敲⁳…汁潧楲桴獭਍਍⌣‣⸱⨠䌪捡楨杮⠠慈桳湩⥧⨪਍‭湉洭浥牯⁹慈桳慍⁰潦⁲牦煥敵瑮祬愠捣獥敳⁤慰楴湥獴਍‭慃档⁥湩慶楬慤楴湯漠⁮慤慴洠摯晩捩瑡潩獮਍‭敒畤散⁳慤慴慢敳焠敵楲獥猠杩楮楦慣瑮祬਍਍⌣‣⸲⨠匪慥捲楨杮⨪਍‭楂慮祲猠慥捲⁨湯猠牯整⁤慰楴湥⁴楬瑳൳ⴊ䌠獡ⵥ湩敳獮瑩癩⁥畳獢牴湩⁧敳牡档映牯渠浡獥਍‭湉敤數⁤慤慴慢敳挠汯浵獮映牯映獡⁴潬歯灵൳ഊ⌊⌣㌠‮⨪潓瑲湩⩧പⴊ䴠牥敧猠牯⁴潦⁲慬杲⁥慰楴湥⽴潤瑣牯氠獩獴਍‭灁潰湩浴湥⁴潳瑲湩⁧祢搠瑡⁥湡⁤楴敭਍‭牐獥牣灩楴湯栠獩潴祲猠牯楴杮਍਍⌣‣⸴⨠䤪摮硥湩⩧പⴊ倠楲慭祲欠祥椠摮硥獥漠⁮污⁬湥楴祴琠扡敬൳ⴊ䘠牯楥湧欠祥椠摮硥獥映牯樠楯⁮灯楴業慺楴湯਍‭潃灭獯瑩⁥湩敤數⁳湯映敲畱湥汴⁹楦瑬牥摥挠汯浵獮਍਍⌣‣⸵⨠倪牥潦浲湡散䴠湯瑩牯湩⩧പⴊ儠敵祲攠數畣楴湯琠浩⁥牴捡楫杮਍‭慃档⁥楨⽴業獳猠慴楴瑳捩൳ⴊ倠牥潦浲湡散挠浯慰楲潳⁮敲潰瑲൳ഊⴊⴭ਍਍⌣䔠慶畬瑡潩⁮牃瑩牥慩਍਍⁼慃整潧祲簠倠楯瑮⁳⁼瑓瑡獵簠਍⵼ⴭⴭⴭⴭ簭ⴭⴭⴭⴭ⵼ⴭⴭⴭ簭਍⁼慄慴慢敳䐠獥杩⁮䔨䑒‬潎浲污穩瑡潩⥮簠㈠‵⁼鳢ₓർ簊匠䱑䤠灭敬敭瑮瑡潩⁮匨档浥ⱡ䌠湯瑳慲湩獴 ⁼〲簠鎜簠਍⁼慊慶塆⬠䨠䉄⁃湉整牧瑡潩⁮⁼〲簠鎜簠਍⁼卄⁁灁汰捩瑡潩⁮䌨捡楨杮‬潓瑲湩Ⱨ匠慥捲楨杮 ⁼㔱簠鎜簠਍⁼敐晲牯慭据⁥灏楴業慺楴湯簠ㄠ‰⁼鳢ₓർ簊䐠捯浵湥慴楴湯☠䌠摯⁥畑污瑩⁹⁼〱簠鎜簠਍⁼⨪佔䅔⩌‪⁼⨪〱⨰‪⁼鳢ₓർഊⴊⴭ਍਍⌣唠慳敧䜠極敤਍਍⌣‣慊慶塆䜠䥕䘠慥畴敲൳ഊ⌊⌣‣慐楴湥⁴慍慮敧敭瑮吠扡਍‭⨪摁⁤慐楴湥㩴⨪䘠汩⁬湩映物瑳渠浡ⱥ氠獡⁴慮敭‬浥楡ⱬ瀠潨敮‬湡⁤佄ൂⴊ⨠刪晥敲桳䰠獩㩴⨪䌠楬正∠敒牦獥⁨楌瑳•潴瘠敩⁷污⁬慰楴湥獴਍‭⨪敓牡档⨺‪慐楴湥⁴䑉愠摮渠浡⁥楶楳汢⁥湩氠獩൴ഊ⌊⌣‣潄瑣牯䴠湡条浥湥⁴慔ൢⴊ⨠䄪摤䐠捯潴㩲⨪䔠瑮牥渠浡ⱥ攠慭汩‬桰湯ⱥ搠灥牡浴湥ⱴ愠摮猠数楣污穩瑡潩൮ⴊ⨠嘪敩⁷潄瑣牯㩳⨪䰠獩⁴桳睯⁳污⁬敲楧瑳牥摥搠捯潴獲਍‭⨪楆瑬牥⨺‪潄瑣牯⁳牯慧楮敺⁤祢猠数楣污穩瑡潩൮ഊ⌊⌣‣灁潰湩浴湥⁴慍慮敧敭瑮吠扡਍‭⨪捓敨畤敬䄠灰楯瑮敭瑮⨺‪湅整⁲慰楴湥⁴䑉‬潤瑣牯䤠ⱄ搠瑡ⱥ琠浩ⱥ愠摮爠慥潳൮ⴊ⨠嘪敩⁷灁潰湩浴湥獴⨺‪楌瑳猠潨獷愠汬猠档摥汵摥愠灰楯瑮敭瑮൳ⴊ⨠匪慴畴⁳牔捡楫杮⨺‪楖睥愠灰楯瑮敭瑮猠慴畴⁳匨档摥汵摥‬潃灭敬整Ɽ䌠湡散汬摥ഩഊ⌊⌣‣慄桳潢牡⁤慔ൢⴊ⨠匪獹整⁭瑓瑡獩楴獣⨺‪楖睥琠瑯污瀠瑡敩瑮ⱳ搠捯潴獲‬湡⁤灡潰湩浴湥獴਍‭⨪敐晲牯慭据⁥敍牴捩㩳⨪䐠瑡扡獡⁥数晲牯慭据⁥潭楮潴楲杮਍‭⨪祓瑳浥匠慴畴㩳⨪䄠灰楬慣楴湯栠慥瑬⁨湡⁤潣湮捥楴楶祴਍਍ⴭഭഊ⌊‣慓灭敬匠䱑儠敵楲獥਍਍恠獠汱਍ⴭ䜠瑥愠汬瀠瑡敩瑮൳匊䱅䍅⁔‪剆䵏瀠瑡敩瑮㭳਍਍ⴭ䘠湩⁤潤瑣牯戠⁹灳捥慩楬慺楴湯਍䕓䕌呃⨠䘠佒⁍潤瑣牯⁳䡗剅⁅灳捥慩楬慺楴湯㴠✠慃摲潩潬祧㬧਍਍ⴭ䜠瑥愠灰楯瑮敭瑮⁳潦⁲⁡灳捥晩捩搠瑡൥匊䱅䍅⁔‪剆䵏愠灰楯瑮敭瑮⁳䡗剅⁅灡潰湩浴湥彴慤整㴠✠〲㘲〭ⴱ㠰㬧਍਍ⴭ䄠灰楯瑮敭瑮眠瑩⁨慰楴湥⁴湡⁤潤瑣牯搠瑥楡獬਍䕓䕌呃愠⨮‬⹰楦獲彴慮敭‬⹰慬瑳湟浡ⱥ搠昮物瑳湟浡ⱥ搠氮獡彴慮敭਍剆䵏愠灰楯瑮敭瑮⁳ൡ䨊䥏⁎慰楴湥獴瀠传⁎⹡慰楴湥彴摩㴠瀠瀮瑡敩瑮楟൤䨊䥏⁎潤瑣牯⁳⁤乏愠搮捯潴彲摩㴠搠搮捯潴彲摩഻怊恠਍਍ⴭഭഊ⌊‣敐晲牯慭据⁥灏楴業慺楴湯匠牴瑡来敩൳ഊ⌊⌣ㄠ‮⨪慄慴慢敳䰭癥汥⨪਍‭湉敤數⁳湯栠杩⵨牦煥敵据⁹潣畬湭⁳瀨瑡敩瑮楟Ɽ搠捯潴彲摩‬灡潰湩浴湥彴慤整ഩⴊ儠敵祲漠瑰浩穩瑡潩⁮楷桴䔠偘䅌义䄠䅎奌䕚਍‭潃湮捥楴湯瀠潯楬杮映牯䨠䉄ൃഊ⌊⌣㈠‮⨪灁汰捩瑡潩⵮敌敶⩬പⴊ䠠獡䵨灡挠捡楨杮映牯瀠瑡敩瑮搯捯潴⁲潬歯灵਍‭慌祺氠慯楤杮映牯爠汥瑡摥攠瑮瑩敩൳ⴊ䈠瑡档瀠潲散獳湩⁧潦⁲畢歬漠数慲楴湯൳ഊ⌊⌣㌠‮⨪敍獡牵浥湥⩴പⴊ倠牥潦浲湡散潍楮潴⁲瑵汩瑩⁹汣獡⁳牴捡獫焠敵祲琠浩獥਍‭敂潦敲愯瑦牥漠瑰浩穩瑡潩⁮潣灭牡獩湯਍‭慃档⁥瑳瑡獩楴獣愠摮栠瑩爠瑡獥਍਍ⴭഭഊ⌊‣牔畯汢獥潨瑯湩൧ഊ⌊⌣䐠瑡扡獡⁥潃湮捥楴湯䤠獳敵൳怊恠਍牅潲㩲∠慆汩摥琠⁯獥慴汢獩⁨慤慴慢敳挠湯敮瑣潩≮਍潓畬楴湯ഺㄊ‮敖楲祦䴠卹䱑椠⁳畲湮湩൧㈊‮桃捥⁫牣摥湥楴污⁳湩䐠䍂湯敮瑣潩⹮慪慶਍⸳䌠湯楦浲栠獯楰慴彬扤攠楸瑳㩳匠佈⁗䅄䅔䅂䕓㭓਍⸴嘠牥晩⁹捳敨慭椠⁳潬摡摥›单⁅潨灳瑩污摟㭢匠佈⁗䅔䱂卅഻怊恠਍਍⌣‣慊慶塆丠瑯䰠慯楤杮਍恠ൠ䔊牲牯›樢癡晡⁸潭畤敬⁳潮⁴潦湵≤਍潓畬楴湯ഺㄊ‮湅畳敲瀠浯砮汭栠獡樠癡晡⁸敤数摮湥楣獥਍⸲删湵›癭⁮汣慥⁮湩瑳污൬㌊‮桃捥⁫慊慶瘠牥楳湯›慪慶ⴠ敶獲潩⁮猨潨汵⁤敢ㄠ⬱ഩ怊恠਍਍⌣‣慍敶⁮畂汩⁤慆汩牵獥਍恠ൠ匊汯瑵潩㩮਍⸱䌠敬牡䴠癡湥挠捡敨›癭⁮汣慥൮㈊‮敒畢汩㩤洠湶椠獮慴汬਍⸳䌠敨正䨠癡⁡潨敭›捥潨␠䅊䅖䡟䵏൅怊恠਍਍ⴭഭഊ⌊‣畆畴敲䔠桮湡散敭瑮൳ഊⴊ嬠崠丠卯䱑椠灭敬敭瑮瑡潩⁮潦⁲慰楴湥⁴潮整⽳敭楤慣⁬潬獧਍‭⁛⁝摁慶据摥猠慥捲⁨楷桴映汩整獲愠摮瀠条湩瑡潩൮ⴊ嬠崠删慥⵬楴敭渠瑯晩捩瑡潩獮映牯愠灰楯瑮敭瑮൳ⴊ嬠崠匠卍䔯慭汩愠敬瑲⁳潦⁲敲業摮牥൳ⴊ嬠崠䴠扯汩⁥灡⁰湩整牧瑡潩൮ⴊ嬠崠删卅⁔偁⁉潦⁲硥整湲污猠獹整獭਍‭⁛⁝摁慶据摥爠灥牯楴杮愠摮愠慮祬楴獣਍‭⁛⁝慍档湩⁥敬牡楮杮映牯愠灰楯瑮敭瑮瀠敲楤瑣潩獮਍਍ⴭഭഊ⌊‣敔浡☠䌠湯慴瑣਍਍‭⨪牐橯捥㩴⨪䠠獯楰慴⁬慍慮敧敭瑮匠獹整⁭‭慄慴慢敳䘠湵慤敭瑮污൳ⴊ⨠䜪瑩畈㩢⨪栠瑴獰⼺术瑩畨⹢潣⽭䕒䕇䍎ⵙ㐱䠯獯楰慴䵬湡条浥湥却獹整㉭਍‭⨪牃慥整㩤⨪䨠湡慵祲㈠㈰ശഊⴊⴭ਍਍⌣䰠捩湥敳਍਍桔獩瀠潲敪瑣椠⁳牰癯摩摥映牯攠畤慣楴湯污瀠牵潰敳⹳䘠敥⁬牦敥琠⁯獵ⱥ洠摯晩ⱹ愠摮搠獩牴扩瑵⁥潦⁲敬牡楮杮മഊⴊⴭ਍਍⌣䄠灰湥楤㩸䐠瑡扡獡⁥捓敨慭਍਍⌣‣兓⁌捓楲瑰䰠捯瑡潩൮ⴊ䘠汩㩥怠慤慴慢敳栯獯楰慴彬捳敨慭献汱ൠⴊ䌠湯慴湩㩳吠扡敬搠晥湩瑩潩獮‬潣獮牴楡瑮ⱳ椠摮硥獥‬湡⁤慳灭敬搠瑡ൡⴊ匠穩㩥传瑰浩穩摥映牯㌠䙎渠牯慭楬慺楴湯਍਍⌣‣慓灭敬䐠瑡⁡湉汣摵摥਍‭‵慓灭敬倠瑡敩瑮൳ⴊ㌠匠浡汰⁥潄瑣牯൳ⴊ㔠匠浡汰⁥灁潰湩浴湥獴਍‭〱匠浡汰⁥敍楤慣楴湯⁳湩䤠癮湥潴祲਍‭慓灭敬倠瑡敩瑮䘠敥扤捡⁫敒潣摲൳ഊⴊⴭ਍਍⨪瑓瑡獵⨺‪鳢ₓ捁楴敶䐠癥汥灯敭瑮簠⨠䰪獡⁴灕慤整㩤⨪䨠湡慵祲㠠‬〲㘲਍
+# Hospital Management System 2
+
+A comprehensive Hospital Management System built with Java, Java Swing, and MySQL. This system implements database design (3NF normalization), CRUD operations, performance optimization, and integration with a modern GUI framework.
+
+## Project Overview
+
+**Complexity**: Advanced  
+**Development Time**: 15+ hours  
+**Target**: Azure AKS, Azure App Service, Cloud Readiness, Linux, OpenJDK 11, OpenJDK 17, OpenJDK 21  
+**Architecture**: MVC with Services/DAO (Model Context Protocol)
+
+## Technology Stack
+
+- **Java Version**: Java 11, JDBC
+- **Frontend**: Java Swing 2.1.0
+- **Database**: MySQL 8.0
+- **Build Tool**: Maven 3
+- **Architecture**: MVC with Services/DAO Layers
+
+## Project Features
+
+### 1. Patient Management
+- Add, view, update, delete patient records
+- Search patients by name or ID
+- Store medical history and contact information
+- Input validation and data integrity checks
+
+### 2. Doctor Management
+- Track doctor specialization and parameters
+- View doctor availability
+- Search and filter doctors by specialization
+
+### 3. Appointment Management
+- Schedule appointments between patients and doctors
+- Track appointment status (Scheduled, Completed, Cancelled)
+- View appointment history
+- Appointment data and time validation
+
+### 4. Medical Inventory Management
+- Track medical supplies and equipment
+- Monitor inventory levels
+- Record usage and restocking
+- Alert system for low stock times
+
+### 5. Prescription Management
+- Create and manage prescriptions
+- Track prescribed medications and dosages
+- Link prescriptions to appointments and patients
+- Prescription history and validation
+
+### 6. Department Management
+- Organize doctors by departments
+- Manage department information
+- Track department-specific operations
+
+### 7. Patient Feedback System
+- Collect patient feedback and ratings
+- Track patient satisfaction
+- Generate feedback reports
+
+### 8. Performance Monitoring & Optimization
+- In-memory caching for frequently accessed data
+- Query optimization with database indexing
+- Performance metrics tracking
+- Before/after optimization comparison reports
+
+### 9. Dashboard & Reporting
+- System statistics and overview
+- Query performance metrics
+- Data visualization and summaries
+
+## Database Schema
+
+The database uses Entity-Relationships and 3NF normalization:
+
+### Core Entities:
+- **Patients**: Patient demographics and contact information
+- **Doctors**: Doctor profiles and specializations
+- **Appointments**: Patient-doctor appointment records
+- **Prescriptions**: Prescription records
+- **Prescription Items**: Individual medications and dosages
+- **Patient Feedback**: Patient satisfaction feedback
+- **Medical Inventory**: Medical supplies and equipment
+- **Departments**: Hospital departments
+
+### Key Relationships:
+- Patients (1:M) Appointments
+- Doctors (1:M) Appointments
+- Patients (1:M) Prescriptions
+- Prescriptions (1:M) Prescription Items
+- Patients (1:M) Patient Feedback
+- Medical Inventory (1:M) Equipment
+
+### Data Normalization
+
+All tables normalized to 3NF:
+- Elimination of redundant data
+- Removal of transitive dependencies
+- Composite indexes for frequently filtered columns
+
+## Installation & Setup
+
+### Prerequisites:
+- Java 11 or higher
+- Maven 3.6+
+- MySQL 8.0+
+- Git
+
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/REGENCY-14/HospitalManagementSystem2.git
+cd HospitalManagementSystem2
+```
+
+### Step 2: Create Database and Load Schema
+```bash
+mysql -u root -p
+SOURCE database/hospital_schema.sql
+```
+
+### Step 3: Maven Clean Install
+```bash
+mvn clean install
+```
+
+### Step 4: Run the Application
+
+**Option 1: Windows**
+```bash
+./run.bat
+```
+
+**Option 2: Linux/macOS**
+```bash
+./run.sh
+```
+
+**Option 3: Direct Execution**
+```bash
+mvn clean exec:java -Dexec.mainClass="org.example.Main"
+```
+
+## Performance Optimization Strategies
+
+### 1. Database Level
+- Indexed columns on high-frequency lookup columns (patient ID, doctor ID, date)
+- Cached execution plans with EXPLAIN & ANALYZE
+- Connection pooling for JDBC
+
+### 2. Application Level
+- HashMap caching for patient/doctor lookups
+- Lazy loading for related entities
+- Query optimization with filtered columns
+
+### 3. Search Optimization
+- Binary search on sorted patient/doctor lists
+- Case-insensitive substring matching for name searches
+- Indexed database queries for fast lookups
+
+### 4. Measurement & Monitoring
+- Query execution time tracking
+- Cache hit/miss statistics
+- Performance comparison reports
+
+## Troubleshooting
+
+### Database Connection Issues
+**Error**: "Failed to establish database connection"
+
+**Solution**:
+1. Verify MySQL is running
+2. Check credentials in DBConnection.java
+3. Confirm database exists: SHOW DATABASES;
+4. Verify schema is loaded: USE hospital; SHOW TABLES;
+
+### Java/Maven Version Errors
+**Error**: "Java version not compatible" or "Maven not found"
+
+**Solution**:
+1. Verify Java version: `java -version` (should be 11 or higher)
+2. Install Maven: `mvn --version` (should be 3.6+)
+3. Check JAVA_HOME environment variable
+
+### Compilation Errors
+**Error**: "Cannot find symbol" or "Package not found"
+
+**Solution**:
+1. Ensure all dependencies installed: `mvn clean install`
+2. Check internet connection for dependency download
+3. Verify pom.xml configuration
+
+## License
+
+This project is provided for educational purposes. Feel free to use, modify, and distribute for learning.
+
+## Contact & Support
+
+**Project**: Hospital Management System  
+**GitHub**: https://github.com/REGENCY-14/HospitalManagementSystem2  
+**Created**: January 2026
+
+---
+
+## Development Notes
+
+### Future Enhancements
+- Advanced search with filters and pagination
+- REST API implementation for patient/medical/logs
+- Mobile app integration
+- Machine learning for appointment predictions
+- SMS/Email notifications for reminders
+
+### Advanced Reporting and Analytics
+- Reporting and analytics suite
+- Collaborative data models
+- Specialized queries for research
+- Real-time monitoring and alerts
+
+### Status
+✓ Active Development
+✓ Last Updated: January 14, 2026
