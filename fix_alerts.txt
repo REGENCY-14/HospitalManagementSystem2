@@ -1,0 +1,33 @@
+Lines to fix:
+625: showAlert(Alert.AlertType.WARNING, "No Selection", "Please select an appointment to edit.");
+     -> showAlert("No Selection", "Please select an appointment to edit.");
+
+648: showAlert(Alert.AlertType.INFORMATION, "Success", "Appointment updated successfully!");
+     -> showAlert("Success", "Appointment updated successfully!");
+
+668: boolean addSuccess = AppointmentService.addAppointment(appointment);
+     -> boolean addSuccess = AppointmentService.createAppointment(appointment);
+
+671: showAlert(Alert.AlertType.INFORMATION, "Success", "Appointment scheduled successfully!");
+     -> showAlert("Success", "Appointment scheduled successfully!");
+
+683: showAlert(Alert.AlertType.ERROR, "Error", "Failed to schedule appointment");
+     -> showAlert("Error", "Failed to schedule appointment");
+
+686: showAlert(Alert.AlertType.ERROR, "Error", "Invalid input: " + ex.getMessage());
+     -> showAlert("Error", "Invalid input: " + ex.getMessage());
+
+690: showAlert(Alert.AlertType.ERROR, "Error", "Failed to update appointment");
+     -> showAlert("Error", "Failed to update appointment");
+
+693: showAlert(Alert.AlertType.ERROR, "Error", "Invalid input: " + ex.getMessage());
+     -> showAlert("Error", "Invalid input: " + ex.getMessage());
+
+703: showAlert(Alert.AlertType.WARNING, "No Selection", "Please select an appointment to delete.");
+     -> showAlert("No Selection", "Please select an appointment to delete.");
+
+709: showAlert(Alert.AlertType.INFORMATION, "Success", "Appointment deleted successfully!");
+     -> showAlert("Success", "Appointment deleted successfully!");
+
+712: showAlert(Alert.AlertType.ERROR, "Error", "Failed to delete appointment");
+     -> showAlert("Error", "Failed to delete appointment");
