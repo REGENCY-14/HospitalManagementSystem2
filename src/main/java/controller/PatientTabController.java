@@ -1,24 +1,24 @@
 package controller;
 
-import java.io.IOException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Patient;
 import service.PatientService;
+import ui.components.FXMLTabController;
+import ui.util.AlertUtil;
+import ui.util.FormUtil;
 import util.ValidationUtil;
 
 /**
  * Controller for Patient Management tab.
  * UI layout is defined in Patient.fxml
  */
-public class PatientTabController {
+public class PatientTabController extends FXMLTabController {
     
     @FXML
     private Label titleLabel;
@@ -86,27 +86,21 @@ public class PatientTabController {
     @FXML
     private HBox buttonBox;
     
+    @Override
+    protected String getFXMLFile() {
+        return "Patient.fxml";
+    }
+
+    @Override
+    protected void initializeUI() {
+        initializeComboBoxes();
+        initializeTableColumns();
+        initializeEventHandlers();
+        loadPatientData();
+    }
+
     public Tab createPatientTab() {
-        Tab tab = new Tab("Patient Management");
-
-        try {
-            // Load FXML
-            FXMLLoader loader = new FXMLLoader(getResource("Patient.fxml"));
-            loader.setController(this);
-            VBox root = loader.load();
-            
-            // Initialize UI components
-            initializeComboBoxes();
-            initializeTableColumns();
-            initializeEventHandlers();
-            loadPatientData();
-            
-            tab.setContent(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Failed to load Patient.fxml: " + e.getMessage());
-        }
-
+        Tab tab = createTabFromFXML("Patient Management");
         return tab;
     }
     
@@ -297,9 +291,5 @@ public class PatientTabController {
         alert.setHeaderText(title);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-    
-    private URL getResource(String resourceName) {
-        return getClass().getResource("/fxml/" + resourceName);
     }
 }

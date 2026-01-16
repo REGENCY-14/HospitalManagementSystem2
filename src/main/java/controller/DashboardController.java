@@ -1,24 +1,22 @@
 package controller;
 
-import java.io.IOException;
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import service.PatientService;
 import service.DoctorService;
+import ui.components.FXMLTabController;
 import util.SimpleCache;
 
 /**
  * Dashboard controller to display cache statistics and system metrics.
  * UI layout is defined in Dashboard.fxml
  */
-public class DashboardController {
+public class DashboardController extends FXMLTabController {
 
     @FXML
     private Label titleLabel;
@@ -41,25 +39,19 @@ public class DashboardController {
     @FXML
     private Button clearCacheBtn;
 
+    @Override
+    protected String getFXMLFile() {
+        return "Dashboard.fxml";
+    }
+
+    @Override
+    protected void initializeUI() {
+        initializeEventHandlers();
+    }
+
     public Tab createDashboardTab() {
-        Tab tab = new Tab("Dashboard");
+        Tab tab = createTabFromFXML("Dashboard");
         tab.setClosable(false);
-
-        try {
-            // Load FXML
-            FXMLLoader loader = new FXMLLoader(getResource("Dashboard.fxml"));
-            loader.setController(this);
-            VBox root = loader.load();
-            
-            // Initialize event handlers
-            initializeEventHandlers();
-            
-            tab.setContent(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Failed to load Dashboard.fxml: " + e.getMessage());
-        }
-
         return tab;
     }
     
@@ -99,10 +91,6 @@ public class DashboardController {
             doctorCacheLabel.setText("Doctor Cache: ---");
             refreshTimeLabel.setText("Cache cleared!");
         });
-    }
-    
-    private URL getResource(String resourceName) {
-        return getClass().getResource("/fxml/" + resourceName);
     }
 }
 

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="15.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <children>
+      <Label fx:id="titleLabel" text="Patient Management" style="-fx-font-size: 18; -fx-font-weight: bold;" />
+      <Separator />
+      <Label text="Add New Patient:" />
+      <VBox fx:id="inputSection" spacing="10.0">
+         <children>
+            <HBox spacing="10.0">
+               <children>
+                  <TextField fx:id="firstNameField" prefWidth="150.0" promptText="First Name" />
+                  <TextField fx:id="lastNameField" prefWidth="150.0" promptText="Last Name" />
+                  <TextField fx:id="phoneField" prefWidth="150.0" promptText="Phone Number" />
+                  <ComboBox fx:id="genderCombo" prefWidth="100.0" promptText="Gender" />
+               </children>
+            </HBox>
+            <HBox spacing="10.0">
+               <children>
+                  <ComboBox fx:id="bloodGroupCombo" prefWidth="120.0" promptText="Blood Group" />
+                  <DatePicker fx:id="dobPicker" promptText="Date of Birth" />
+                  <Button fx:id="addBtn" mnemonicParsing="false" style="-fx-font-size: 12; -fx-padding: 8;" text="Add Patient" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <Separator />
+      <Label text="Patient List:" />
+      <TextField fx:id="searchField" prefWidth="300.0" promptText="Search by name, phone, or blood type..." />
+      <HBox fx:id="buttonBox" spacing="10.0">
+         <children>
+            <Button fx:id="refreshBtn" mnemonicParsing="false" style="-fx-font-size: 12; -fx-padding: 8;" text="Refresh List" />
+            <Button fx:id="editBtn" mnemonicParsing="false" style="-fx-font-size: 12; -fx-padding: 8;" text="Edit Selected" />
+            <Button fx:id="deleteBtn" mnemonicParsing="false" style="-fx-font-size: 12; -fx-padding: 8;" text="Delete Selected" />
+         </children>
+      </HBox>
+      <TableView fx:id="patientTable" prefHeight="400.0">
+         <columns>
+            <TableColumn fx:id="idCol" prefWidth="50.0" text="ID" />
+            <TableColumn fx:id="firstNameCol" prefWidth="120.0" text="First Name" />
+            <TableColumn fx:id="lastNameCol" prefWidth="120.0" text="Last Name" />
+            <TableColumn fx:id="genderCol" prefWidth="70.0" text="Gender" />
+            <TableColumn fx:id="phoneCol" prefWidth="120.0" text="Phone" />
+            <TableColumn fx:id="dobCol" prefWidth="120.0" text="Date of Birth" />
+            <TableColumn fx:id="bloodTypeCol" prefWidth="90.0" text="Blood Type" />
+         </columns>
+      </TableView>
+   </children>
+</VBox>
