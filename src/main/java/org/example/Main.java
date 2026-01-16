@@ -1,12 +1,18 @@
 package org.example;
 
+import controller.AppointmentTabController;
+import controller.DashboardController;
+import controller.DepartmentTabController;
+import controller.DoctorTabController;
+import controller.MedicalInventoryTabController;
+import controller.MedicalLogController;
+import controller.PatientFeedbackTabController;
+import controller.PatientTabController;
+import controller.PrescriptionTabController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.TabPane;
 import javafx.stage.Stage;
-import controller.MedicalLogController;
-import controller.PatientTabController;
-import controller.DoctorTabController;
 
 /**
  * Main Application Entry Point - Refactored to follow Single Responsibility Principle
@@ -16,6 +22,12 @@ public class Main extends Application {
 
     private PatientTabController patientController;
     private DoctorTabController doctorController;
+    private AppointmentTabController appointmentController;
+    private DepartmentTabController departmentController;
+    private PrescriptionTabController prescriptionController;
+    private PatientFeedbackTabController feedbackController;
+    private MedicalInventoryTabController inventoryController;
+    private DashboardController dashboardController;
 
     @Override
     public void start(Stage primaryStage) {
@@ -34,22 +46,28 @@ public class Main extends Application {
         // Initialize controllers
         patientController = new PatientTabController();
         doctorController = new DoctorTabController();
+        appointmentController = new AppointmentTabController();
+        departmentController = new DepartmentTabController();
+        prescriptionController = new PrescriptionTabController();
+        feedbackController = new PatientFeedbackTabController();
+        inventoryController = new MedicalInventoryTabController();
+        dashboardController = new DashboardController();
         MedicalLogController medicalLogController = new MedicalLogController(primaryStage);
 
         // Add tabs (delegated to controller classes)
         tabPane.getTabs().addAll(
+            dashboardController.createDashboardTab(),
             patientController.createPatientTab(),
             doctorController.createDoctorTab(),
+            appointmentController.createAppointmentTab(),
+            departmentController.createDepartmentTab(),
+            prescriptionController.createPrescriptionTab(),
+            feedbackController.createPatientFeedbackTab(),
+            inventoryController.createMedicalInventoryTab(),
             medicalLogController.createMedicalLogTab()
-            // TODO: Migrate remaining tabs to separate controller classes:
-            // - AppointmentTabController
-            // - DepartmentTabController
-            // - PrescriptionTabController
-            // - PatientFeedbackTabController
-            // - MedicalInventoryTabController
         );
 
-        // Select Patient tab by default
+        // Select Dashboard tab by default
         tabPane.getSelectionModel().select(0);
 
         Scene scene = new Scene(tabPane);
@@ -67,6 +85,11 @@ public class Main extends Application {
         System.out.println("Loading all data into views...");
         patientController.loadPatientData();
         doctorController.loadDoctorData();
+        appointmentController.loadAppointmentData();
+        departmentController.loadDepartmentData();
+        prescriptionController.loadPrescriptionData();
+        feedbackController.loadFeedbackData();
+        inventoryController.loadInventoryData();
         System.out.println("✓ All data loaded\n");
     }
 

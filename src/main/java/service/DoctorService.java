@@ -2,9 +2,12 @@ package service;
 
 import dao.DoctorDAO;
 import model.Doctor;
+import util.SimpleCache;
 import java.util.List;
 
 public class DoctorService {
+    
+    private static final SimpleCache<Integer, Doctor> cache = new SimpleCache<>();
     
     /**
      * Creates a new doctor in the system
@@ -14,18 +17,31 @@ public class DoctorService {
             System.err.println("Invalid doctor data");
             return false;
         }
-        return DoctorDAO.addDoctor(doctor);
+        boolean result = DoctorDAO.addDoctor(doctor);
+        if (result && doctor.getDoctorId() > 0) {
+            // Cache the newly created doctor immediately
+            cache.put(doctor.getDoctorId(), doctor);
+        }
+        return result;
     }
     
     /**
-     * Retrieves a doctor by ID
+     * Retrieves a doctor by ID (with caching)
      */
     public static Doctor getDoctor(int doctorId) {
         if (doctorId <= 0) {
             System.err.println("Invalid doctor ID");
             return null;
         }
-        return DoctorDAO.getDoctorById(doctorId);
+        Doctor cached = cache.get(doctorId);
+        if (cached != null) {
+            return cached;
+        }
+        Doctor doctor = DoctorDAO.getDoctorById(doctorId);
+        if (doctor != null) {
+            cache.put(doctorId, doctor);
+        }
+        return doctor;
     }
     
     /**
@@ -54,7 +70,11 @@ public class DoctorService {
             System.err.println("Invalid doctor data for update");
             return false;
         }
-        return DoctorDAO.updateDoctor(doctor);
+        boolean result = DoctorDAO.updateDoctor(doctor);
+        if (result) {
+            cache.invalidate(doctor.getDoctorId());
+        }
+        return result;
     }
     
     /**
@@ -65,7 +85,33 @@ public class DoctorService {
             System.err.println("Invalid doctor ID");
             return false;
         }
-        return DoctorDAO.deleteDoctor(doctorId);
+        boolean result = DoctorDAO.deleteDoctor(doctorId);
+        if (result) {
+            cache.invalidate(doctorId);
+        }
+        return result;
+    }
+    
+    /**
+     * Gets cache statistics
+     */
+    public static SimpleCache.Stats getCacheStats() {
+        return cache.stats();
+    }
+    
+    /**
+     * Gets cache size
+     */
+    public static long getCacheSize() {
+        return cache.size();
+    }
+    
+    /**
+     * Clears the cache
+     */
+    public static void clearCache() {
+        cache.clear();
+        System.out.println("✓ Doctor cache cleared");
     }
     
     /**

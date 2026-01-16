@@ -2,9 +2,12 @@ package service;
 
 import dao.PatientDAO;
 import model.Patient;
+import util.SimpleCache;
 import java.util.List;
 
 public class PatientService {
+    
+    private static final SimpleCache<Integer, Patient> cache = new SimpleCache<>();
     
     /**
      * Creates a new patient in the system
@@ -14,18 +17,31 @@ public class PatientService {
             System.err.println("Invalid patient data");
             return false;
         }
-        return PatientDAO.addPatient(patient);
+        boolean result = PatientDAO.addPatient(patient);
+        if (result && patient.getPatientId() > 0) {
+            // Cache the newly created patient immediately
+            cache.put(patient.getPatientId(), patient);
+        }
+        return result;
     }
     
     /**
-     * Retrieves a patient by ID
+     * Retrieves a patient by ID (with caching)
      */
     public static Patient getPatient(int patientId) {
         if (patientId <= 0) {
             System.err.println("Invalid patient ID");
             return null;
         }
-        return PatientDAO.getPatientById(patientId);
+        Patient cached = cache.get(patientId);
+        if (cached != null) {
+            return cached;
+        }
+        Patient patient = PatientDAO.getPatientById(patientId);
+        if (patient != null) {
+            cache.put(patientId, patient);
+        }
+        return patient;
     }
     
     /**
@@ -43,7 +59,11 @@ public class PatientService {
             System.err.println("Invalid patient data for update");
             return false;
         }
-        return PatientDAO.updatePatient(patient);
+        boolean result = PatientDAO.updatePatient(patient);
+        if (result) {
+            cache.invalidate(patient.getPatientId());
+        }
+        return result;
     }
     
     /**
@@ -54,7 +74,33 @@ public class PatientService {
             System.err.println("Invalid patient ID");
             return false;
         }
-        return PatientDAO.deletePatient(patientId);
+        boolean result = PatientDAO.deletePatient(patientId);
+        if (result) {
+            cache.invalidate(patientId);
+        }
+        return result;
+    }
+    
+    /**
+     * Gets cache statistics
+     */
+    public static SimpleCache.Stats getCacheStats() {
+        return cache.stats();
+    }
+    
+    /**
+     * Gets cache size
+     */
+    public static long getCacheSize() {
+        return cache.size();
+    }
+    
+    /**
+     * Clears the cache
+     */
+    public static void clearCache() {
+        cache.clear();
+        System.out.println("✓ Patient cache cleared");
     }
     
     /**

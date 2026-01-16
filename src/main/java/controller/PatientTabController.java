@@ -30,9 +30,6 @@ public class PatientTabController {
         TextField lastNameField = new TextField();
         lastNameField.setPromptText("Last Name");
 
-        TextField emailField = new TextField();
-        emailField.setPromptText("Email");
-
         TextField phoneField = new TextField();
         phoneField.setPromptText("Phone Number");
 
@@ -80,13 +77,6 @@ public class PatientTabController {
                 return;
             }
             
-            // Validate email
-            if (!ValidationUtil.isValidEmail(emailField.getText())) {
-                showAlert("Validation Error", "Please enter a valid email address (e.g., user@example.com)");
-                emailField.requestFocus();
-                return;
-            }
-            
             try {
                 LocalDate dob = dobPicker.getValue();
                 String gender = genderCombo.getValue() != null ? genderCombo.getValue() : "M";
@@ -102,7 +92,7 @@ public class PatientTabController {
                 );
                 if (PatientService.createPatient(patient)) {
                     showAlert("Success", "Patient added successfully!");
-                    clearFields(firstNameField, lastNameField, emailField, phoneField, genderCombo, bloodGroupCombo, dobPicker);
+                    clearFields(firstNameField, lastNameField, phoneField, genderCombo, bloodGroupCombo, dobPicker);
                     loadPatientData();
                 } else {
                     showAlert("Error", "Failed to add patient. Check console for details.");
@@ -204,9 +194,9 @@ public class PatientTabController {
                         if (PatientService.updatePatient(selected)) {
                             showAlert("Success", "Patient updated successfully!");
                             patientTable.refresh();
-                            clearFields(firstNameField, lastNameField, emailField, phoneField, genderCombo, bloodGroupCombo, dobPicker);
+                            clearFields(firstNameField, lastNameField, phoneField, genderCombo, bloodGroupCombo, dobPicker);
                             addBtn.setText("Add Patient");
-                            setupAddButton(addBtn, firstNameField, lastNameField, emailField, phoneField, genderCombo, bloodGroupCombo, dobPicker);
+                            setupAddButton(addBtn, firstNameField, lastNameField, phoneField, genderCombo, bloodGroupCombo, dobPicker);
                         } else {
                             showAlert("Error", "Failed to update patient");
                         }
@@ -262,7 +252,7 @@ public class PatientTabController {
         return tab;
     }
     
-    private void setupAddButton(Button addBtn, TextField firstNameField, TextField lastNameField, TextField emailField, 
+    private void setupAddButton(Button addBtn, TextField firstNameField, TextField lastNameField, 
                                 TextField phoneField, ComboBox<String> genderCombo, ComboBox<String> bloodGroupCombo, DatePicker dobPicker) {
         addBtn.setOnAction(e -> {
             if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()) {
@@ -274,7 +264,7 @@ public class PatientTabController {
                 showAlert("Validation Error", "Names can only contain letters, spaces, hyphens, and apostrophes!");
                 return;
             }
-            
+
             try {
                 LocalDate dob = dobPicker.getValue();
                 String gender = genderCombo.getValue() != null ? genderCombo.getValue() : "M";
@@ -290,7 +280,7 @@ public class PatientTabController {
                 );
                 if (PatientService.createPatient(patient)) {
                     showAlert("Success", "Patient added successfully!");
-                    clearFields(firstNameField, lastNameField, emailField, phoneField, genderCombo, bloodGroupCombo, dobPicker);
+                    clearFields(firstNameField, lastNameField, phoneField, genderCombo, bloodGroupCombo, dobPicker);
                     loadPatientData();
                 } else {
                     showAlert("Error", "Failed to add patient. Check console for details.");
@@ -302,11 +292,10 @@ public class PatientTabController {
         });
     }
     
-    private void clearFields(TextField firstNameField, TextField lastNameField, TextField emailField, 
+    private void clearFields(TextField firstNameField, TextField lastNameField, 
                             TextField phoneField, ComboBox<String> genderCombo, ComboBox<String> bloodGroupCombo, DatePicker dobPicker) {
         firstNameField.clear();
         lastNameField.clear();
-        emailField.clear();
         phoneField.clear();
         genderCombo.setValue("M");
         bloodGroupCombo.setValue("O+");
