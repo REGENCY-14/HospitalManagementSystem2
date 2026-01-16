@@ -73,24 +73,6 @@ public class Main extends Application {
         Scene scene = new Scene(tabPane);
         primaryStage.setScene(scene);
         primaryStage.show();
-        
-        // Auto-load all data when application starts
-        loadAllData();
-    }
-    
-    /**
-     * Load all data into table views
-     */
-    private void loadAllData() {
-        System.out.println("Loading all data into views...");
-        patientController.loadPatientData();
-        doctorController.loadDoctorData();
-        appointmentController.loadAppointmentData();
-        departmentController.loadDepartmentData();
-        prescriptionController.loadPrescriptionData();
-        feedbackController.loadFeedbackData();
-        inventoryController.loadInventoryData();
-        System.out.println("✓ All data loaded\n");
     }
 
     public static void main(String[] args) {
