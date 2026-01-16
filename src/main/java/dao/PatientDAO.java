@@ -35,8 +35,12 @@ public class PatientDAO {
      */
     public static Patient getPatientById(int patientId) {
         String query = "SELECT * FROM Patient WHERE patient_id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.err.println("Warning: Database connection is null. Returning null patient.");
+            return null;
+        }
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
             
             stmt.setInt(1, patientId);
             ResultSet rs = stmt.executeQuery();
@@ -57,6 +61,8 @@ public class PatientDAO {
             }
         } catch (SQLException e) {
             System.err.println("Error retrieving patient: " + e.getMessage());
+        } finally {
+            try { conn.close(); } catch (SQLException ignore) {}
         }
         return null;
     }
@@ -68,9 +74,15 @@ public class PatientDAO {
         List<Patient> patients = new ArrayList<>();
         String query = "SELECT * FROM Patient";
         
-        try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+        try {
+            Connection conn = DBConnection.getConnection();
+            if (conn == null) {
+                System.err.println("Warning: Database connection is null. Returning empty patient list.");
+                return patients;
+            }
+            
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
             
             while (rs.next()) {
                 Patient patient = new Patient(
@@ -86,6 +98,11 @@ public class PatientDAO {
                 patient.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
                 patients.add(patient);
             }
+            
+            // Close resources
+            rs.close();
+            stmt.close();
+            conn.close();
         } catch (SQLException e) {
             System.err.println("Error retrieving all patients: " + e.getMessage());
         }

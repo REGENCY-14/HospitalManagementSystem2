@@ -12,13 +12,13 @@ import java.util.Properties;
  * Provides connection pooling, retry logic, and connection validation
  */
 public class DBConnection {
-    // Database Configuration
-    private static final String DB_HOST = "localhost";
-    private static final String DB_PORT = "3306";
-    private static final String DB_NAME = "hospital_db";
-    private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
-    private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Hustler,14"; // UPDATE THIS with your MySQL password
+    // Database Configuration (supports environment overrides)
+    private static final String DB_HOST = System.getenv().getOrDefault("HOSPITAL_DB_HOST", "localhost");
+    private static final String DB_PORT = System.getenv().getOrDefault("HOSPITAL_DB_PORT", "3306");
+    private static final String DB_NAME = System.getenv().getOrDefault("HOSPITAL_DB_NAME", "hospital_db");
+    private static final String DB_USER = System.getenv().getOrDefault("HOSPITAL_DB_USER", "root");
+    private static final String DB_PASSWORD = System.getenv().getOrDefault("HOSPITAL_DB_PASSWORD", "Hustler,14");
+    private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
     
     // Connection settings
     private static final int MAX_RETRY_ATTEMPTS = 3;
@@ -74,9 +74,8 @@ public class DBConnection {
                 // Establish connection
                 Connection conn = DriverManager.getConnection(DB_URL, props);
                 
-                System.out.println("✓ Database connection established successfully!");
-                System.out.println("  - Host: " + DB_HOST + ":" + DB_PORT);
-                System.out.println("  - Database: " + DB_NAME);
+                System.out.println("✓ MySQL connection established");
+                System.out.println("  - URL: " + DB_URL);
                 System.out.println("  - User: " + DB_USER);
                 
                 return conn;
@@ -104,10 +103,10 @@ public class DBConnection {
             }
         }
         
-        System.err.println("\n✗ Failed to connect to database after " + MAX_RETRY_ATTEMPTS + " attempts");
+        System.err.println("\n✗ Failed to connect to MySQL after " + MAX_RETRY_ATTEMPTS + " attempts");
         System.err.println("  Please check:");
         System.err.println("  1. MySQL server is running");
-        System.err.println("  2. Database '" + DB_NAME + "' exists");
+        System.err.println("  2. Database '" + DB_NAME + "' exists and schema applied");
         System.err.println("  3. Username and password are correct");
         System.err.println("  4. MySQL is listening on " + DB_HOST + ":" + DB_PORT);
         

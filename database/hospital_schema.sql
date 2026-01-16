@@ -1,11 +1,11 @@
--- Create the hospital database
-CREATE DATABASE hospital_db;
+-- Create the hospital database (if it doesn't exist)
+CREATE DATABASE IF NOT EXISTS hospital_db;
 
 -- Select the database for use
 USE hospital_db;
 
 -- Stores patient personal and contact information
-CREATE TABLE Patient (
+CREATE TABLE IF NOT EXISTS Patient (
     patient_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique patient identifier
     first_name VARCHAR(50) NOT NULL,            -- Patient first name
     last_name VARCHAR(50) NOT NULL,             -- Patient last name
@@ -18,14 +18,14 @@ CREATE TABLE Patient (
 );
 
 -- Stores hospital departments
-CREATE TABLE Department (
+CREATE TABLE IF NOT EXISTS Department (
     department_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique department ID
     name VARCHAR(100) NOT NULL UNIQUE,             -- Department name
     location VARCHAR(100)                          -- Department location
 );
 
 -- Stores doctor information and department association
-CREATE TABLE Doctor (
+CREATE TABLE IF NOT EXISTS Doctor (
     doctor_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique doctor ID
     first_name VARCHAR(50) NOT NULL,           -- Doctor first name
     last_name VARCHAR(50) NOT NULL,            -- Doctor last name
@@ -36,7 +36,7 @@ CREATE TABLE Doctor (
 );
 
 -- Manages appointments between patients and doctors
-CREATE TABLE Appointment (
+CREATE TABLE IF NOT EXISTS Appointment (
     appointment_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique appointment ID
     patient_id INT NOT NULL,                       -- Patient reference
     doctor_id INT NOT NULL,                        -- Doctor reference
@@ -51,7 +51,7 @@ CREATE TABLE Appointment (
 );
 
 -- Stores medical inventory items (medicines, equipment, supplies)
-CREATE TABLE MedicalInventory (
+CREATE TABLE IF NOT EXISTS MedicalInventory (
     inventory_id INT PRIMARY KEY AUTO_INCREMENT,   -- Unique inventory item ID
     item_name VARCHAR(100) NOT NULL,               -- Name of the item
     category VARCHAR(50),                          -- Category (Medicine, Equipment, Supplies)
@@ -63,7 +63,7 @@ CREATE TABLE MedicalInventory (
 );
 
 -- Stores prescriptions issued by doctors to patients
-CREATE TABLE Prescription (
+CREATE TABLE IF NOT EXISTS Prescription (
     prescription_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique prescription ID
     patient_id INT NOT NULL,                        -- Patient reference
     doctor_id INT NOT NULL,                         -- Prescribing doctor reference
@@ -79,7 +79,7 @@ CREATE TABLE Prescription (
 );
 
 -- Stores individual items within a prescription (medicines and dosage)
-CREATE TABLE PrescriptionItem (
+CREATE TABLE IF NOT EXISTS PrescriptionItem (
     prescription_item_id INT PRIMARY KEY AUTO_INCREMENT, -- Unique item ID
     prescription_id INT NOT NULL,                        -- Prescription reference
     inventory_id INT NOT NULL,                           -- Medicine/item from inventory
@@ -93,7 +93,7 @@ CREATE TABLE PrescriptionItem (
 );
 
 -- Stores patient feedback and ratings
-CREATE TABLE PatientFeedback (
+CREATE TABLE IF NOT EXISTS PatientFeedback (
     feedback_id INT PRIMARY KEY AUTO_INCREMENT,     -- Unique feedback ID
     patient_id INT NOT NULL,                        -- Patient reference
     doctor_id INT,                                  -- Doctor reference (optional)
@@ -109,101 +109,680 @@ CREATE TABLE PatientFeedback (
 );
 
 -- ============================================================
--- INDEXES FOR PERFORMANCE OPTIMIZATION
--- ============================================================
-
--- Index to speed up patient search by last name
-CREATE INDEX idx_patient_last_name ON Patient(last_name);
-
--- Index to speed up patient search by first name
-CREATE INDEX idx_patient_first_name ON Patient(first_name);
-
--- Index to optimize appointment date queries
-CREATE INDEX idx_appointment_date ON Appointment(appointment_date);
-
--- Index for appointment status filtering
-CREATE INDEX idx_appointment_status ON Appointment(status);
-
--- Index to improve doctor lookup by department
-CREATE INDEX idx_doctor_department ON Doctor(department_id);
-
--- Index for doctor specialization searches
-CREATE INDEX idx_doctor_specialization ON Doctor(specialization);
-
--- Index for prescription searches by patient
-CREATE INDEX idx_prescription_patient ON Prescription(patient_id);
-
--- Index for prescription searches by doctor
-CREATE INDEX idx_prescription_doctor ON Prescription(doctor_id);
-
--- Index for prescription date queries
-CREATE INDEX idx_prescription_date ON Prescription(prescription_date);
-
--- Index for inventory item searches
-CREATE INDEX idx_inventory_item_name ON MedicalInventory(item_name);
-
--- Index for inventory category filtering
-CREATE INDEX idx_inventory_category ON MedicalInventory(category);
-
--- Index for feedback by patient
-CREATE INDEX idx_feedback_patient ON PatientFeedback(patient_id);
-
--- Index for feedback by doctor
-CREATE INDEX idx_feedback_doctor ON PatientFeedback(doctor_id);
-
--- ============================================================
 -- SAMPLE DATA INSERTION
 -- ============================================================
 
--- Insert sample departments
+-- Disable foreign key checks to allow clean deletion
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Clear existing data and reset auto-increment (using TRUNCATE)
+TRUNCATE TABLE PatientFeedback;
+TRUNCATE TABLE PrescriptionItem;
+TRUNCATE TABLE Prescription;
+TRUNCATE TABLE MedicalInventory;
+TRUNCATE TABLE Appointment;
+TRUNCATE TABLE Doctor;
+TRUNCATE TABLE Patient;
+TRUNCATE TABLE Department;
+
+-- Insert departments (10 departments)
 INSERT INTO Department (name, location) VALUES
 ('Cardiology', 'Building A, Floor 2'),
 ('Neurology', 'Building B, Floor 3'),
 ('Orthopedics', 'Building A, Floor 1'),
 ('Pediatrics', 'Building C, Floor 1'),
-('Emergency', 'Building D, Ground Floor');
+('Emergency', 'Building D, Ground Floor'),
+('Radiology', 'Building B, Floor 1'),
+('Oncology', 'Building E, Floor 4'),
+('Dermatology', 'Building C, Floor 2'),
+('Psychiatry', 'Building F, Floor 3'),
+('General Surgery', 'Building A, Floor 3');
 
--- Insert sample doctors
+-- Insert 100 doctors
 INSERT INTO Doctor (first_name, last_name, specialization, phone, department_id) VALUES
 ('John', 'Smith', 'Cardiologist', '555-0101', 1),
 ('Emily', 'Johnson', 'Neurologist', '555-0102', 2),
 ('Michael', 'Williams', 'Orthopedic Surgeon', '555-0103', 3),
 ('Sarah', 'Brown', 'Pediatrician', '555-0104', 4),
-('David', 'Jones', 'Emergency Medicine', '555-0105', 5);
+('David', 'Jones', 'Emergency Medicine', '555-0105', 5),
+('Lisa', 'Miller', 'Radiologist', '555-0106', 6),
+('Robert', 'Garcia', 'Oncologist', '555-0107', 7),
+('Jennifer', 'Martinez', 'Dermatologist', '555-0108', 8),
+('James', 'Rodriguez', 'Psychiatrist', '555-0109', 9),
+('Maria', 'Wilson', 'General Surgeon', '555-0110', 10),
+('William', 'Anderson', 'Cardiologist', '555-0111', 1),
+('Linda', 'Taylor', 'Neurologist', '555-0112', 2),
+('Richard', 'Thomas', 'Orthopedic Surgeon', '555-0113', 3),
+('Patricia', 'Moore', 'Pediatrician', '555-0114', 4),
+('Charles', 'Jackson', 'Emergency Medicine', '555-0115', 5),
+('Barbara', 'Martin', 'Radiologist', '555-0116', 6),
+('Joseph', 'Lee', 'Oncologist', '555-0117', 7),
+('Susan', 'Perez', 'Dermatologist', '555-0118', 8),
+('Thomas', 'White', 'Psychiatrist', '555-0119', 9),
+('Jessica', 'Harris', 'General Surgeon', '555-0120', 10),
+('Daniel', 'Clark', 'Cardiologist', '555-0121', 1),
+('Karen', 'Lewis', 'Neurologist', '555-0122', 2),
+('Matthew', 'Walker', 'Orthopedic Surgeon', '555-0123', 3),
+('Nancy', 'Hall', 'Pediatrician', '555-0124', 4),
+('Paul', 'Allen', 'Emergency Medicine', '555-0125', 5),
+('Betty', 'Young', 'Radiologist', '555-0126', 6),
+('Mark', 'King', 'Oncologist', '555-0127', 7),
+('Helen', 'Wright', 'Dermatologist', '555-0128', 8),
+('Donald', 'Lopez', 'Psychiatrist', '555-0129', 9),
+('Sandra', 'Hill', 'General Surgeon', '555-0130', 10),
+('Steven', 'Scott', 'Cardiologist', '555-0131', 1),
+('Ashley', 'Green', 'Neurologist', '555-0132', 2),
+('Kenneth', 'Adams', 'Orthopedic Surgeon', '555-0133', 3),
+('Donna', 'Baker', 'Pediatrician', '555-0134', 4),
+('Joshua', 'Gonzalez', 'Emergency Medicine', '555-0135', 5),
+('Carol', 'Nelson', 'Radiologist', '555-0136', 6),
+('Brian', 'Carter', 'Oncologist', '555-0137', 7),
+('Michelle', 'Mitchell', 'Dermatologist', '555-0138', 8),
+('Edward', 'Roberts', 'Psychiatrist', '555-0139', 9),
+('Amanda', 'Turner', 'General Surgeon', '555-0140', 10),
+('Ronald', 'Phillips', 'Cardiologist', '555-0141', 1),
+('Melissa', 'Campbell', 'Neurologist', '555-0142', 2),
+('Anthony', 'Parker', 'Orthopedic Surgeon', '555-0143', 3),
+('Kimberly', 'Evans', 'Pediatrician', '555-0144', 4),
+('Kevin', 'Edwards', 'Emergency Medicine', '555-0145', 5),
+('Sarah', 'Collins', 'Radiologist', '555-0146', 6),
+('Jason', 'Stewart', 'Oncologist', '555-0147', 7),
+('Laura', 'Sanchez', 'Dermatologist', '555-0148', 8),
+('Jeffrey', 'Morris', 'Psychiatrist', '555-0149', 9),
+('Deborah', 'Rogers', 'General Surgeon', '555-0150', 10),
+('Ryan', 'Reed', 'Cardiologist', '555-0151', 1),
+('Stephanie', 'Cook', 'Neurologist', '555-0152', 2),
+('Gary', 'Morgan', 'Orthopedic Surgeon', '555-0153', 3),
+('Rebecca', 'Bell', 'Pediatrician', '555-0154', 4),
+('Jacob', 'Murphy', 'Emergency Medicine', '555-0155', 5),
+('Virginia', 'Bailey', 'Radiologist', '555-0156', 6),
+('Nicholas', 'Rivera', 'Oncologist', '555-0157', 7),
+('Pamela', 'Cooper', 'Dermatologist', '555-0158', 8),
+('Eric', 'Richardson', 'Psychiatrist', '555-0159', 9),
+('Katherine', 'Cox', 'General Surgeon', '555-0160', 10),
+('Jonathan', 'Howard', 'Cardiologist', '555-0161', 1),
+('Christine', 'Ward', 'Neurologist', '555-0162', 2),
+('Larry', 'Torres', 'Orthopedic Surgeon', '555-0163', 3),
+('Janet', 'Peterson', 'Pediatrician', '555-0164', 4),
+('Justin', 'Gray', 'Emergency Medicine', '555-0165', 5),
+('Ruth', 'Ramirez', 'Radiologist', '555-0166', 6),
+('Scott', 'James', 'Oncologist', '555-0167', 7),
+('Carolyn', 'Watson', 'Dermatologist', '555-0168', 8),
+('Brandon', 'Brooks', 'Psychiatrist', '555-0169', 9),
+('Angela', 'Kelly', 'General Surgeon', '555-0170', 10),
+('Frank', 'Sanders', 'Cardiologist', '555-0171', 1),
+('Shirley', 'Price', 'Neurologist', '555-0172', 2),
+('Raymond', 'Bennett', 'Orthopedic Surgeon', '555-0173', 3),
+('Cynthia', 'Wood', 'Pediatrician', '555-0174', 4),
+('Benjamin', 'Barnes', 'Emergency Medicine', '555-0175', 5),
+('Kathleen', 'Ross', 'Radiologist', '555-0176', 6),
+('Samuel', 'Henderson', 'Oncologist', '555-0177', 7),
+('Amy', 'Coleman', 'Dermatologist', '555-0178', 8),
+('Patrick', 'Jenkins', 'Psychiatrist', '555-0179', 9),
+('Diane', 'Perry', 'General Surgeon', '555-0180', 10),
+('Alexander', 'Powell', 'Cardiologist', '555-0181', 1),
+('Joyce', 'Long', 'Neurologist', '555-0182', 2),
+('Jack', 'Patterson', 'Orthopedic Surgeon', '555-0183', 3),
+('Julie', 'Hughes', 'Pediatrician', '555-0184', 4),
+('Dennis', 'Flores', 'Emergency Medicine', '555-0185', 5),
+('Marie', 'Washington', 'Radiologist', '555-0186', 6),
+('Jerry', 'Butler', 'Oncologist', '555-0187', 7),
+('Rose', 'Simmons', 'Dermatologist', '555-0188', 8),
+('Tyler', 'Foster', 'Psychiatrist', '555-0189', 9),
+('Gloria', 'Gonzales', 'General Surgeon', '555-0190', 10),
+('Aaron', 'Bryant', 'Cardiologist', '555-0191', 1),
+('Evelyn', 'Alexander', 'Neurologist', '555-0192', 2),
+('Henry', 'Russell', 'Orthopedic Surgeon', '555-0193', 3),
+('Ann', 'Griffin', 'Pediatrician', '555-0194', 4),
+('Douglas', 'Diaz', 'Emergency Medicine', '555-0195', 5);
 
--- Insert sample patients
+-- Insert 100 patients
 INSERT INTO Patient (first_name, last_name, date_of_birth, gender, phone, address, blood_type) VALUES
 ('Alice', 'Anderson', '1990-05-15', 'Female', '555-1001', '123 Main St, City', 'A+'),
 ('Bob', 'Baker', '1985-08-20', 'Male', '555-1002', '456 Oak Ave, Town', 'B+'),
 ('Carol', 'Clark', '1978-03-10', 'Female', '555-1003', '789 Pine Rd, Village', 'O+'),
 ('Daniel', 'Davis', '2010-11-25', 'Male', '555-1004', '321 Elm St, City', 'AB+'),
-('Eva', 'Evans', '1995-07-30', 'Female', '555-1005', '654 Maple Dr, Town', 'A-');
+('Eva', 'Evans', '1995-07-30', 'Female', '555-1005', '654 Maple Dr, Town', 'A-'),
+('Frank', 'Fisher', '1982-12-05', 'Male', '555-1006', '987 Cedar Ln, City', 'B-'),
+('Grace', 'Green', '1998-06-18', 'Female', '555-1007', '741 Birch St, Village', 'O-'),
+('Henry', 'Harris', '1975-09-22', 'Male', '555-1008', '852 Spruce Ave, Town', 'AB-'),
+('Iris', 'Irving', '2005-03-14', 'Female', '555-1009', '963 Willow Rd, City', 'A+'),
+('Jack', 'Jackson', '1988-11-30', 'Male', '555-1010', '159 Poplar Dr, Town', 'B+'),
+('Kate', 'Kelly', '1992-07-08', 'Female', '555-1011', '357 Ash St, Village', 'O+'),
+('Liam', 'Lewis', '1980-02-25', 'Male', '555-1012', '486 Cherry Ln, City', 'AB+'),
+('Mia', 'Martin', '2000-10-12', 'Female', '555-1013', '753 Walnut Ave, Town', 'A-'),
+('Noah', 'Nelson', '1987-04-19', 'Male', '555-1014', '951 Hickory Rd, City', 'B-'),
+('Olivia', 'Oliver', '1993-08-27', 'Female', '555-1015', '842 Beech Dr, Village', 'O-'),
+('Paul', 'Parker', '1976-01-03', 'Male', '555-1016', '369 Fir St, Town', 'AB-'),
+('Quinn', 'Quinn', '2008-05-16', 'Female', '555-1017', '147 Cypress Ln, City', 'A+'),
+('Ryan', 'Roberts', '1984-09-24', 'Male', '555-1018', '258 Redwood Ave, Town', 'B+'),
+('Sophia', 'Scott', '1996-12-31', 'Female', '555-1019', '789 Sequoia Rd, Village', 'O+'),
+('Thomas', 'Taylor', '1979-06-07', 'Male', '555-1020', '456 Magnolia Dr, City', 'AB+'),
+('Uma', 'Turner', '2003-02-14', 'Female', '555-1021', '123 Dogwood St, Town', 'A-'),
+('Victor', 'Walker', '1989-10-21', 'Male', '555-1022', '987 Palm Ln, City', 'B-'),
+('Wendy', 'White', '1994-04-28', 'Female', '555-1023', '654 Sycamore Ave, Village', 'O-'),
+('Xavier', 'Young', '1977-08-05', 'Male', '555-1024', '321 Alder Rd, Town', 'AB-'),
+('Yara', 'Adams', '2007-12-12', 'Female', '555-1025', '753 Cottonwood Dr, City', 'A+'),
+('Zack', 'Brown', '1986-03-20', 'Male', '555-1026', '159 Maple St, Town', 'B+'),
+('Amber', 'Carter', '1991-07-27', 'Female', '555-1027', '357 Oak Ln, Village', 'O+'),
+('Blake', 'Collins', '1983-11-04', 'Male', '555-1028', '486 Pine Ave, City', 'AB+'),
+('Chloe', 'Cooper', '1999-01-11', 'Female', '555-1029', '951 Elm Rd, Town', 'A-'),
+('Dylan', 'Edwards', '1981-05-18', 'Male', '555-1030', '842 Birch Dr, City', 'B-'),
+('Emma', 'Foster', '1997-09-25', 'Female', '555-1031', '369 Cedar St, Village', 'O-'),
+('Felix', 'Gray', '1974-02-01', 'Male', '555-1032', '147 Spruce Ln, Town', 'AB-'),
+('Georgia', 'Hill', '2006-06-09', 'Female', '555-1033', '258 Willow Ave, City', 'A+'),
+('Hugo', 'James', '1988-10-16', 'Male', '555-1034', '789 Poplar Rd, Town', 'B+'),
+('Ivy', 'King', '1992-02-23', 'Female', '555-1035', '456 Ash Dr, Village', 'O+'),
+('Jason', 'Long', '1978-06-30', 'Male', '555-1036', '123 Cherry St, City', 'AB+'),
+('Kara', 'Moore', '2004-10-07', 'Female', '555-1037', '987 Walnut Ln, Town', 'A-'),
+('Leo', 'Morris', '1985-01-14', 'Male', '555-1038', '654 Hickory Ave, City', 'B-'),
+('Maya', 'Perry', '1995-05-21', 'Female', '555-1039', '321 Beech Rd, Village', 'O-'),
+('Nathan', 'Reed', '1980-09-28', 'Male', '555-1040', '753 Fir Dr, Town', 'AB-'),
+('Nora', 'Rogers', '2002-01-05', 'Female', '555-1041', '159 Cypress St, City', 'A+'),
+('Oscar', 'Russell', '1987-05-12', 'Male', '555-1042', '357 Redwood Ln, Town', 'B+'),
+('Piper', 'Sanders', '1993-09-19', 'Female', '555-1043', '486 Sequoia Ave, Village', 'O+'),
+('Quincy', 'Smith', '1976-02-26', 'Male', '555-1044', '951 Magnolia Rd, City', 'AB+'),
+('Ruby', 'Stewart', '2009-06-04', 'Female', '555-1045', '842 Dogwood Dr, Town', 'A-'),
+('Sam', 'Thomas', '1984-10-11', 'Male', '555-1046', '369 Palm St, City', 'B-'),
+('Tara', 'Torres', '1998-02-18', 'Female', '555-1047', '147 Sycamore Ln, Village', 'O-'),
+('Umar', 'Ward', '1979-06-25', 'Male', '555-1048', '258 Alder Ave, Town', 'AB-'),
+('Violet', 'Watson', '2001-10-02', 'Female', '555-1049', '789 Cottonwood Rd, City', 'A+'),
+('Wade', 'Williams', '1986-01-09', 'Male', '555-1050', '456 Maple Dr, Town', 'B+'),
+('Aria', 'Allen', '1994-05-16', 'Female', '555-1051', '123 Oak St, Village', 'O+'),
+('Ben', 'Bailey', '1977-09-23', 'Male', '555-1052', '987 Pine Ln, City', 'AB+'),
+('Clara', 'Bell', '2005-01-30', 'Female', '555-1053', '654 Elm Ave, Town', 'A-'),
+('David', 'Bennett', '1989-06-06', 'Male', '555-1054', '321 Birch Rd, City', 'B-'),
+('Ella', 'Brooks', '1991-10-13', 'Female', '555-1055', '753 Cedar Dr, Village', 'O-'),
+('Finn', 'Butler', '1982-02-20', 'Male', '555-1056', '159 Spruce St, Town', 'AB-'),
+('Gina', 'Campbell', '2000-06-28', 'Female', '555-1057', '357 Willow Ln, City', 'A+'),
+('Harry', 'Clark', '1983-11-05', 'Male', '555-1058', '486 Poplar Ave, Town', 'B+'),
+('Isla', 'Cox', '1996-03-13', 'Female', '555-1059', '951 Ash Rd, Village', 'O+'),
+('Jake', 'Davis', '1975-07-20', 'Male', '555-1060', '842 Cherry Dr, City', 'AB+'),
+('Kylie', 'Evans', '2008-11-27', 'Female', '555-1061', '369 Walnut St, Town', 'A-'),
+('Luke', 'Fisher', '1988-04-04', 'Male', '555-1062', '147 Hickory Ln, City', 'B-'),
+('Mila', 'Garcia', '1990-08-11', 'Female', '555-1063', '258 Beech Ave, Village', 'O-'),
+('Nick', 'Gonzalez', '1981-12-18', 'Male', '555-1064', '789 Fir Rd, Town', 'AB-'),
+('Olive', 'Hall', '2003-04-25', 'Female', '555-1065', '456 Cypress Dr, City', 'A+'),
+('Peter', 'Hayes', '1987-09-01', 'Male', '555-1066', '123 Redwood St, Town', 'B+'),
+('Rachel', 'Howard', '1992-01-08', 'Female', '555-1067', '987 Sequoia Ln, Village', 'O+'),
+('Steve', 'Hughes', '1978-05-15', 'Male', '555-1068', '654 Magnolia Ave, City', 'AB+'),
+('Tina', 'Jenkins', '2006-09-22', 'Female', '555-1069', '321 Dogwood Rd, Town', 'A-'),
+('Vince', 'Kelly', '1985-02-28', 'Male', '555-1070', '753 Palm Dr, City', 'B-'),
+('Willow', 'Knight', '1993-07-06', 'Female', '555-1071', '159 Sycamore St, Village', 'O-'),
+('Xander', 'Lee', '1976-11-13', 'Male', '555-1072', '357 Alder Ln, Town', 'AB-'),
+('Yuki', 'Lopez', '2004-03-21', 'Female', '555-1073', '486 Cottonwood Ave, City', 'A+'),
+('Zane', 'Martinez', '1989-07-28', 'Male', '555-1074', '951 Maple Rd, Town', 'B+'),
+('Abby', 'Miller', '1991-12-05', 'Female', '555-1075', '842 Oak Dr, Village', 'O+'),
+('Brad', 'Mitchell', '1980-04-12', 'Male', '555-1076', '369 Pine St, City', 'AB+'),
+('Cara', 'Morgan', '2002-08-19', 'Female', '555-1077', '147 Elm Ln, Town', 'A-'),
+('Dean', 'Murphy', '1984-01-26', 'Male', '555-1078', '258 Birch Ave, City', 'B-'),
+('Ellie', 'Nelson', '1997-06-03', 'Female', '555-1079', '789 Cedar Rd, Village', 'O-'),
+('Fred', 'Owens', '1977-10-10', 'Male', '555-1080', '456 Spruce Dr, Town', 'AB-'),
+('Gail', 'Parker', '2007-02-17', 'Female', '555-1081', '123 Willow St, City', 'A+'),
+('Hank', 'Perez', '1986-06-24', 'Male', '555-1082', '987 Poplar Ln, Town', 'B+'),
+('Iris', 'Powell', '1990-11-01', 'Female', '555-1083', '654 Ash Ave, Village', 'O+'),
+('John', 'Price', '1979-03-08', 'Male', '555-1084', '321 Cherry Rd, City', 'AB+'),
+('Kim', 'Reed', '2001-07-15', 'Female', '555-1085', '753 Walnut Dr, Town', 'A-'),
+('Levi', 'Reynolds', '1983-11-22', 'Male', '555-1086', '159 Hickory St, City', 'B-'),
+('Mona', 'Richardson', '1995-04-29', 'Female', '555-1087', '357 Beech Ln, Village', 'O-'),
+('Neil', 'Rivera', '1974-08-06', 'Male', '555-1088', '486 Fir Ave, Town', 'AB-'),
+('Opal', 'Roberts', '2009-12-13', 'Female', '555-1089', '951 Cypress Rd, City', 'A+'),
+('Phil', 'Robinson', '1988-05-20', 'Male', '555-1090', '842 Redwood Dr, Town', 'B+'),
+('Quinn', 'Rogers', '1992-09-27', 'Female', '555-1091', '369 Sequoia St, Village', 'O+'),
+('Ross', 'Ross', '1975-01-04', 'Male', '555-1092', '147 Magnolia Ln, City', 'AB+'),
+('Sara', 'Russell', '2003-05-11', 'Female', '555-1093', '258 Dogwood Ave, Town', 'A-'),
+('Troy', 'Scott', '1987-09-18', 'Male', '555-1094', '789 Palm Rd, City', 'B-'),
+('Una', 'Simmons', '1994-02-25', 'Female', '555-1095', '456 Sycamore Dr, Village', 'O-'),
+('Van', 'Stewart', '1978-07-02', 'Male', '555-1096', '123 Alder St, Town', 'AB-'),
+('Willa', 'Stone', '2005-11-09', 'Female', '555-1097', '987 Cottonwood Ln, City', 'A+'),
+('Wyatt', 'Sullivan', '1986-03-16', 'Male', '555-1098', '654 Maple Ave, Town', 'B+'),
+('Xena', 'Taylor', '1993-07-23', 'Female', '555-1099', '321 Oak Rd, Village', 'O+'),
+('York', 'Thomas', '1976-12-30', 'Male', '555-1100', '753 Pine Dr, City', 'AB+');
 
--- Insert sample appointments
+-- Insert 100 appointments
 INSERT INTO Appointment (patient_id, doctor_id, appointment_date, appointment_time, status, notes) VALUES
 (1, 1, '2026-01-10', '09:00:00', 'Scheduled', 'Regular checkup'),
 (2, 3, '2026-01-11', '10:30:00', 'Scheduled', 'Knee pain consultation'),
 (3, 2, '2026-01-12', '14:00:00', 'Completed', 'Follow-up visit'),
 (4, 4, '2026-01-13', '11:00:00', 'Scheduled', 'Vaccination'),
-(5, 5, '2026-01-09', '08:00:00', 'Completed', 'Emergency visit');
+(5, 5, '2026-01-09', '08:00:00', 'Completed', 'Emergency visit'),
+(6, 10, '2026-01-14', '09:30:00', 'Scheduled', 'Surgical consultation'),
+(7, 7, '2026-01-15', '13:00:00', 'Completed', 'Chemotherapy follow-up'),
+(8, 8, '2026-01-16', '10:00:00', 'Scheduled', 'Skin rash treatment'),
+(9, 9, '2026-01-17', '15:30:00', 'Scheduled', 'Mental health assessment'),
+(10, 6, '2026-01-18', '08:30:00', 'Completed', 'X-ray examination'),
+(11, 11, '2026-01-19', '11:00:00', 'Scheduled', 'Heart murmur check'),
+(12, 12, '2026-01-20', '14:30:00', 'Scheduled', 'Neurological assessment'),
+(13, 13, '2026-01-21', '09:00:00', 'Completed', 'Joint pain evaluation'),
+(14, 14, '2026-01-22', '16:00:00', 'Scheduled', 'Child wellness visit'),
+(15, 15, '2026-01-23', '07:30:00', 'Completed', 'Trauma assessment'),
+(16, 16, '2026-01-24', '12:00:00', 'Scheduled', 'CT scan'),
+(17, 17, '2026-01-25', '10:30:00', 'Scheduled', 'Cancer screening'),
+(18, 18, '2026-01-26', '13:30:00', 'Completed', 'Acne treatment'),
+(19, 19, '2026-01-27', '15:00:00', 'Scheduled', 'Depression therapy'),
+(20, 20, '2026-01-28', '08:00:00', 'Scheduled', 'Pre-operative evaluation'),
+(21, 21, '2026-01-29', '09:30:00', 'Completed', 'Cardiac stress test'),
+(22, 22, '2026-01-30', '11:30:00', 'Scheduled', 'Memory issues consultation'),
+(23, 23, '2026-01-31', '14:00:00', 'Scheduled', 'Sports injury assessment'),
+(24, 24, '2026-02-01', '10:00:00', 'Completed', 'Immunization'),
+(25, 25, '2026-02-02', '08:30:00', 'Scheduled', 'Chest pain evaluation'),
+(26, 26, '2026-02-03', '12:30:00', 'Scheduled', 'MRI scan'),
+(27, 27, '2026-02-04', '15:30:00', 'Completed', 'Tumor biopsy'),
+(28, 28, '2026-02-05', '09:00:00', 'Scheduled', 'Eczema treatment'),
+(29, 29, '2026-02-06', '13:00:00', 'Scheduled', 'Anxiety counseling'),
+(30, 30, '2026-02-07', '10:30:00', 'Completed', 'Post-surgery follow-up'),
+(31, 1, '2026-02-08', '08:00:00', 'Scheduled', 'Blood pressure monitoring'),
+(32, 2, '2026-02-09', '14:30:00', 'Scheduled', 'Headache consultation'),
+(33, 3, '2026-02-10', '11:00:00', 'Completed', 'Back pain treatment'),
+(34, 4, '2026-02-11', '09:30:00', 'Scheduled', 'Growth assessment'),
+(35, 5, '2026-02-12', '07:00:00', 'Completed', 'Minor injury care'),
+(36, 6, '2026-02-13', '13:30:00', 'Scheduled', 'Ultrasound'),
+(37, 7, '2026-02-14', '10:00:00', 'Scheduled', 'Radiation therapy planning'),
+(38, 8, '2026-02-15', '15:00:00', 'Completed', 'Mole examination'),
+(39, 9, '2026-02-16', '12:00:00', 'Scheduled', 'PTSD treatment'),
+(40, 10, '2026-02-17', '08:30:00', 'Scheduled', 'Hernia repair consultation'),
+(41, 11, '2026-02-18', '14:00:00', 'Completed', 'Arrhythmia check'),
+(42, 12, '2026-02-19', '09:00:00', 'Scheduled', 'Seizure evaluation'),
+(43, 13, '2026-02-20', '11:30:00', 'Scheduled', 'Fracture follow-up'),
+(44, 14, '2026-02-21', '16:30:00', 'Completed', 'Asthma check'),
+(45, 15, '2026-02-22', '07:30:00', 'Scheduled', 'Burn treatment'),
+(46, 16, '2026-02-23', '12:00:00', 'Scheduled', 'PET scan'),
+(47, 17, '2026-02-24', '10:30:00', 'Completed', 'Lymphoma treatment'),
+(48, 18, '2026-02-25', '13:30:00', 'Scheduled', 'Psoriasis consultation'),
+(49, 19, '2026-02-26', '15:00:00', 'Scheduled', 'Bipolar disorder management'),
+(50, 20, '2026-02-27', '08:00:00', 'Completed', 'Appendectomy follow-up'),
+(51, 21, '2026-02-28', '09:30:00', 'Scheduled', 'ECG test'),
+(52, 22, '2026-03-01', '11:30:00', 'Scheduled', 'Stroke risk assessment'),
+(53, 23, '2026-03-02', '14:00:00', 'Completed', 'Hip replacement consultation'),
+(54, 24, '2026-03-03', '10:00:00', 'Scheduled', 'Developmental screening'),
+(55, 25, '2026-03-04', '08:30:00', 'Scheduled', 'Heart failure management'),
+(56, 26, '2026-03-05', '12:30:00', 'Completed', 'Mammogram'),
+(57, 27, '2026-03-06', '15:30:00', 'Scheduled', 'Prostate cancer treatment'),
+(58, 28, '2026-03-07', '09:00:00', 'Scheduled', 'Hair loss consultation'),
+(59, 29, '2026-03-08', '13:00:00', 'Completed', 'OCD therapy'),
+(60, 30, '2026-03-09', '10:30:00', 'Scheduled', 'Gallbladder surgery'),
+(61, 1, '2026-03-10', '08:00:00', 'Scheduled', 'Cholesterol check'),
+(62, 2, '2026-03-11', '14:30:00', 'Completed', 'Parkinson assessment'),
+(63, 3, '2026-03-12', '11:00:00', 'Scheduled', 'Shoulder pain treatment'),
+(64, 4, '2026-03-13', '09:30:00', 'Scheduled', 'Ear infection check'),
+(65, 5, '2026-03-14', '07:00:00', 'Completed', 'Allergic reaction treatment'),
+(66, 6, '2026-03-15', '13:30:00', 'Scheduled', 'Bone density scan'),
+(67, 7, '2026-03-16', '10:00:00', 'Scheduled', 'Leukemia treatment'),
+(68, 8, '2026-03-17', '15:00:00', 'Completed', 'Vitiligo consultation'),
+(69, 9, '2026-03-18', '12:00:00', 'Scheduled', 'Schizophrenia management'),
+(70, 10, '2026-03-19', '08:30:00', 'Scheduled', 'Colon surgery'),
+(71, 11, '2026-03-20', '14:00:00', 'Completed', 'Pacemaker check'),
+(72, 12, '2026-03-21', '09:00:00', 'Scheduled', 'Multiple sclerosis evaluation'),
+(73, 13, '2026-03-22', '11:30:00', 'Scheduled', 'Knee surgery follow-up'),
+(74, 14, '2026-03-23', '16:30:00', 'Completed', 'Allergy testing'),
+(75, 15, '2026-03-24', '07:30:00', 'Scheduled', 'Poisoning treatment'),
+(76, 16, '2026-03-25', '12:00:00', 'Scheduled', 'Angiography'),
+(77, 17, '2026-03-26', '10:30:00', 'Completed', 'Melanoma screening'),
+(78, 18, '2026-03-27', '13:30:00', 'Scheduled', 'Rosacea treatment'),
+(79, 19, '2026-03-28', '15:00:00', 'Scheduled', 'Eating disorder therapy'),
+(80, 20, '2026-03-29', '08:00:00', 'Completed', 'Thyroid surgery'),
+(81, 21, '2026-03-30', '09:30:00', 'Scheduled', 'Hypertension follow-up'),
+(82, 22, '2026-03-31', '11:30:00', 'Scheduled', 'Dementia assessment'),
+(83, 23, '2026-04-01', '14:00:00', 'Completed', 'Ankle sprain treatment'),
+(84, 24, '2026-04-02', '10:00:00', 'Scheduled', 'Vision screening'),
+(85, 25, '2026-04-03', '08:30:00', 'Scheduled', 'Angina treatment'),
+(86, 26, '2026-04-04', '12:30:00', 'Completed', 'Fluoroscopy'),
+(87, 27, '2026-04-05', '15:30:00', 'Scheduled', 'Bladder cancer treatment'),
+(88, 28, '2026-04-06', '09:00:00', 'Scheduled', 'Wart removal'),
+(89, 29, '2026-04-07', '13:00:00', 'Completed', 'Substance abuse counseling'),
+(90, 30, '2026-04-08', '10:30:00', 'Scheduled', 'Liver transplant consultation'),
+(91, 1, '2026-04-09', '08:00:00', 'Scheduled', 'Heart disease prevention'),
+(92, 2, '2026-04-10', '14:30:00', 'Completed', 'Neuropathy treatment'),
+(93, 3, '2026-04-11', '11:00:00', 'Scheduled', 'Carpal tunnel surgery'),
+(94, 4, '2026-04-12', '09:30:00', 'Scheduled', 'Behavioral assessment'),
+(95, 5, '2026-04-13', '07:00:00', 'Completed', 'Shock treatment'),
+(96, 6, '2026-04-14', '13:30:00', 'Scheduled', 'Nuclear medicine scan'),
+(97, 7, '2026-04-15', '10:00:00', 'Scheduled', 'Bone marrow transplant'),
+(98, 8, '2026-04-16', '15:00:00', 'Completed', 'Fungal infection treatment'),
+(99, 9, '2026-04-17', '12:00:00', 'Scheduled', 'Personality disorder therapy'),
+(100, 10, '2026-04-18', '08:30:00', 'Scheduled', 'Organ transplant evaluation');
 
--- Insert sample medical inventory
+-- Insert 30 medical inventory items
 INSERT INTO MedicalInventory (item_name, category, quantity, unit_price, expiry_date, supplier) VALUES
 ('Paracetamol 500mg', 'Medicine', 500, 0.50, '2027-12-31', 'PharmaCorp'),
 ('Ibuprofen 200mg', 'Medicine', 300, 0.75, '2027-06-30', 'MediSupply'),
 ('Bandages', 'Supplies', 1000, 2.00, NULL, 'HealthSupplies Inc'),
 ('Syringes 5ml', 'Equipment', 200, 1.50, NULL, 'MedEquip Ltd'),
-('Antibiotics - Amoxicillin', 'Medicine', 150, 5.00, '2026-12-31', 'PharmaCorp');
+('Antibiotics - Amoxicillin', 'Medicine', 150, 5.00, '2026-12-31', 'PharmaCorp'),
+('Aspirin 100mg', 'Medicine', 400, 0.40, '2027-09-30', 'PharmaCorp'),
+('Insulin Injection', 'Medicine', 120, 25.00, '2027-03-31', 'DiabetesCare'),
+('Blood Pressure Monitor', 'Equipment', 50, 85.00, NULL, 'MedEquip Ltd'),
+('Thermometer Digital', 'Equipment', 150, 12.00, NULL, 'MedEquip Ltd'),
+('Surgical Gloves', 'Supplies', 2000, 0.30, NULL, 'HealthSupplies Inc'),
+('Face Masks N95', 'Supplies', 5000, 1.20, NULL, 'SafetyFirst'),
+('IV Drip Set', 'Equipment', 300, 8.50, NULL, 'MedEquip Ltd'),
+('Oxygen Cylinder', 'Equipment', 25, 450.00, NULL, 'OxygenPro'),
+('Gauze Pads', 'Supplies', 1500, 1.00, NULL, 'HealthSupplies Inc'),
+('Cotton Swabs', 'Supplies', 3000, 0.15, NULL, 'HealthSupplies Inc'),
+('Antibiotic Cream', 'Medicine', 200, 8.00, '2027-08-31', 'PharmaCorp'),
+('Cough Syrup', 'Medicine', 180, 6.50, '2027-11-30', 'MediSupply'),
+('Eye Drops', 'Medicine', 250, 4.75, '2027-05-31', 'EyeCare Inc'),
+('Wheelchair', 'Equipment', 15, 350.00, NULL, 'MobilityAid'),
+('Crutches', 'Equipment', 40, 45.00, NULL, 'MobilityAid'),
+('Stethoscope', 'Equipment', 75, 95.00, NULL, 'MedEquip Ltd'),
+('ECG Machine', 'Equipment', 8, 3500.00, NULL, 'CardiacTech'),
+('Defibrillator', 'Equipment', 5, 15000.00, NULL, 'EmergencyMed'),
+('X-Ray Film', 'Supplies', 500, 3.50, NULL, 'ImagingSupply'),
+('Contrast Dye', 'Medicine', 80, 120.00, '2027-10-31', 'ImagingSupply'),
+('Surgical Scalpel', 'Equipment', 200, 5.00, NULL, 'SurgiTech'),
+('Suture Kit', 'Supplies', 300, 15.00, NULL, 'SurgiTech'),
+('Disinfectant Spray', 'Supplies', 400, 8.50, NULL, 'CleanMed'),
+('Latex Examination Gloves', 'Supplies', 2500, 0.25, NULL, 'HealthSupplies Inc'),
+('Medical Tape', 'Supplies', 800, 2.50, NULL, 'HealthSupplies Inc');
 
--- Insert sample prescriptions
+-- Insert 100 prescriptions
 INSERT INTO Prescription (patient_id, doctor_id, appointment_id, prescription_date, diagnosis, notes) VALUES
-(3, 2, 3, '2026-01-12', 'Migraine', 'Patient reported severe headaches');
+(1, 1, 1, '2026-01-10', 'Hypertension', 'Patient has elevated blood pressure, needs monitoring'),
+(2, 3, 2, '2026-01-11', 'Knee Osteoarthritis', 'Pain management and physical therapy recommended'),
+(3, 2, 3, '2026-01-12', 'Migraine', 'Patient reported severe headaches, requires medication'),
+(4, 4, 4, '2026-01-13', 'Common Cold', 'Viral infection, symptomatic treatment advised'),
+(5, 5, 5, '2026-01-09', 'Minor Wound', 'Laceration treatment and antibiotics prescribed'),
+(6, 10, 6, '2026-01-14', 'Post-surgical care', 'Surgical site healing well, continue antibiotics'),
+(7, 7, 7, '2026-01-15', 'Cancer pain management', 'Pain control for chemotherapy side effects'),
+(8, 8, 8, '2026-01-16', 'Dermatitis', 'Topical treatment for skin inflammation'),
+(9, 9, 9, '2026-01-17', 'Anxiety disorder', 'Medication for anxiety symptoms'),
+(10, 6, 10, '2026-01-18', 'Fracture healing', 'Pain management and calcium supplement'),
+(11, 11, 11, '2026-01-19', 'Heart failure', 'Diuretic and ACE inhibitor therapy'),
+(12, 12, 12, '2026-01-20', 'Neuropathy', 'Nerve pain management'),
+(13, 13, 13, '2026-01-21', 'Arthritis', 'Anti-inflammatory medication'),
+(14, 14, 14, '2026-01-22', 'Pediatric fever', 'Fever reducer and fluids'),
+(15, 15, 15, '2026-01-23', 'Trauma recovery', 'Pain management post-accident'),
+(16, 16, 16, '2026-01-24', 'Respiratory infection', 'Antibiotic therapy'),
+(17, 17, 17, '2026-01-25', 'Lymphoma', 'Chemotherapy support medication'),
+(18, 18, 18, '2026-01-26', 'Acne vulgaris', 'Topical and oral acne treatment'),
+(19, 19, 19, '2026-01-27', 'Depression', 'Antidepressant medication'),
+(20, 20, 20, '2026-01-28', 'Pre-op preparation', 'Medications before surgery'),
+(21, 21, 21, '2026-01-29', 'Angina', 'Nitrate and beta-blocker therapy'),
+(22, 22, 22, '2026-01-30', 'Cognitive decline', 'Memory support medication'),
+(23, 23, 23, '2026-01-31', 'Sports injury', 'NSAID and muscle relaxant'),
+(24, 24, 24, '2026-02-01', 'Immunization schedule', 'Vaccine side effect management'),
+(25, 25, 25, '2026-02-02', 'Chest pain', 'Cardiac medication'),
+(26, 26, 26, '2026-02-03', 'Contrast allergy prevention', 'Premedication for imaging'),
+(27, 27, 27, '2026-02-04', 'Tumor pain', 'Opioid pain management'),
+(28, 28, 28, '2026-02-05', 'Eczema', 'Corticosteroid cream'),
+(29, 29, 29, '2026-02-06', 'Panic disorder', 'Anxiolytic medication'),
+(30, 30, 30, '2026-02-07', 'Post-operative infection', 'Broad-spectrum antibiotic'),
+(31, 1, 31, '2026-02-08', 'Hypertensive crisis', 'Emergency blood pressure medication'),
+(32, 2, 32, '2026-02-09', 'Cluster headache', 'Triptan therapy'),
+(33, 3, 33, '2026-02-10', 'Lower back pain', 'Muscle relaxant and pain reliever'),
+(34, 4, 34, '2026-02-11', 'Growth hormone deficiency', 'Hormone replacement therapy'),
+(35, 5, 35, '2026-02-12', 'Minor burn', 'Topical antibiotic and dressing'),
+(36, 6, 36, '2026-02-13', 'Kidney stones', 'Pain management and hydration'),
+(37, 7, 37, '2026-02-14', 'Radiation side effects', 'Anti-nausea medication'),
+(38, 8, 38, '2026-02-15', 'Melanoma screening follow-up', 'Preventive care'),
+(39, 9, 39, '2026-02-16', 'PTSD', 'Trauma therapy support medication'),
+(40, 10, 40, '2026-02-17', 'Hernia repair recovery', 'Pain management'),
+(41, 11, 41, '2026-02-18', 'Arrhythmia', 'Antiarrhythmic medication'),
+(42, 12, 42, '2026-02-19', 'Epilepsy', 'Anticonvulsant therapy'),
+(43, 13, 43, '2026-02-20', 'Bone healing', 'Calcium and vitamin D supplement'),
+(44, 14, 44, '2026-02-21', 'Asthma exacerbation', 'Inhaler and steroid'),
+(45, 15, 45, '2026-02-22', 'Second-degree burn', 'Pain relief and wound care'),
+(46, 16, 46, '2026-02-23', 'Pre-scan anxiety', 'Mild sedative'),
+(47, 17, 47, '2026-02-24', 'Lymphatic cancer', 'Supportive care medication'),
+(48, 18, 48, '2026-02-25', 'Psoriasis', 'Biologic therapy'),
+(49, 19, 49, '2026-02-26', 'Bipolar disorder', 'Mood stabilizer'),
+(50, 20, 50, '2026-02-27', 'Appendectomy recovery', 'Antibiotic and pain relief'),
+(51, 21, 51, '2026-02-28', 'Coronary artery disease', 'Statin therapy'),
+(52, 22, 52, '2026-03-01', 'Stroke prevention', 'Antiplatelet medication'),
+(53, 23, 53, '2026-03-02', 'Hip osteoarthritis', 'Joint pain management'),
+(54, 24, 54, '2026-03-03', 'Developmental delay', 'Nutritional supplements'),
+(55, 25, 55, '2026-03-04', 'Congestive heart failure', 'Diuretic therapy'),
+(56, 26, 56, '2026-03-05', 'Breast cancer screening', 'Follow-up care'),
+(57, 27, 57, '2026-03-06', 'Prostate cancer', 'Hormone therapy'),
+(58, 28, 58, '2026-03-07', 'Alopecia', 'Topical hair growth treatment'),
+(59, 29, 59, '2026-03-08', 'OCD', 'SSRI medication'),
+(60, 30, 60, '2026-03-09', 'Gallbladder removal recovery', 'Pain management'),
+(61, 1, 61, '2026-03-10', 'High cholesterol', 'Statin medication'),
+(62, 2, 62, '2026-03-11', 'Parkinsons disease', 'Dopamine therapy'),
+(63, 3, 63, '2026-03-12', 'Rotator cuff injury', 'Anti-inflammatory'),
+(64, 4, 64, '2026-03-13', 'Ear infection', 'Antibiotic drops'),
+(65, 5, 65, '2026-03-14', 'Allergic reaction', 'Antihistamine and epinephrine'),
+(66, 6, 66, '2026-03-15', 'Osteoporosis', 'Bone density medication'),
+(67, 7, 67, '2026-03-16', 'Leukemia', 'Chemotherapy support'),
+(68, 8, 68, '2026-03-17', 'Vitiligo', 'Topical corticosteroid'),
+(69, 9, 69, '2026-03-18', 'Schizophrenia', 'Antipsychotic medication'),
+(70, 10, 70, '2026-03-19', 'Colon surgery prep', 'Bowel preparation'),
+(71, 11, 71, '2026-03-20', 'Pacemaker check', 'Routine medication'),
+(72, 12, 72, '2026-03-21', 'Multiple sclerosis', 'Disease-modifying therapy'),
+(73, 13, 73, '2026-03-22', 'Post-knee surgery', 'Pain and inflammation control'),
+(74, 14, 74, '2026-03-23', 'Seasonal allergies', 'Antihistamine'),
+(75, 15, 75, '2026-03-24', 'Carbon monoxide poisoning', 'Oxygen therapy support'),
+(76, 16, 76, '2026-03-25', 'Vascular disease', 'Blood thinner'),
+(77, 17, 77, '2026-03-26', 'Melanoma', 'Immunotherapy support'),
+(78, 18, 78, '2026-03-27', 'Rosacea', 'Topical and oral treatment'),
+(79, 19, 79, '2026-03-28', 'Eating disorder', 'Nutritional support'),
+(80, 20, 80, '2026-03-29', 'Thyroid surgery recovery', 'Hormone replacement'),
+(81, 21, 81, '2026-03-30', 'Chronic hypertension', 'Long-term blood pressure control'),
+(82, 22, 82, '2026-03-31', 'Dementia', 'Cognitive support medication'),
+(83, 23, 83, '2026-04-01', 'Ankle sprain', 'NSAID and rest'),
+(84, 24, 84, '2026-04-02', 'Vision problems', 'Eye drops'),
+(85, 25, 85, '2026-04-03', 'Angina pectoris', 'Nitrate therapy'),
+(86, 26, 86, '2026-04-04', 'Imaging contrast reaction', 'Antihistamine premedication'),
+(87, 27, 87, '2026-04-05', 'Bladder cancer', 'Chemotherapy support'),
+(88, 28, 88, '2026-04-06', 'Wart removal follow-up', 'Topical treatment'),
+(89, 29, 89, '2026-04-07', 'Substance abuse', 'Medication-assisted treatment'),
+(90, 30, 90, '2026-04-08', 'Liver transplant prep', 'Immunosuppressant'),
+(91, 1, 91, '2026-04-09', 'Preventive cardiology', 'Aspirin therapy'),
+(92, 2, 92, '2026-04-10', 'Peripheral neuropathy', 'Gabapentin'),
+(93, 3, 93, '2026-04-11', 'Carpal tunnel', 'Anti-inflammatory and splint'),
+(94, 4, 94, '2026-04-12', 'ADHD', 'Stimulant medication'),
+(95, 5, 95, '2026-04-13', 'Shock treatment', 'Fluid replacement'),
+(96, 6, 96, '2026-04-14', 'Thyroid disorder', 'Thyroid hormone'),
+(97, 7, 97, '2026-04-15', 'Bone marrow transplant', 'Immunosuppressive therapy'),
+(98, 8, 98, '2026-04-16', 'Fungal infection', 'Antifungal medication'),
+(99, 9, 99, '2026-04-17', 'Personality disorder', 'Psychiatric medication'),
+(100, 10, 100, '2026-04-18', 'Organ transplant evaluation', 'Pre-transplant medication');
 
--- Insert sample prescription items
+-- Insert 200 prescription items (2 per prescription on average)
 INSERT INTO PrescriptionItem (prescription_id, inventory_id, dosage, frequency, duration, quantity) VALUES
-(1, 1, '500mg', 'Twice daily', '5 days', 10);
+(1, 1, '500mg', 'Twice daily', '30 days', 60), (1, 6, '100mg', 'Once daily', '30 days', 30),
+(2, 2, '200mg', 'Three times daily', '10 days', 30), (2, 16, 'Apply', 'Twice daily', '10 days', 1),
+(3, 1, '500mg', 'Twice daily', '5 days', 10), (3, 17, '10ml', 'As needed', '5 days', 1),
+(4, 5, '250mg', 'Twice daily', '7 days', 14), (4, 1, '500mg', 'As needed', '7 days', 14),
+(5, 5, '500mg', 'Twice daily', '10 days', 20), (5, 16, 'Apply', 'Three times', '10 days', 1),
+(6, 5, '500mg', 'Three times', '14 days', 42), (6, 1, '500mg', 'As needed', '14 days', 14),
+(7, 1, '1000mg', 'Three times', '30 days', 90), (7, 2, '400mg', 'As needed', '30 days', 60),
+(8, 16, 'Apply', 'Twice daily', '14 days', 1), (8, 2, '200mg', 'Once daily', '14 days', 14),
+(9, 1, '500mg', 'Once daily', '60 days', 60), (9, 2, '200mg', 'As needed', '60 days', 30),
+(10, 1, '500mg', 'Twice daily', '7 days', 14), (10, 2, '200mg', 'Three times', '7 days', 21),
+(11, 6, '81mg', 'Once daily', '90 days', 90), (11, 1, '500mg', 'As needed', '90 days', 30),
+(12, 1, '500mg', 'Twice daily', '30 days', 60), (12, 2, '400mg', 'Three times', '30 days', 90),
+(13, 2, '400mg', 'Twice daily', '30 days', 60), (13, 16, 'Apply', 'As needed', '30 days', 1),
+(14, 1, '250mg', 'Three times', '5 days', 15), (14, 17, '5ml', 'Twice daily', '5 days', 1),
+(15, 1, '500mg', 'Three times', '10 days', 30), (15, 2, '200mg', 'As needed', '10 days', 20),
+(16, 5, '500mg', 'Three times', '10 days', 30), (16, 17, '10ml', 'Twice daily', '10 days', 1),
+(17, 1, '500mg', 'As needed', '30 days', 30), (17, 2, '200mg', 'Twice daily', '30 days', 60),
+(18, 16, 'Apply', 'Once daily', '30 days', 1), (18, 5, '250mg', 'Twice daily', '14 days', 28),
+(19, 1, '500mg', 'Once daily', '60 days', 60), (19, 2, '200mg', 'As needed', '60 days', 30),
+(20, 5, '500mg', 'Once daily', '3 days', 3), (20, 1, '500mg', 'As needed', '3 days', 6),
+(21, 6, '81mg', 'Once daily', '90 days', 90), (21, 1, '500mg', 'As needed', '90 days', 30),
+(22, 1, '500mg', 'Twice daily', '60 days', 120), (22, 2, '200mg', 'Once daily', '60 days', 60),
+(23, 2, '400mg', 'Three times', '14 days', 42), (23, 16, 'Apply', 'Twice daily', '14 days', 1),
+(24, 1, '250mg', 'As needed', '2 days', 6), (24, 2, '200mg', 'As needed', '2 days', 4),
+(25, 6, '81mg', 'Once daily', '90 days', 90), (25, 1, '500mg', 'As needed', '90 days', 30),
+(26, 1, '500mg', 'Once daily', '1 day', 1), (26, 2, '200mg', 'As needed', '1 day', 2),
+(27, 1, '1000mg', 'Four times', '30 days', 120), (27, 2, '400mg', 'As needed', '30 days', 60),
+(28, 16, 'Apply', 'Twice daily', '21 days', 1), (28, 2, '200mg', 'Once daily', '21 days', 21),
+(29, 1, '500mg', 'Twice daily', '60 days', 120), (29, 2, '200mg', 'As needed', '60 days', 30),
+(30, 5, '500mg', 'Three times', '14 days', 42), (30, 1, '500mg', 'As needed', '14 days', 14),
+(31, 6, '81mg', 'Twice daily', '30 days', 60), (31, 1, '500mg', 'As needed', '30 days', 30),
+(32, 1, '1000mg', 'At onset', '30 days', 30), (32, 2, '400mg', 'As needed', '30 days', 60),
+(33, 2, '400mg', 'Three times', '14 days', 42), (33, 1, '500mg', 'As needed', '14 days', 28),
+(34, 7, '10 units', 'Once daily', '30 days', 30), (34, 1, '500mg', 'As needed', '30 days', 15),
+(35, 16, 'Apply', 'Three times', '7 days', 1), (35, 1, '500mg', 'As needed', '7 days', 14),
+(36, 1, '500mg', 'Three times', '7 days', 21), (36, 2, '400mg', 'As needed', '7 days', 14),
+(37, 1, '500mg', 'Three times', '30 days', 90), (37, 2, '200mg', 'Twice daily', '30 days', 60),
+(38, 16, 'Apply', 'Once daily', '90 days', 1), (38, 18, '2 drops', 'Twice daily', '90 days', 1),
+(39, 1, '500mg', 'Once daily', '60 days', 60), (39, 2, '200mg', 'As needed', '60 days', 30),
+(40, 1, '500mg', 'Twice daily', '10 days', 20), (40, 5, '500mg', 'Once daily', '10 days', 10),
+(41, 6, '81mg', 'Once daily', '90 days', 90), (41, 1, '500mg', 'As needed', '90 days', 30),
+(42, 1, '500mg', 'Twice daily', '90 days', 180), (42, 2, '200mg', 'Once daily', '90 days', 90),
+(43, 1, '500mg', 'Twice daily', '60 days', 120), (43, 2, '200mg', 'As needed', '60 days', 30),
+(44, 2, '200mg', 'Three times', '7 days', 21), (44, 17, '10ml', 'Twice daily', '7 days', 1),
+(45, 16, 'Apply', 'Three times', '14 days', 1), (45, 1, '500mg', 'Three times', '14 days', 42),
+(46, 1, '500mg', 'Once', '1 day', 1), (46, 2, '200mg', 'Once', '1 day', 1),
+(47, 1, '500mg', 'Three times', '30 days', 90), (47, 2, '400mg', 'As needed', '30 days', 60),
+(48, 16, 'Apply', 'Once daily', '90 days', 1), (48, 5, '250mg', 'Twice daily', '90 days', 180),
+(49, 1, '500mg', 'Twice daily', '90 days', 180), (49, 2, '200mg', 'Once daily', '90 days', 90),
+(50, 5, '500mg', 'Three times', '14 days', 42), (50, 1, '500mg', 'As needed', '14 days', 28),
+(51, 6, '100mg', 'Once daily', '90 days', 90), (51, 1, '500mg', 'As needed', '90 days', 30),
+(52, 6, '81mg', 'Once daily', '90 days', 90), (52, 1, '500mg', 'As needed', '90 days', 30),
+(53, 2, '400mg', 'Twice daily', '60 days', 120), (53, 1, '500mg', 'As needed', '60 days', 60),
+(54, 1, '500mg', 'Once daily', '90 days', 90), (54, 2, '200mg', 'As needed', '90 days', 45),
+(55, 6, '81mg', 'Once daily', '90 days', 90), (55, 1, '500mg', 'As needed', '90 days', 30),
+(56, 1, '500mg', 'As needed', '30 days', 15), (56, 18, '2 drops', 'Twice daily', '30 days', 1),
+(57, 5, '500mg', 'Once daily', '90 days', 90), (57, 1, '500mg', 'As needed', '90 days', 45),
+(58, 16, 'Apply', 'Twice daily', '90 days', 1), (58, 1, '500mg', 'As needed', '90 days', 30),
+(59, 1, '500mg', 'Once daily', '90 days', 90), (59, 2, '200mg', 'As needed', '90 days', 45),
+(60, 1, '500mg', 'Twice daily', '10 days', 20), (60, 5, '500mg', 'Once daily', '10 days', 10),
+(61, 6, '100mg', 'Once daily', '90 days', 90), (61, 1, '500mg', 'As needed', '90 days', 30),
+(62, 1, '500mg', 'Three times', '90 days', 270), (62, 2, '200mg', 'Twice daily', '90 days', 180),
+(63, 2, '400mg', 'Three times', '14 days', 42), (63, 16, 'Apply', 'Twice daily', '14 days', 1),
+(64, 5, '250mg', 'Twice daily', '10 days', 20), (64, 18, '3 drops', 'Three times', '10 days', 1),
+(65, 1, '500mg', 'Once', '1 day', 1), (65, 2, '200mg', 'As needed', '3 days', 6),
+(66, 1, '500mg', 'Once daily', '90 days', 90), (66, 2, '200mg', 'As needed', '90 days', 45),
+(67, 1, '500mg', 'Three times', '30 days', 90), (67, 2, '400mg', 'As needed', '30 days', 60),
+(68, 16, 'Apply', 'Twice daily', '90 days', 1), (68, 1, '500mg', 'As needed', '90 days', 30),
+(69, 1, '500mg', 'Once daily', '90 days', 90), (69, 2, '200mg', 'Twice daily', '90 days', 180),
+(70, 5, '500mg', 'Once daily', '3 days', 3), (70, 1, '500mg', 'As needed', '3 days', 6),
+(71, 6, '81mg', 'Once daily', '90 days', 90), (71, 1, '500mg', 'As needed', '90 days', 30),
+(72, 1, '500mg', 'Twice daily', '90 days', 180), (72, 2, '200mg', 'Once daily', '90 days', 90),
+(73, 1, '500mg', 'Three times', '14 days', 42), (73, 2, '400mg', 'As needed', '14 days', 28),
+(74, 1, '500mg', 'Once daily', '30 days', 30), (74, 2, '200mg', 'As needed', '30 days', 15),
+(75, 1, '500mg', 'As needed', '7 days', 14), (75, 2, '200mg', 'Three times', '7 days', 21),
+(76, 6, '81mg', 'Once daily', '90 days', 90), (76, 1, '500mg', 'As needed', '90 days', 30),
+(77, 1, '500mg', 'Three times', '30 days', 90), (77, 2, '400mg', 'As needed', '30 days', 60),
+(78, 16, 'Apply', 'Twice daily', '60 days', 1), (78, 5, '250mg', 'Once daily', '60 days', 60),
+(79, 1, '500mg', 'Once daily', '90 days', 90), (79, 2, '200mg', 'As needed', '90 days', 45),
+(80, 7, '100mcg', 'Once daily', '90 days', 90), (80, 1, '500mg', 'As needed', '90 days', 30),
+(81, 6, '81mg', 'Once daily', '90 days', 90), (81, 1, '500mg', 'As needed', '90 days', 30),
+(82, 1, '500mg', 'Twice daily', '90 days', 180), (82, 2, '200mg', 'Once daily', '90 days', 90),
+(83, 2, '400mg', 'Three times', '7 days', 21), (83, 16, 'Apply', 'As needed', '7 days', 1),
+(84, 18, '2 drops', 'Three times', '14 days', 1), (84, 1, '500mg', 'As needed', '14 days', 7),
+(85, 6, '81mg', 'Once daily', '90 days', 90), (85, 1, '500mg', 'As needed', '90 days', 30),
+(86, 1, '500mg', 'Once', '1 day', 1), (86, 2, '200mg', 'Once', '1 day', 1),
+(87, 1, '500mg', 'Three times', '30 days', 90), (87, 2, '400mg', 'As needed', '30 days', 60),
+(88, 16, 'Apply', 'Once daily', '30 days', 1), (88, 1, '500mg', 'As needed', '30 days', 15),
+(89, 1, '500mg', 'Once daily', '90 days', 90), (89, 2, '200mg', 'Twice daily', '90 days', 180),
+(90, 5, '500mg', 'Once daily', '90 days', 90), (90, 1, '500mg', 'As needed', '90 days', 45),
+(91, 6, '81mg', 'Once daily', '90 days', 90), (91, 1, '500mg', 'As needed', '90 days', 30),
+(92, 1, '500mg', 'Three times', '60 days', 180), (92, 2, '200mg', 'Twice daily', '60 days', 120),
+(93, 2, '400mg', 'Three times', '14 days', 42), (93, 1, '500mg', 'As needed', '14 days', 28),
+(94, 1, '500mg', 'Once daily', '90 days', 90), (94, 2, '200mg', 'As needed', '90 days', 45),
+(95, 1, '500mg', 'As needed', '3 days', 6), (95, 2, '200mg', 'Three times', '3 days', 9),
+(96, 7, '100mcg', 'Once daily', '90 days', 90), (96, 1, '500mg', 'As needed', '90 days', 30),
+(97, 5, '500mg', 'Once daily', '90 days', 90), (97, 1, '500mg', 'As needed', '90 days', 45),
+(98, 16, 'Apply', 'Twice daily', '21 days', 1), (98, 5, '250mg', 'Twice daily', '21 days', 42),
+(99, 1, '500mg', 'Once daily', '90 days', 90), (99, 2, '200mg', 'Twice daily', '90 days', 180),
+(100, 5, '500mg', 'Once daily', '30 days', 30), (100, 1, '500mg', 'As needed', '30 days', 15);
 
--- Insert sample feedback
+-- Insert 100 patient feedback entries
 INSERT INTO PatientFeedback (patient_id, doctor_id, appointment_id, rating, comments, feedback_date) VALUES
-(3, 2, 3, 5, 'Excellent care and attention', '2026-01-13'),
-(1, 1, 1, 4, 'Good consultation', '2026-01-11');
+(1, 1, 1, 5, 'Dr. Smith was very professional and explained everything clearly', '2026-01-11'),
+(2, 3, 2, 4, 'Excellent care and thorough examination by Dr. Williams', '2026-01-12'),
+(3, 2, 3, 5, 'Excellent care and attention from Dr. Johnson', '2026-01-13'),
+(4, 4, 4, 4, 'Dr. Brown was friendly and made my child comfortable', '2026-01-14'),
+(5, 5, 5, 5, 'Great emergency care provided by Dr. Jones', '2026-01-10'),
+(6, 10, 6, 4, 'Surgical consultation was detailed and informative', '2026-01-15'),
+(7, 7, 7, 5, 'Compassionate oncologist, made a difficult time easier', '2026-01-16'),
+(8, 8, 8, 3, 'Treatment was effective but wait time was long', '2026-01-17'),
+(9, 9, 9, 5, 'Understanding psychiatrist who listened to my concerns', '2026-01-18'),
+(10, 6, 10, 4, 'Radiologist explained the X-ray results well', '2026-01-19'),
+(11, 11, 11, 5, 'Thorough heart examination', '2026-01-20'),
+(12, 12, 12, 4, 'Knowledgeable neurologist', '2026-01-21'),
+(13, 13, 13, 5, 'Excellent joint pain treatment', '2026-01-22'),
+(14, 14, 14, 5, 'Great with children', '2026-01-23'),
+(15, 15, 15, 4, 'Quick emergency response', '2026-01-24'),
+(16, 16, 16, 5, 'Professional imaging service', '2026-01-25'),
+(17, 17, 17, 5, 'Compassionate cancer care', '2026-01-26'),
+(18, 18, 18, 4, 'Effective skin treatment', '2026-01-27'),
+(19, 19, 19, 5, 'Understanding mental health professional', '2026-01-28'),
+(20, 20, 20, 4, 'Detailed pre-op consultation', '2026-01-29'),
+(21, 21, 21, 5, 'Excellent cardiac care', '2026-01-30'),
+(22, 22, 22, 4, 'Helpful memory consultation', '2026-01-31'),
+(23, 23, 23, 5, 'Great sports injury treatment', '2026-02-01'),
+(24, 24, 24, 5, 'Caring pediatrician', '2026-02-02'),
+(25, 25, 25, 4, 'Thorough chest pain evaluation', '2026-02-03'),
+(26, 26, 26, 5, 'Professional MRI service', '2026-02-04'),
+(27, 27, 27, 5, 'Compassionate oncology care', '2026-02-05'),
+(28, 28, 28, 4, 'Effective dermatology treatment', '2026-02-06'),
+(29, 29, 29, 5, 'Supportive anxiety counseling', '2026-02-07'),
+(30, 30, 30, 5, 'Excellent post-surgery care', '2026-02-08'),
+(31, 1, 31, 4, 'Good blood pressure monitoring', '2026-02-09'),
+(32, 2, 32, 5, 'Effective headache treatment', '2026-02-10'),
+(33, 3, 33, 4, 'Helpful back pain consultation', '2026-02-11'),
+(34, 4, 34, 5, 'Comprehensive child assessment', '2026-02-12'),
+(35, 5, 35, 5, 'Quick minor injury care', '2026-02-13'),
+(36, 6, 36, 4, 'Professional ultrasound service', '2026-02-14'),
+(37, 7, 37, 5, 'Detailed radiation planning', '2026-02-15'),
+(38, 8, 38, 4, 'Thorough mole examination', '2026-02-16'),
+(39, 9, 39, 5, 'Supportive PTSD treatment', '2026-02-17'),
+(40, 10, 40, 5, 'Clear surgical consultation', '2026-02-18'),
+(41, 11, 41, 4, 'Comprehensive arrhythmia check', '2026-02-19'),
+(42, 12, 42, 5, 'Detailed seizure evaluation', '2026-02-20'),
+(43, 13, 43, 4, 'Good fracture follow-up', '2026-02-21'),
+(44, 14, 44, 5, 'Caring asthma treatment', '2026-02-22'),
+(45, 15, 45, 5, 'Professional burn care', '2026-02-23'),
+(46, 16, 46, 4, 'Efficient PET scan', '2026-02-24'),
+(47, 17, 47, 5, 'Compassionate lymphoma care', '2026-02-25'),
+(48, 18, 48, 4, 'Effective psoriasis treatment', '2026-02-26'),
+(49, 19, 49, 5, 'Supportive bipolar management', '2026-02-27'),
+(50, 20, 50, 5, 'Excellent appendectomy follow-up', '2026-02-28'),
+(51, 21, 51, 4, 'Professional ECG test', '2026-03-01'),
+(52, 22, 52, 5, 'Thorough stroke assessment', '2026-03-02'),
+(53, 23, 53, 5, 'Clear hip replacement discussion', '2026-03-03'),
+(54, 24, 54, 4, 'Comprehensive child screening', '2026-03-04'),
+(55, 25, 55, 5, 'Excellent heart failure care', '2026-03-05'),
+(56, 26, 56, 4, 'Professional mammogram service', '2026-03-06'),
+(57, 27, 57, 5, 'Compassionate prostate cancer care', '2026-03-07'),
+(58, 28, 58, 4, 'Helpful hair loss consultation', '2026-03-08'),
+(59, 29, 59, 5, 'Supportive OCD therapy', '2026-03-09'),
+(60, 30, 60, 5, 'Clear gallbladder surgery plan', '2026-03-10'),
+(61, 1, 61, 4, 'Good cholesterol management', '2026-03-11'),
+(62, 2, 62, 5, 'Thorough Parkinson assessment', '2026-03-12'),
+(63, 3, 63, 4, 'Effective shoulder treatment', '2026-03-13'),
+(64, 4, 64, 5, 'Quick ear infection treatment', '2026-03-14'),
+(65, 5, 65, 5, 'Excellent allergy care', '2026-03-15'),
+(66, 6, 66, 4, 'Professional bone density scan', '2026-03-16'),
+(67, 7, 67, 5, 'Compassionate leukemia treatment', '2026-03-17'),
+(68, 8, 68, 4, 'Helpful vitiligo consultation', '2026-03-18'),
+(69, 9, 69, 5, 'Supportive schizophrenia care', '2026-03-19'),
+(70, 10, 70, 5, 'Clear colon surgery plan', '2026-03-20'),
+(71, 11, 71, 4, 'Thorough pacemaker check', '2026-03-21'),
+(72, 12, 72, 5, 'Comprehensive MS evaluation', '2026-03-22'),
+(73, 13, 73, 5, 'Excellent knee surgery follow-up', '2026-03-23'),
+(74, 14, 74, 4, 'Professional allergy testing', '2026-03-24'),
+(75, 15, 75, 5, 'Quick poisoning treatment', '2026-03-25'),
+(76, 16, 76, 4, 'Detailed angiography service', '2026-03-26'),
+(77, 17, 77, 5, 'Compassionate melanoma screening', '2026-03-27'),
+(78, 18, 78, 4, 'Effective rosacea treatment', '2026-03-28'),
+(79, 19, 79, 5, 'Supportive eating disorder therapy', '2026-03-29'),
+(80, 20, 80, 5, 'Excellent thyroid surgery care', '2026-03-30'),
+(81, 21, 81, 4, 'Good hypertension follow-up', '2026-03-31'),
+(82, 22, 82, 5, 'Thorough dementia assessment', '2026-04-01'),
+(83, 23, 83, 5, 'Quick ankle sprain treatment', '2026-04-02'),
+(84, 24, 84, 4, 'Professional vision screening', '2026-04-03'),
+(85, 25, 85, 5, 'Excellent angina treatment', '2026-04-04'),
+(86, 26, 86, 4, 'Efficient fluoroscopy service', '2026-04-05'),
+(87, 27, 87, 5, 'Compassionate bladder cancer care', '2026-04-06'),
+(88, 28, 88, 4, 'Quick wart removal', '2026-04-07'),
+(89, 29, 89, 5, 'Supportive substance abuse counseling', '2026-04-08'),
+(90, 30, 90, 5, 'Comprehensive transplant consultation', '2026-04-09'),
+(91, 1, 91, 4, 'Good preventive cardiology', '2026-04-10'),
+(92, 2, 92, 5, 'Effective neuropathy treatment', '2026-04-11'),
+(93, 3, 93, 5, 'Clear carpal tunnel surgery plan', '2026-04-12'),
+(94, 4, 94, 4, 'Thorough behavioral assessment', '2026-04-13'),
+(95, 5, 95, 5, 'Quick shock treatment', '2026-04-14'),
+(96, 6, 96, 4, 'Professional nuclear medicine scan', '2026-04-15'),
+(97, 7, 97, 5, 'Compassionate bone marrow transplant plan', '2026-04-16'),
+(98, 8, 98, 5, 'Effective fungal infection treatment', '2026-04-17'),
+(99, 9, 99, 4, 'Supportive personality disorder therapy', '2026-04-18'),
+(100, 10, 100, 5, 'Comprehensive organ transplant evaluation', '2026-04-19');
+
+-- Re-enable foreign key checks
+SET FOREIGN_KEY_CHECKS = 1;

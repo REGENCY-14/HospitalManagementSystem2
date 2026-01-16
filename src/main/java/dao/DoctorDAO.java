@@ -33,8 +33,12 @@ public class DoctorDAO {
      */
     public static Doctor getDoctorById(int doctorId) {
         String query = "SELECT * FROM Doctor WHERE doctor_id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.err.println("Warning: Database connection is null. Returning null doctor.");
+            return null;
+        }
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
             
             stmt.setInt(1, doctorId);
             ResultSet rs = stmt.executeQuery();
@@ -51,6 +55,8 @@ public class DoctorDAO {
             }
         } catch (SQLException e) {
             System.err.println("Error retrieving doctor: " + e.getMessage());
+        } finally {
+            try { conn.close(); } catch (SQLException ignore) {}
         }
         return null;
     }
@@ -62,8 +68,12 @@ public class DoctorDAO {
         List<Doctor> doctors = new ArrayList<>();
         String query = "SELECT * FROM Doctor";
         
-        try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.err.println("Warning: Database connection is null. Returning empty doctor list.");
+            return doctors;
+        }
+        try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             
             while (rs.next()) {
@@ -78,6 +88,8 @@ public class DoctorDAO {
             }
         } catch (SQLException e) {
             System.err.println("Error retrieving all doctors: " + e.getMessage());
+        } finally {
+            try { conn.close(); } catch (SQLException ignore) {}
         }
         return doctors;
     }

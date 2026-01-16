@@ -66,8 +66,13 @@ public class AppointmentDAO {
         List<Appointment> appointments = new ArrayList<>();
         String query = "SELECT * FROM Appointment";
         
-        try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.err.println("Warning: Database connection is null. Returning empty appointment list.");
+            return appointments;
+        }
+        
+        try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
             
             while (rs.next()) {
@@ -85,6 +90,8 @@ public class AppointmentDAO {
             }
         } catch (SQLException e) {
             System.err.println("Error retrieving all appointments: " + e.getMessage());
+        } finally {
+            try { conn.close(); } catch (SQLException ignore) {}
         }
         return appointments;
     }
@@ -96,8 +103,12 @@ public class AppointmentDAO {
         List<Appointment> appointments = new ArrayList<>();
         String query = "SELECT * FROM Appointment WHERE patient_id = ?";
         
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.err.println("Warning: Database connection is null. Cannot retrieve appointments by patient.");
+            return appointments;
+        }
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
             
             stmt.setInt(1, patientId);
             ResultSet rs = stmt.executeQuery();
@@ -117,6 +128,8 @@ public class AppointmentDAO {
             }
         } catch (SQLException e) {
             System.err.println("Error retrieving appointments by patient: " + e.getMessage());
+        } finally {
+            try { conn.close(); } catch (SQLException ignore) {}
         }
         return appointments;
     }
@@ -126,8 +139,12 @@ public class AppointmentDAO {
      */
     public static boolean updateAppointment(Appointment appointment) {
         String query = "UPDATE Appointment SET patient_id = ?, doctor_id = ?, appointment_date = ?, appointment_time = ?, status = ?, notes = ? WHERE appointment_id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.err.println("Warning: Database connection is null. Cannot update appointment.");
+            return false;
+        }
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
             
             stmt.setInt(1, appointment.getPatientId());
             stmt.setInt(2, appointment.getDoctorId());
@@ -141,6 +158,8 @@ public class AppointmentDAO {
         } catch (SQLException e) {
             System.err.println("Error updating appointment: " + e.getMessage());
             return false;
+        } finally {
+            try { conn.close(); } catch (SQLException ignore) {}
         }
     }
     
@@ -149,14 +168,20 @@ public class AppointmentDAO {
      */
     public static boolean deleteAppointment(int appointmentId) {
         String query = "DELETE FROM Appointment WHERE appointment_id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        Connection conn = DBConnection.getConnection();
+        if (conn == null) {
+            System.err.println("Warning: Database connection is null. Cannot delete appointment.");
+            return false;
+        }
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
             
             stmt.setInt(1, appointmentId);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             System.err.println("Error deleting appointment: " + e.getMessage());
             return false;
+        } finally {
+            try { conn.close(); } catch (SQLException ignore) {}
         }
     }
 }
