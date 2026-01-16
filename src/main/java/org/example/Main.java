@@ -203,10 +203,40 @@ public class Main extends Application {
         Button addBtn = new Button("Add Patient");
         addBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
         addBtn.setOnAction(e -> {
+            // Validate required fields
             if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()) {
-                showAlert("Error", "Please fill in all required fields");
+                showAlert("Validation Error", "First Name and Last Name are required fields!");
                 return;
             }
+            
+            // Validate first name
+            if (!isValidName(firstNameField.getText())) {
+                showAlert("Validation Error", "First Name can only contain letters, spaces, hyphens, and apostrophes.\nNumbers and special characters are not allowed!");
+                firstNameField.requestFocus();
+                return;
+            }
+            
+            // Validate last name
+            if (!isValidName(lastNameField.getText())) {
+                showAlert("Validation Error", "Last Name can only contain letters, spaces, hyphens, and apostrophes.\nNumbers and special characters are not allowed!");
+                lastNameField.requestFocus();
+                return;
+            }
+            
+            // Validate phone number
+            if (!isValidPhone(phoneField.getText())) {
+                showAlert("Validation Error", "Phone Number can only contain digits, spaces, hyphens, and parentheses.");
+                phoneField.requestFocus();
+                return;
+            }
+            
+            // Validate email
+            if (!isValidEmail(emailField.getText())) {
+                showAlert("Validation Error", "Please enter a valid email address (e.g., user@example.com)");
+                emailField.requestFocus();
+                return;
+            }
+            
             try {
                 LocalDate dob = dobPicker.getValue();
                 String gender = genderCombo.getValue() != null ? genderCombo.getValue() : "M";
@@ -456,10 +486,40 @@ public class Main extends Application {
         Button addBtn = new Button("Add Doctor");
         addBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
         addBtn.setOnAction(e -> {
+            // Validate required fields
             if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()) {
-                showAlert("Error", "Please fill in all required fields");
+                showAlert("Validation Error", "First Name and Last Name are required fields!");
                 return;
             }
+            
+            // Validate first name
+            if (!isValidName(firstNameField.getText())) {
+                showAlert("Validation Error", "First Name can only contain letters, spaces, hyphens, and apostrophes.\nNumbers and special characters are not allowed!");
+                firstNameField.requestFocus();
+                return;
+            }
+            
+            // Validate last name
+            if (!isValidName(lastNameField.getText())) {
+                showAlert("Validation Error", "Last Name can only contain letters, spaces, hyphens, and apostrophes.\nNumbers and special characters are not allowed!");
+                lastNameField.requestFocus();
+                return;
+            }
+            
+            // Validate phone number
+            if (!isValidPhone(phoneField.getText())) {
+                showAlert("Validation Error", "Phone Number can only contain digits, spaces, hyphens, and parentheses.");
+                phoneField.requestFocus();
+                return;
+            }
+            
+            // Validate email
+            if (!isValidEmail(emailField.getText())) {
+                showAlert("Validation Error", "Please enter a valid email address (e.g., doctor@example.com)");
+                emailField.requestFocus();
+                return;
+            }
+            
             try {
                 Doctor doctor = new Doctor(
                     firstNameField.getText(),
@@ -1776,6 +1836,44 @@ public class Main extends Application {
         alert.setHeaderText(title);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+    
+    /**
+     * Validate name input - only letters, spaces, and hyphens allowed
+     * @param name The name to validate
+     * @return true if valid, false otherwise
+     */
+    private boolean isValidName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+        // Allow only letters, spaces, hyphens, and apostrophes
+        return name.matches("^[a-zA-Z\\s'-]+$");
+    }
+    
+    /**
+     * Validate phone number - only digits, spaces, hyphens, and parentheses
+     * @param phone The phone number to validate
+     * @return true if valid, false otherwise
+     */
+    private boolean isValidPhone(String phone) {
+        if (phone == null || phone.trim().isEmpty()) {
+            return true; // Phone is optional
+        }
+        // Allow only digits, spaces, hyphens, parentheses, and plus sign
+        return phone.matches("^[0-9\\s()+-]+$");
+    }
+    
+    /**
+     * Validate email format
+     * @param email The email to validate
+     * @return true if valid, false otherwise
+     */
+    private boolean isValidEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return true; // Email is optional
+        }
+        return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
     }
 
     public static void main(String[] args) {

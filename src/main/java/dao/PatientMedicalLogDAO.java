@@ -1,16 +1,21 @@
 package dao;
 
-import model.PatientMedicalLog;
-import com.mongodb.client.*;
-import com.mongodb.client.model.*;
-import org.bson.Document;
-import org.bson.types.ObjectId;
-import org.bson.conversions.Bson;
-
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
+
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
+
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
+
+import model.PatientMedicalLog;
 
 /**
  * MongoDB DAO for Patient Medical Logs
