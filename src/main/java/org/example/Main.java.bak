@@ -1,0 +1,1821 @@
+package org.example;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
+import javafx.stage.Stage;
+import controller.*;
+import util.AlertUtils;
+
+/**
+ * Main Application Entry Point
+ * Simplified to follow Single Responsibility Principle
+ * Each tab is managed by its own dedicated controller
+ */
+public class Main extends Application {
+
+    // Controllers for each tab
+    private PatientTabController patientController;
+    private DoctorTabController doctorController;
+    private DepartmentTabController departmentController;
+    private AppointmentTabController appointmentController;
+    private PrescriptionTabController prescriptionController;
+    private PatientFeedbackTabController feedbackController;
+    private MedicalInventoryTabController inventoryController;
+
+    @Override
+    public void start(Stage primaryStage) {
+        System.out.println("========================================");
+        System.out.println("Hospital Management System - Starting...");
+        System.out.println("========================================\n");
+        System.out.println("✓ Application started\n");
+
+        primaryStage.setTitle("Hospital Management System");
+        primaryStage.setWidth(1000);
+        primaryStage.setHeight(700);
+
+        // Initialize controllers
+        patientController = new PatientTabController();
+        doctorController = new DoctorTabController();
+        departmentController = new DepartmentTabController();
+        appointmentController = new AppointmentTabController();
+        prescriptionController = new PrescriptionTabController();
+        feedbackController = new PatientFeedbackTabController();
+        inventoryController = new MedicalInventoryTabController();
+        MedicalLogController medicalLogController = new MedicalLogController(primaryStage);
+
+        // Create TabPane
+        TabPane tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        // Add all tabs using their controllers
+        tabPane.getTabs().addAll(
+            patientController.createTab(),
+            doctorController.createTab(),
+            departmentController.createTab(),
+            appointmentController.createTab(),
+            prescriptionController.createTab(),
+            feedbackController.createTab(),
+            inventoryController.createTab(),
+            medicalLogController.createMedicalLogTab()
+        );
+
+        // Select Patient tab by default
+        tabPane.getSelectionModel().select(0);
+
+        Scene scene = new Scene(tabPane);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        
+        // Auto-load all data when application starts
+        loadAllData();
+    }
+    
+    /**
+     * Load initial data for all tabs
+     */
+    private void loadAllData() {
+        System.out.println("Loading all data into views...");
+        
+        patientController.refreshTable();
+        System.out.println("✓ Loaded patient data");
+        
+        doctorController.refreshTable();
+        System.out.println("✓ Loaded doctor data");
+        
+        departmentController.refreshTable();
+        System.out.println("✓ Loaded department data");
+        
+        appointmentController.refreshTable();
+        System.out.println("✓ Loaded appointment data");
+        
+        prescriptionController.refreshTable();
+        System.out.println("✓ Loaded prescription data");
+        
+        feedbackController.refreshTable();
+        System.out.println("✓ Loaded feedback data");
+        
+        inventoryController.refreshTable();
+        System.out.println("✓ Loaded inventory data");
+        
+        System.out.println("✓ All data loaded successfully!\n");
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
+        Tab tab = new Tab("Patient Management");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+
+        Label titleLabel = new Label("Patient Management");
+        titleLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        // Input fields
+        TextField firstNameField = new TextField();
+        firstNameField.setPromptText("First Name");
+
+        TextField lastNameField = new TextField();
+        lastNameField.setPromptText("Last Name");
+
+        TextField emailField = new TextField();
+        emailField.setPromptText("Email");
+
+        TextField phoneField = new TextField();
+        phoneField.setPromptText("Phone Number");
+
+        ComboBox<String> genderCombo = new ComboBox<>();
+        genderCombo.getItems().addAll("M", "F", "O");
+        genderCombo.setPromptText("Gender");
+        genderCombo.setValue("M");
+
+        ComboBox<String> bloodGroupCombo = new ComboBox<>();
+        bloodGroupCombo.getItems().addAll("A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-");
+        bloodGroupCombo.setPromptText("Blood Group");
+        bloodGroupCombo.setValue("O+");
+
+        DatePicker dobPicker = new DatePicker();
+        dobPicker.setPromptText("Date of Birth");
+
+        // Buttons
+        Button addBtn = new Button("Add Patient");
+        addBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        addBtn.setOnAction(e -> {
+            // Validate required fields
+            if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()) {
+                showAlert("Validation Error", "First Name and Last Name are required fields!");
+                return;
+            }
+            
+            // Validate first name
+            if (!isValidName(firstNameField.getText())) {
+                showAlert("Validation Error", "First Name can only contain letters, spaces, hyphens, and apostrophes.\nNumbers and special characters are not allowed!");
+                firstNameField.requestFocus();
+                return;
+            }
+            
+            // Validate last name
+            if (!isValidName(lastNameField.getText())) {
+                showAlert("Validation Error", "Last Name can only contain letters, spaces, hyphens, and apostrophes.\nNumbers and special characters are not allowed!");
+                lastNameField.requestFocus();
+                return;
+            }
+            
+            // Validate phone number
+            if (!isValidPhone(phoneField.getText())) {
+                showAlert("Validation Error", "Phone Number can only contain digits, spaces, hyphens, and parentheses.");
+                phoneField.requestFocus();
+                return;
+            }
+            
+            // Validate email
+            if (!isValidEmail(emailField.getText())) {
+                showAlert("Validation Error", "Please enter a valid email address (e.g., user@example.com)");
+                emailField.requestFocus();
+                return;
+            }
+            
+            try {
+                LocalDate dob = dobPicker.getValue();
+                String gender = genderCombo.getValue() != null ? genderCombo.getValue() : "M";
+                String bloodGroup = bloodGroupCombo.getValue() != null ? bloodGroupCombo.getValue() : "O+";
+                Patient patient = new Patient(
+                    firstNameField.getText(),
+                    lastNameField.getText(),
+                    dob,
+                    gender,
+                    phoneField.getText(),
+                    "",
+                    bloodGroup
+                );
+                if (PatientService.createPatient(patient)) {
+                    showAlert("Success", "Patient added successfully!");
+                    firstNameField.clear();
+                    lastNameField.clear();
+                    emailField.clear();
+                    phoneField.clear();
+                    genderCombo.setValue("M");
+                    bloodGroupCombo.setValue("O+");
+                    dobPicker.setValue(null);
+                } else {
+                    showAlert("Error", "Failed to add patient. Check console for details.");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                showAlert("Error", "Failed to add patient: " + ex.getMessage());
+            }
+        });
+
+        // Patient Table
+        patientTable = new TableView<>();
+        patientTable.setPrefHeight(400);
+        
+        TableColumn<Patient, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("patientId"));
+        idCol.setPrefWidth(50);
+        
+        TableColumn<Patient, String> firstNameCol = new TableColumn<>("First Name");
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        firstNameCol.setPrefWidth(120);
+        
+        TableColumn<Patient, String> lastNameCol = new TableColumn<>("Last Name");
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        lastNameCol.setPrefWidth(120);
+        
+        TableColumn<Patient, String> genderCol = new TableColumn<>("Gender");
+        genderCol.setCellValueFactory(new PropertyValueFactory<>("gender"));
+        genderCol.setPrefWidth(70);
+        
+        TableColumn<Patient, String> phoneCol = new TableColumn<>("Phone");
+        phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        phoneCol.setPrefWidth(120);
+        
+        TableColumn<Patient, LocalDate> dobCol = new TableColumn<>("Date of Birth");
+        dobCol.setCellValueFactory(new PropertyValueFactory<>("dateOfBirth"));
+        dobCol.setPrefWidth(120);
+        
+        TableColumn<Patient, String> bloodTypeCol = new TableColumn<>("Blood Type");
+        bloodTypeCol.setCellValueFactory(new PropertyValueFactory<>("bloodType"));
+        bloodTypeCol.setPrefWidth(90);
+        
+        patientTable.getColumns().addAll(idCol, firstNameCol, lastNameCol, genderCol, phoneCol, dobCol, bloodTypeCol);
+        
+        // Search functionality
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search by name, phone, or blood type...");
+        searchField.setPrefWidth(300);
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            List<Patient> allPatients = PatientService.getAllPatients();
+            if (allPatients == null) return;
+            
+            if (newVal == null || newVal.trim().isEmpty()) {
+                patientTable.getItems().setAll(allPatients);
+            } else {
+                String search = newVal.toLowerCase();
+                patientTable.getItems().setAll(allPatients.stream()
+                    .filter(p -> (p.getFirstName() + " " + p.getLastName()).toLowerCase().contains(search) ||
+                                 (p.getPhone() != null && p.getPhone().contains(search)) ||
+                                 (p.getBloodType() != null && p.getBloodType().toLowerCase().contains(search)))
+                    .collect(java.util.stream.Collectors.toList()));
+            }
+        });
+        
+        Button refreshBtn = new Button("Refresh List");
+        refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        refreshBtn.setOnAction(e -> {
+            patientTable.getItems().clear();
+            List<Patient> patients = PatientService.getAllPatients();
+            if (patients != null) {
+                patientTable.getItems().addAll(patients);
+            }
+            searchField.clear();
+        });
+        
+        Button editBtn = new Button("Edit Selected");
+        editBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        editBtn.setOnAction(e -> {
+            Patient selected = patientTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                firstNameField.setText(selected.getFirstName());
+                lastNameField.setText(selected.getLastName());
+                phoneField.setText(selected.getPhone());
+                genderCombo.setValue(selected.getGender());
+                bloodGroupCombo.setValue(selected.getBloodType());
+                dobPicker.setValue(selected.getDateOfBirth());
+                
+                addBtn.setText("Update Patient");
+                addBtn.setOnAction(updateEvt -> {
+                    try {
+                        selected.setFirstName(firstNameField.getText());
+                        selected.setLastName(lastNameField.getText());
+                        selected.setPhone(phoneField.getText());
+                        selected.setGender(genderCombo.getValue());
+                        selected.setBloodType(bloodGroupCombo.getValue());
+                        selected.setDateOfBirth(dobPicker.getValue());
+                        
+                        if (PatientService.updatePatient(selected)) {
+                            showAlert("Success", "Patient updated successfully!");
+                            patientTable.refresh();
+                            firstNameField.clear();
+                            lastNameField.clear();
+                            phoneField.clear();
+                            genderCombo.setValue("M");
+                            bloodGroupCombo.setValue("O+");
+                            dobPicker.setValue(null);
+                            addBtn.setText("Add Patient");
+                            
+                            // Reset to add mode
+                            addBtn.setOnAction(addEvt -> {
+                                if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()) {
+                                    showAlert("Error", "Please fill in all required fields");
+                                    return;
+                                }
+                                try {
+                                    LocalDate dob = dobPicker.getValue();
+                                    String gender = genderCombo.getValue() != null ? genderCombo.getValue() : "M";
+                                    String bloodGroup = bloodGroupCombo.getValue() != null ? bloodGroupCombo.getValue() : "O+";
+                                    Patient newPatient = new Patient(
+                                        firstNameField.getText(),
+                                        lastNameField.getText(),
+                                        dob,
+                                        gender,
+                                        phoneField.getText(),
+                                        "",
+                                        bloodGroup
+                                    );
+                                    if (PatientService.createPatient(newPatient)) {
+                                        showAlert("Success", "Patient added successfully!");
+                                        firstNameField.clear();
+                                        lastNameField.clear();
+                                        emailField.clear();
+                                        phoneField.clear();
+                                        genderCombo.setValue("M");
+                                        bloodGroupCombo.setValue("O+");
+                                        dobPicker.setValue(null);
+                                    } else {
+                                        showAlert("Error", "Failed to add patient. Check console for details.");
+                                    }
+                                } catch (Exception ex) {
+                                    ex.printStackTrace();
+                                    showAlert("Error", "Failed to add patient: " + ex.getMessage());
+                                }
+                            });
+                        } else {
+                            showAlert("Error", "Failed to update patient");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        showAlert("Error", "Failed to update: " + ex.getMessage());
+                    }
+                });
+            } else {
+                showAlert("Error", "Please select a patient to edit");
+            }
+        });
+        
+        Button deleteBtn = new Button("Delete Selected");
+        deleteBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        deleteBtn.setOnAction(e -> {
+            Patient selected = patientTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                if (PatientService.deletePatient(selected.getPatientId())) {
+                    showAlert("Success", "Patient deleted successfully!");
+                    patientTable.getItems().remove(selected);
+                } else {
+                    showAlert("Error", "Failed to delete patient");
+                }
+            } else {
+                showAlert("Error", "Please select a patient to delete");
+            }
+        });
+        
+        HBox buttonBox = new HBox(10);
+        buttonBox.getChildren().addAll(refreshBtn, editBtn, deleteBtn);
+
+        VBox inputSection = new VBox(10);
+        HBox inputBox1 = new HBox(10);
+        inputBox1.getChildren().addAll(firstNameField, lastNameField, phoneField, genderCombo);
+        HBox inputBox2 = new HBox(10);
+        inputBox2.getChildren().addAll(bloodGroupCombo, dobPicker, addBtn);
+        inputSection.getChildren().addAll(inputBox1, inputBox2);
+
+        root.getChildren().addAll(
+            titleLabel,
+            new Separator(),
+            new Label("Add New Patient:"),
+            inputSection,
+            new Separator(),
+            new Label("Patient List:"),            searchField,            buttonBox,
+            patientTable
+        );
+
+        tab.setContent(root);
+        return tab;
+    }
+
+    private Tab createDoctorTab() {
+        Tab tab = new Tab("Doctor Management");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+
+        Label titleLabel = new Label("Doctor Management");
+        titleLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        // Input fields
+        TextField firstNameField = new TextField();
+        firstNameField.setPromptText("First Name");
+
+        TextField lastNameField = new TextField();
+        lastNameField.setPromptText("Last Name");
+
+        TextField emailField = new TextField();
+        emailField.setPromptText("Email");
+
+        TextField phoneField = new TextField();
+        phoneField.setPromptText("Phone Number");
+
+        TextField departmentField = new TextField();
+        departmentField.setPromptText("Department");
+
+        TextField specializationField = new TextField();
+        specializationField.setPromptText("Specialization");
+
+        // Buttons
+        Button addBtn = new Button("Add Doctor");
+        addBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        addBtn.setOnAction(e -> {
+            // Validate required fields
+            if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()) {
+                showAlert("Validation Error", "First Name and Last Name are required fields!");
+                return;
+            }
+            
+            // Validate first name
+            if (!isValidName(firstNameField.getText())) {
+                showAlert("Validation Error", "First Name can only contain letters, spaces, hyphens, and apostrophes.\nNumbers and special characters are not allowed!");
+                firstNameField.requestFocus();
+                return;
+            }
+            
+            // Validate last name
+            if (!isValidName(lastNameField.getText())) {
+                showAlert("Validation Error", "Last Name can only contain letters, spaces, hyphens, and apostrophes.\nNumbers and special characters are not allowed!");
+                lastNameField.requestFocus();
+                return;
+            }
+            
+            // Validate phone number
+            if (!isValidPhone(phoneField.getText())) {
+                showAlert("Validation Error", "Phone Number can only contain digits, spaces, hyphens, and parentheses.");
+                phoneField.requestFocus();
+                return;
+            }
+            
+            // Validate email
+            if (!isValidEmail(emailField.getText())) {
+                showAlert("Validation Error", "Please enter a valid email address (e.g., doctor@example.com)");
+                emailField.requestFocus();
+                return;
+            }
+            
+            try {
+                Doctor doctor = new Doctor(
+                    firstNameField.getText(),
+                    lastNameField.getText(),
+                    specializationField.getText(),
+                    phoneField.getText(),
+                    1  // Default department ID
+                );
+                if (DoctorService.createDoctor(doctor)) {
+                    showAlert("Success", "Doctor added successfully!");
+                    firstNameField.clear();
+                    lastNameField.clear();
+                    emailField.clear();
+                    phoneField.clear();
+                    departmentField.clear();
+                    specializationField.clear();
+                } else {
+                    showAlert("Error", "Failed to add doctor");
+                }
+            } catch (Exception ex) {
+                showAlert("Error", "Invalid input: " + ex.getMessage());
+            }
+        });
+
+        // Doctor Table
+        doctorTable = new TableView<>();
+        doctorTable.setPrefHeight(400);
+        
+        TableColumn<Doctor, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("doctorId"));
+        idCol.setPrefWidth(50);
+        
+        TableColumn<Doctor, String> firstNameCol = new TableColumn<>("First Name");
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        firstNameCol.setPrefWidth(120);
+        
+        TableColumn<Doctor, String> lastNameCol = new TableColumn<>("Last Name");
+        lastNameCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        lastNameCol.setPrefWidth(120);
+        
+        TableColumn<Doctor, String> specializationCol = new TableColumn<>("Specialization");
+        specializationCol.setCellValueFactory(new PropertyValueFactory<>("specialization"));
+        specializationCol.setPrefWidth(150);
+        
+        TableColumn<Doctor, String> phoneCol = new TableColumn<>("Phone");
+        phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        phoneCol.setPrefWidth(120);
+        
+        TableColumn<Doctor, Integer> deptCol = new TableColumn<>("Dept ID");
+        deptCol.setCellValueFactory(new PropertyValueFactory<>("departmentId"));
+        deptCol.setPrefWidth(80);
+        
+        doctorTable.getColumns().addAll(idCol, firstNameCol, lastNameCol, specializationCol, phoneCol, deptCol);
+        
+        // Search functionality
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search by name, specialization, or phone...");
+        searchField.setPrefWidth(300);
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            List<Doctor> allDoctors = DoctorService.getAllDoctors();
+            if (allDoctors == null) return;
+            
+            if (newVal == null || newVal.trim().isEmpty()) {
+                doctorTable.getItems().setAll(allDoctors);
+            } else {
+                String search = newVal.toLowerCase();
+                doctorTable.getItems().setAll(allDoctors.stream()
+                    .filter(d -> (d.getFirstName() + " " + d.getLastName()).toLowerCase().contains(search) ||
+                                 (d.getSpecialization() != null && d.getSpecialization().toLowerCase().contains(search)) ||
+                                 (d.getPhone() != null && d.getPhone().contains(search)))
+                    .collect(java.util.stream.Collectors.toList()));
+            }
+        });
+        
+        Button refreshBtn = new Button("Refresh List");
+        refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        refreshBtn.setOnAction(e -> {
+            doctorTable.getItems().clear();
+            List<Doctor> doctors = DoctorService.getAllDoctors();
+            if (doctors != null) {
+                doctorTable.getItems().addAll(doctors);
+            }
+            searchField.clear();
+        });
+        
+        Button editBtn = new Button("Edit Selected");
+        editBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        editBtn.setOnAction(e -> {
+            Doctor selected = doctorTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                firstNameField.setText(selected.getFirstName());
+                lastNameField.setText(selected.getLastName());
+                phoneField.setText(selected.getPhone());
+                specializationField.setText(selected.getSpecialization());
+                departmentField.setText(String.valueOf(selected.getDepartmentId()));
+                
+                addBtn.setText("Update Doctor");
+                addBtn.setOnAction(updateEvt -> {
+                    try {
+                        selected.setFirstName(firstNameField.getText());
+                        selected.setLastName(lastNameField.getText());
+                        selected.setPhone(phoneField.getText());
+                        selected.setSpecialization(specializationField.getText());
+                        selected.setDepartmentId(Integer.parseInt(departmentField.getText()));
+                        
+                        if (DoctorService.updateDoctor(selected)) {
+                            showAlert("Success", "Doctor updated successfully!");
+                            doctorTable.refresh();
+                            firstNameField.clear();
+                            lastNameField.clear();
+                            phoneField.clear();
+                            specializationField.clear();
+                            departmentField.clear();
+                            addBtn.setText("Add Doctor");
+                            
+                            // Reset to add mode
+                            addBtn.setOnAction(addEvt -> {
+                                if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty()) {
+                                    showAlert("Error", "Please fill in all required fields");
+                                    return;
+                                }
+                                try {
+                                    Doctor newDoctor = new Doctor(
+                                        firstNameField.getText(),
+                                        lastNameField.getText(),
+                                        specializationField.getText(),
+                                        phoneField.getText(),
+                                        1
+                                    );
+                                    if (DoctorService.createDoctor(newDoctor)) {
+                                        showAlert("Success", "Doctor added successfully!");
+                                        firstNameField.clear();
+                                        lastNameField.clear();
+                                        emailField.clear();
+                                        phoneField.clear();
+                                        departmentField.clear();
+                                        specializationField.clear();
+                                    } else {
+                                        showAlert("Error", "Failed to add doctor");
+                                    }
+                                } catch (Exception ex) {
+                                    showAlert("Error", "Invalid input: " + ex.getMessage());
+                                }
+                            });
+                        } else {
+                            showAlert("Error", "Failed to update doctor");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        showAlert("Error", "Failed to update: " + ex.getMessage());
+                    }
+                });
+            } else {
+                showAlert("Error", "Please select a doctor to edit");
+            }
+        });
+        
+        Button deleteBtn = new Button("Delete Selected");
+        deleteBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        deleteBtn.setOnAction(e -> {
+            Doctor selected = doctorTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                if (DoctorService.deleteDoctor(selected.getDoctorId())) {
+                    showAlert("Success", "Doctor deleted successfully!");
+                    doctorTable.getItems().remove(selected);
+                } else {
+                    showAlert("Error", "Failed to delete doctor");
+                }
+            } else {
+                showAlert("Error", "Please select a doctor to delete");
+            }
+        });
+        
+        HBox buttonBox = new HBox(10);
+        buttonBox.getChildren().addAll(refreshBtn, editBtn, deleteBtn);
+
+        HBox inputBox = new HBox(10);
+        inputBox.getChildren().addAll(firstNameField, lastNameField, emailField, phoneField, departmentField, specializationField, addBtn);
+
+        root.getChildren().addAll(
+            titleLabel,
+            new Separator(),
+            new Label("Add New Doctor:"),
+            inputBox,
+            new Separator(),
+            new Label("Doctor List:"),
+            searchField,
+            buttonBox,
+            doctorTable
+        );
+
+        tab.setContent(root);
+        return tab;
+    }
+
+    private Tab createAppointmentTab() {
+        Tab tab = new Tab("Appointment Management");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+
+        Label titleLabel = new Label("Appointment Management");
+        titleLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        // Patient & Doctor selection
+        ComboBox<Patient> patientCombo = new ComboBox<>();
+        patientCombo.setPromptText("Select Patient");
+        List<Patient> allPatients = PatientService.getAllPatients();
+        if (allPatients != null) {
+            patientCombo.getItems().addAll(allPatients);
+        }
+        patientCombo.setConverter(new StringConverter<Patient>() {
+            @Override
+            public String toString(Patient p) {
+                if (p == null) return "";
+                return p.getFirstName() + " " + p.getLastName() + " (ID: " + p.getPatientId() + ")";
+            }
+            @Override
+            public Patient fromString(String string) { return null; }
+        });
+
+        ComboBox<Doctor> doctorCombo = new ComboBox<>();
+        doctorCombo.setPromptText("Select Doctor");
+        List<Doctor> allDoctors = DoctorService.getAllDoctors();
+        if (allDoctors != null) {
+            doctorCombo.getItems().addAll(allDoctors);
+        }
+        doctorCombo.setConverter(new StringConverter<Doctor>() {
+            @Override
+            public String toString(Doctor d) {
+                if (d == null) return "";
+                return d.getFirstName() + " " + d.getLastName() + " (ID: " + d.getDoctorId() + ")";
+            }
+            @Override
+            public Doctor fromString(String string) { return null; }
+        });
+
+        Runnable reloadDropdowns = () -> {
+            patientCombo.getItems().clear();
+            List<Patient> refreshedPatients = PatientService.getAllPatients();
+            if (refreshedPatients != null) {
+                patientCombo.getItems().addAll(refreshedPatients);
+            }
+
+            doctorCombo.getItems().clear();
+            List<Doctor> refreshedDoctors = DoctorService.getAllDoctors();
+            if (refreshedDoctors != null) {
+                doctorCombo.getItems().addAll(refreshedDoctors);
+            }
+        };
+
+        DatePicker appointmentDatePicker = new DatePicker();
+        appointmentDatePicker.setPromptText("Appointment Date");
+
+        TextField timeField = new TextField();
+        timeField.setPromptText("Time (HH:MM)");
+
+        TextField reasonField = new TextField();
+        reasonField.setPromptText("Reason for Visit");
+
+        Button reloadDropdownsBtn = new Button("Reload Patients/Doctors");
+        reloadDropdownsBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        reloadDropdownsBtn.setOnAction(e -> {
+            reloadDropdowns.run();
+            patientCombo.getSelectionModel().clearSelection();
+            doctorCombo.getSelectionModel().clearSelection();
+        });
+
+        // Buttons
+        Button scheduleBtn = new Button("Schedule Appointment");
+        scheduleBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        scheduleBtn.setOnAction(e -> {
+            Patient selectedPatient = patientCombo.getValue();
+            Doctor selectedDoctor = doctorCombo.getValue();
+            if (selectedPatient == null || selectedDoctor == null ||
+                appointmentDatePicker.getValue() == null || timeField.getText().isEmpty()) {
+                showAlert("Error", "Please select patient, doctor, date and time");
+                return;
+            }
+            try {
+                int patientId = selectedPatient.getPatientId();
+                int doctorId = selectedDoctor.getDoctorId();
+                LocalDate date = appointmentDatePicker.getValue();
+                LocalTime time = LocalTime.parse(timeField.getText());
+
+                Appointment appointment = new Appointment(
+                    patientId,
+                    doctorId,
+                    date,
+                    time,
+                    "Scheduled",
+                    reasonField.getText()
+                );
+
+                if (AppointmentService.createAppointment(appointment)) {
+                    showAlert("Success", "Appointment scheduled successfully!");
+                    patientCombo.getSelectionModel().clearSelection();
+                    doctorCombo.getSelectionModel().clearSelection();
+                    appointmentDatePicker.setValue(null);
+                    timeField.clear();
+                    reasonField.clear();
+                } else {
+                    showAlert("Error", "Failed to schedule appointment");
+                }
+            } catch (Exception ex) {
+                showAlert("Error", "Invalid time format (use HH:MM): " + ex.getMessage());
+            }
+        });
+
+        // Appointment Table
+        appointmentTable = new TableView<>();
+        appointmentTable.setPrefHeight(400);
+        
+        TableColumn<Appointment, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("appointmentId"));
+        idCol.setPrefWidth(60);
+        
+        TableColumn<Appointment, String> patientNameCol = new TableColumn<>("Patient Name");
+        patientNameCol.setCellValueFactory(cellData -> {
+            int patientId = cellData.getValue().getPatientId();
+            Patient patient = PatientService.getPatient(patientId);
+            String name = patient != null ? patient.getFirstName() + " " + patient.getLastName() : "Unknown";
+            return new javafx.beans.property.SimpleStringProperty(name);
+        });
+        patientNameCol.setPrefWidth(180);
+        
+        TableColumn<Appointment, String> doctorNameCol = new TableColumn<>("Doctor Name");
+        doctorNameCol.setCellValueFactory(cellData -> {
+            int doctorId = cellData.getValue().getDoctorId();
+            Doctor doctor = DoctorService.getDoctor(doctorId);
+            String name = doctor != null ? "Dr. " + doctor.getFirstName() + " " + doctor.getLastName() : "Unknown";
+            return new javafx.beans.property.SimpleStringProperty(name);
+        });
+        doctorNameCol.setPrefWidth(180);
+        
+        TableColumn<Appointment, LocalDate> dateCol = new TableColumn<>("Date");
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("appointmentDate"));
+        dateCol.setPrefWidth(120);
+        
+        TableColumn<Appointment, LocalTime> timeCol = new TableColumn<>("Time");
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("appointmentTime"));
+        timeCol.setPrefWidth(100);
+        
+        TableColumn<Appointment, String> statusCol = new TableColumn<>("Status");
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusCol.setPrefWidth(120);
+        
+        TableColumn<Appointment, String> notesCol = new TableColumn<>("Notes");
+        notesCol.setCellValueFactory(new PropertyValueFactory<>("notes"));
+        notesCol.setPrefWidth(240);
+        
+        appointmentTable.getColumns().addAll(idCol, patientNameCol, doctorNameCol, dateCol, timeCol, statusCol, notesCol);
+        
+        // Search functionality
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search by patient, doctor, status, or notes...");
+        searchField.setPrefWidth(300);
+        searchField.textProperty().addListener((obs, oldVal, newVal) -> {
+            List<Appointment> allAppointments = AppointmentService.getAllAppointments();
+            if (allAppointments == null) return;
+            
+            if (newVal == null || newVal.trim().isEmpty()) {
+                appointmentTable.getItems().setAll(allAppointments);
+            } else {
+                String search = newVal.toLowerCase();
+                appointmentTable.getItems().setAll(allAppointments.stream()
+                    .filter(a -> {
+                        Patient p = PatientService.getPatient(a.getPatientId());
+                        Doctor d = DoctorService.getDoctor(a.getDoctorId());
+                        String patientName = p != null ? (p.getFirstName() + " " + p.getLastName()).toLowerCase() : "";
+                        String doctorName = d != null ? (d.getFirstName() + " " + d.getLastName()).toLowerCase() : "";
+                        return patientName.contains(search) ||
+                               doctorName.contains(search) ||
+                               (a.getStatus() != null && a.getStatus().toLowerCase().contains(search)) ||
+                               (a.getNotes() != null && a.getNotes().toLowerCase().contains(search));
+                    })
+                    .collect(java.util.stream.Collectors.toList()));
+            }
+        });
+        
+        Button refreshBtn = new Button("Refresh List");
+        refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        refreshBtn.setOnAction(e -> {
+            appointmentTable.getItems().clear();
+            List<Appointment> appointments = AppointmentService.getAllAppointments();
+            if (appointments != null) {
+                appointmentTable.getItems().addAll(appointments);
+            }
+            searchField.clear();
+        });
+
+        Button editBtn = new Button("Edit Selected");
+        editBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        editBtn.setOnAction(e -> {
+            Appointment selected = appointmentTable.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                showAlert("No Selection", "Please select an appointment to edit.");
+                return;
+            }
+            
+            // Populate form with selected appointment data
+            // Select patient & doctor in dropdowns
+            patientCombo.getSelectionModel().clearSelection();
+            for (Patient p : patientCombo.getItems()) {
+                if (p.getPatientId() == selected.getPatientId()) { patientCombo.getSelectionModel().select(p); break; }
+            }
+            doctorCombo.getSelectionModel().clearSelection();
+            for (Doctor d : doctorCombo.getItems()) {
+                if (d.getDoctorId() == selected.getDoctorId()) { doctorCombo.getSelectionModel().select(d); break; }
+            }
+            appointmentDatePicker.setValue(selected.getAppointmentDate());
+            timeField.setText(selected.getAppointmentTime() != null ? selected.getAppointmentTime().toString() : "");
+            reasonField.setText(selected.getNotes());
+            
+            // Change button to Update mode
+            scheduleBtn.setText("Update Appointment");
+            scheduleBtn.setOnAction(updateEvent -> {
+                try {
+                    if (patientCombo.getValue() == null || doctorCombo.getValue() == null) {
+                        showAlert("Error", "Please select patient and doctor");
+                        return;
+                    }
+                    selected.setPatientId(patientCombo.getValue().getPatientId());
+                    selected.setDoctorId(doctorCombo.getValue().getDoctorId());
+                    selected.setAppointmentDate(appointmentDatePicker.getValue());
+                    selected.setAppointmentTime(java.time.LocalTime.parse(timeField.getText()));
+                    selected.setNotes(reasonField.getText());
+                    
+                    boolean success = AppointmentService.updateAppointment(selected);
+                    if (success) {
+                        showAlert("Success", "Appointment updated successfully!");
+                        appointmentTable.refresh();
+                        
+                        // Reset form and button
+                        patientCombo.getSelectionModel().clearSelection();
+                        doctorCombo.getSelectionModel().clearSelection();
+                        appointmentDatePicker.setValue(null);
+                        timeField.clear();
+                        reasonField.clear();
+                        scheduleBtn.setText("Schedule Appointment");
+                        scheduleBtn.setOnAction(scheduleEvent -> {
+                            // Original add appointment logic
+                            try {
+                                if (patientCombo.getValue() == null || doctorCombo.getValue() == null) {
+                                    showAlert("Error", "Please select patient and doctor");
+                                    return;
+                                }
+                                int patientId = patientCombo.getValue().getPatientId();
+                                int doctorId = doctorCombo.getValue().getDoctorId();
+                                java.time.LocalDate date = appointmentDatePicker.getValue();
+                                java.time.LocalTime time = java.time.LocalTime.parse(timeField.getText());
+                                String notes = reasonField.getText();
+                                
+                                Appointment appointment = new Appointment(0, patientId, doctorId, date, time, "Scheduled", notes);
+                                boolean addSuccess = AppointmentService.createAppointment(appointment);
+                                
+                                if (addSuccess) {
+                                    showAlert("Success", "Appointment scheduled successfully!");
+                                    appointmentTable.getItems().clear();
+                                    List<Appointment> appointments = AppointmentService.getAllAppointments();
+                                    if (appointments != null) {
+                                        appointmentTable.getItems().addAll(appointments);
+                                    }
+                                    patientCombo.getSelectionModel().clearSelection();
+                                    doctorCombo.getSelectionModel().clearSelection();
+                                    appointmentDatePicker.setValue(null);
+                                    timeField.clear();
+                                    reasonField.clear();
+                                } else {
+                                    showAlert("Error", "Failed to schedule appointment");
+                                }
+                            } catch (Exception ex) {
+                                showAlert("Error", "Invalid input: " + ex.getMessage());
+                            }
+                        });
+                    } else {
+                        showAlert("Error", "Failed to update appointment");
+                    }
+                } catch (Exception ex) {
+                    showAlert("Error", "Invalid input: " + ex.getMessage());
+                }
+            });
+        });
+
+        Button deleteBtn = new Button("Delete Selected");
+        deleteBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        deleteBtn.setOnAction(e -> {
+            Appointment selected = appointmentTable.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                showAlert("No Selection", "Please select an appointment to delete.");
+                return;
+            }
+            
+            boolean success = AppointmentService.deleteAppointment(selected.getAppointmentId());
+            if (success) {
+                showAlert("Success", "Appointment deleted successfully!");
+                appointmentTable.getItems().remove(selected);
+            } else {
+                showAlert("Error", "Failed to delete appointment");
+            }
+        });
+
+        HBox buttonBox = new HBox(10);
+        buttonBox.getChildren().addAll(refreshBtn, editBtn, deleteBtn);
+
+        HBox inputBox = new HBox(10);
+        inputBox.getChildren().addAll(patientCombo, doctorCombo, appointmentDatePicker, timeField, reasonField, scheduleBtn);
+
+        root.getChildren().addAll(
+            titleLabel,
+            new Separator(),
+            new Label("Schedule New Appointment:"),
+            reloadDropdownsBtn,
+            inputBox,
+            new Separator(),
+            new Label("Appointment List:"),
+            searchField,
+            buttonBox,
+            appointmentTable
+        );
+
+        tab.setContent(root);
+        return tab;
+    }
+
+    private Tab createDepartmentTab() {
+        Tab tab = new Tab("Department Management");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+
+        Label titleLabel = new Label("Department Management");
+        titleLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        // Input fields
+        TextField nameField = new TextField();
+        nameField.setPromptText("Department Name");
+        TextField locationField = new TextField();
+        locationField.setPromptText("Location");
+
+        Button addBtn = new Button("Add Department");
+        addBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        addBtn.setOnAction(e -> {
+            if (nameField.getText().isEmpty()) {
+                showAlert("Error", "Please enter department name");
+                return;
+            }
+            Department dept = new Department(nameField.getText(), locationField.getText());
+            if (DepartmentService.createDepartment(dept)) {
+                showAlert("Success", "Department added successfully!");
+                nameField.clear();
+                locationField.clear();
+            } else {
+                showAlert("Error", "Failed to add department");
+            }
+        });
+
+        departmentTable = new TableView<>();
+        departmentTable.setPrefHeight(400);
+        
+        TableColumn<Department, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("departmentId"));
+        idCol.setPrefWidth(80);
+        
+        TableColumn<Department, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nameCol.setPrefWidth(300);
+        
+        TableColumn<Department, String> locationCol = new TableColumn<>("Location");
+        locationCol.setCellValueFactory(new PropertyValueFactory<>("location"));
+        locationCol.setPrefWidth(300);
+        
+        departmentTable.getColumns().addAll(idCol, nameCol, locationCol);
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search departments...");
+        searchField.setPrefWidth(300);
+        
+        Button refreshBtn = new Button("Refresh List");
+        refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        refreshBtn.setOnAction(e -> {
+            departmentTable.getItems().clear();
+            List<Department> departments = DepartmentService.getAllDepartments();
+            if (departments != null) {
+                departmentTable.getItems().addAll(departments);
+            }
+        });
+        
+        Button editBtn = new Button("Edit Selected");
+        editBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        editBtn.setOnAction(e -> {
+            Department selected = departmentTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                nameField.setText(selected.getName());
+                locationField.setText(selected.getLocation());
+                addBtn.setText("Update Department");
+                addBtn.setOnAction(evt -> {
+                    selected.setName(nameField.getText());
+                    selected.setLocation(locationField.getText());
+                    if (DepartmentService.updateDepartment(selected)) {
+                        showAlert("Success", "Department updated!");
+                        departmentTable.refresh();
+                        nameField.clear();
+                        locationField.clear();
+                        addBtn.setText("Add Department");
+                        refreshBtn.fire();
+                    } else {
+                        showAlert("Error", "Failed to update");
+                    }
+                });
+            } else {
+                showAlert("Error", "Please select a department");
+            }
+        });
+        
+        Button deleteBtn = new Button("Delete Selected");
+        deleteBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        deleteBtn.setOnAction(e -> {
+            Department selected = departmentTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                if (DepartmentService.deleteDepartment(selected.getDepartmentId())) {
+                    showAlert("Success", "Department deleted!");
+                    departmentTable.getItems().remove(selected);
+                } else {
+                    showAlert("Error", "Failed to delete");
+                }
+            } else {
+                showAlert("Error", "Please select a department");
+            }
+        });
+
+        HBox inputBox = new HBox(10);
+        inputBox.getChildren().addAll(nameField, locationField, addBtn);
+        
+        HBox buttonBox = new HBox(10);
+        buttonBox.getChildren().addAll(refreshBtn, editBtn, deleteBtn);
+
+        root.getChildren().addAll(
+            titleLabel,
+            new Separator(),
+            new Label("Add New Department:"),
+            inputBox,
+            new Separator(),
+            new Label("Department List:"),
+            searchField,
+            buttonBox,
+            departmentTable
+        );
+
+        tab.setContent(root);
+        return tab;
+    }
+
+    // Helper methods for ComboBox population
+    private void populatePatientCombo(ComboBox<String> combo) {
+        List<Patient> patients = PatientService.getAllPatients();
+        if (patients != null) {
+            for (Patient p : patients) {
+                combo.getItems().add(p.getPatientId() + " - " + p.getFirstName() + " " + p.getLastName());
+            }
+        }
+    }
+
+    private void populateDoctorCombo(ComboBox<String> combo) {
+        List<Doctor> doctors = DoctorService.getAllDoctors();
+        if (doctors != null) {
+            for (Doctor d : doctors) {
+                combo.getItems().add(d.getDoctorId() + " - Dr. " + d.getFirstName() + " " + d.getLastName());
+            }
+        }
+    }
+
+    private void populateAppointmentCombo(ComboBox<String> combo) {
+        List<Appointment> appointments = AppointmentService.getAllAppointments();
+        if (appointments != null) {
+            for (Appointment a : appointments) {
+                Patient p = PatientService.getPatient(a.getPatientId());
+                Doctor d = DoctorService.getDoctor(a.getDoctorId());
+                String patientName = (p != null) ? p.getFirstName() + " " + p.getLastName() : "Unknown";
+                String doctorName = (d != null) ? "Dr. " + d.getFirstName() + " " + d.getLastName() : "Unknown";
+                combo.getItems().add(a.getAppointmentId() + " - " + patientName + " with " + doctorName + " (" + a.getAppointmentDate() + ")");
+            }
+        }
+    }
+
+    private Integer extractIdFromCombo(String comboValue) {
+        if (comboValue == null || comboValue.isEmpty()) {
+            return null;
+        }
+        try {
+            return Integer.parseInt(comboValue.split(" - ")[0]);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private Tab createPrescriptionTab() {
+        Tab tab = new Tab("Prescriptions");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+
+        Label titleLabel = new Label("Prescription Management");
+        titleLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        // Prescription Input Section - ComboBoxes for selecting existing data
+        ComboBox<String> patientCombo = new ComboBox<>();
+        patientCombo.setPromptText("Select Patient");
+        patientCombo.setPrefWidth(150);
+        populatePatientCombo(patientCombo);
+        
+        ComboBox<String> doctorCombo = new ComboBox<>();
+        doctorCombo.setPromptText("Select Doctor");
+        doctorCombo.setPrefWidth(150);
+        populateDoctorCombo(doctorCombo);
+        
+        ComboBox<String> appointmentCombo = new ComboBox<>();
+        appointmentCombo.setPromptText("Select Appointment (Optional)");
+        appointmentCombo.setPrefWidth(200);
+        populateAppointmentCombo(appointmentCombo);
+        TextField diagnosisField = new TextField();
+        diagnosisField.setPromptText("Diagnosis");
+        TextArea notesArea = new TextArea();
+        notesArea.setPromptText("Notes");
+        notesArea.setPrefRowCount(2);
+        DatePicker datePicker = new DatePicker(LocalDate.now());
+
+        prescriptionTable = new TableView<>();
+        prescriptionTable.setPrefHeight(300);
+        
+        TableColumn<Prescription, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("prescriptionId"));
+        idCol.setPrefWidth(60);
+        
+        TableColumn<Prescription, String> patientCol = new TableColumn<>("Patient Name");
+        patientCol.setCellValueFactory(cellData -> {
+            int patientId = cellData.getValue().getPatientId();
+            Patient patient = PatientService.getPatient(patientId);
+            String name = patient != null ? patient.getFirstName() + " " + patient.getLastName() : "Unknown";
+            return new javafx.beans.property.SimpleStringProperty(name);
+        });
+        patientCol.setPrefWidth(150);
+        
+        TableColumn<Prescription, String> doctorCol = new TableColumn<>("Doctor Name");
+        doctorCol.setCellValueFactory(cellData -> {
+            int doctorId = cellData.getValue().getDoctorId();
+            Doctor doctor = DoctorService.getDoctor(doctorId);
+            String name = doctor != null ? "Dr. " + doctor.getFirstName() + " " + doctor.getLastName() : "Unknown";
+            return new javafx.beans.property.SimpleStringProperty(name);
+        });
+        doctorCol.setPrefWidth(150);
+        
+        TableColumn<Prescription, String> diagnosisCol = new TableColumn<>("Diagnosis");
+        diagnosisCol.setCellValueFactory(new PropertyValueFactory<>("diagnosis"));
+        diagnosisCol.setPrefWidth(200);
+        
+        TableColumn<Prescription, LocalDate> dateCol = new TableColumn<>("Date");
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("prescriptionDate"));
+        dateCol.setPrefWidth(120);
+        
+        prescriptionTable.getColumns().addAll(idCol, patientCol, doctorCol, diagnosisCol, dateCol);
+
+        // Prescription Items Section (Embedded)
+        Label itemsLabel = new Label("Prescription Items:");
+        itemsLabel.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+        
+        TableView<PrescriptionItem> itemsTable = new TableView<>();
+        itemsTable.setPrefHeight(200);
+        
+        TableColumn<PrescriptionItem, Integer> itemIdCol = new TableColumn<>("Item ID");
+        itemIdCol.setCellValueFactory(new PropertyValueFactory<>("prescriptionItemId"));
+        itemIdCol.setPrefWidth(60);
+        
+        TableColumn<PrescriptionItem, Integer> inventoryCol = new TableColumn<>("Inventory ID");
+        inventoryCol.setCellValueFactory(new PropertyValueFactory<>("inventoryId"));
+        inventoryCol.setPrefWidth(100);
+        
+        TableColumn<PrescriptionItem, String> dosageCol = new TableColumn<>("Dosage");
+        dosageCol.setCellValueFactory(new PropertyValueFactory<>("dosage"));
+        dosageCol.setPrefWidth(100);
+        
+        TableColumn<PrescriptionItem, String> frequencyCol = new TableColumn<>("Frequency");
+        frequencyCol.setCellValueFactory(new PropertyValueFactory<>("frequency"));
+        frequencyCol.setPrefWidth(100);
+        
+        TableColumn<PrescriptionItem, String> durationCol = new TableColumn<>("Duration");
+        durationCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
+        durationCol.setPrefWidth(100);
+        
+        TableColumn<PrescriptionItem, Integer> quantityCol = new TableColumn<>("Qty");
+        quantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantityCol.setPrefWidth(60);
+        
+        itemsTable.getColumns().addAll(itemIdCol, inventoryCol, dosageCol, frequencyCol, durationCol, quantityCol);
+
+        // Prescription Item Input Fields
+        TextField inventoryIdField = new TextField();
+        inventoryIdField.setPromptText("Inventory ID");
+        TextField dosageField = new TextField();
+        dosageField.setPromptText("Dosage");
+        TextField frequencyField = new TextField();
+        frequencyField.setPromptText("Frequency");
+        TextField durationField = new TextField();
+        durationField.setPromptText("Duration");
+        TextField itemQuantityField = new TextField();
+        itemQuantityField.setPromptText("Quantity");
+
+        // Declare buttons and refresh/delete buttons first
+        Button addBtn = new Button("Add Prescription");
+        addBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        
+        Button refreshBtn = new Button("Refresh Prescriptions");
+        refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        refreshBtn.setOnAction(e -> {
+            prescriptionTable.getItems().clear();
+            List<Prescription> prescriptions = PrescriptionService.getAllPrescriptions();
+            if (prescriptions != null) {
+                prescriptionTable.getItems().addAll(prescriptions);
+            }
+            itemsTable.getItems().clear();
+        });
+        
+        Button deleteBtn = new Button("Delete Selected Prescription");
+        deleteBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        deleteBtn.setOnAction(e -> {
+            Prescription selected = prescriptionTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                if (PrescriptionService.deletePrescription(selected.getPrescriptionId())) {
+                    showAlert("Success", "Prescription deleted!");
+                    prescriptionTable.getItems().remove(selected);
+                    itemsTable.getItems().clear();
+                } else {
+                    showAlert("Error", "Failed to delete");
+                }
+            } else {
+                showAlert("Error", "Please select a prescription");
+            }
+        });
+
+        Button addItemBtn = new Button("Add Item to Prescription");
+        addItemBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        addItemBtn.setOnAction(e -> {
+            Prescription selected = prescriptionTable.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                showAlert("Error", "Please select a prescription first");
+                return;
+            }
+            try {
+                PrescriptionItem item = new PrescriptionItem(
+                    selected.getPrescriptionId(),
+                    Integer.parseInt(inventoryIdField.getText()),
+                    dosageField.getText(),
+                    frequencyField.getText(),
+                    durationField.getText(),
+                    Integer.parseInt(itemQuantityField.getText())
+                );
+                if (PrescriptionItemService.createPrescriptionItem(item)) {
+                    showAlert("Success", "Item added to prescription!");
+                    inventoryIdField.clear();
+                    dosageField.clear();
+                    frequencyField.clear();
+                    durationField.clear();
+                    itemQuantityField.clear();
+                    // Refresh items table
+                    List<PrescriptionItem> items = PrescriptionItemService.getItemsByPrescription(selected.getPrescriptionId());
+                    itemsTable.getItems().setAll(items != null ? items : new java.util.ArrayList<>());
+                } else {
+                    showAlert("Error", "Failed to add item");
+                }
+            } catch (NumberFormatException ex) {
+                showAlert("Error", "Invalid number format");
+            }
+        });
+
+        Button deleteItemBtn = new Button("Remove Item");
+        deleteItemBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        deleteItemBtn.setOnAction(e -> {
+            PrescriptionItem selected = itemsTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                if (PrescriptionItemService.deletePrescriptionItem(selected.getPrescriptionItemId())) {
+                    showAlert("Success", "Item removed!");
+                    itemsTable.getItems().remove(selected);
+                } else {
+                    showAlert("Error", "Failed to remove item");
+                }
+            } else {
+                showAlert("Error", "Please select an item to remove");
+            }
+        });
+
+        // Prescription Table Selection Listener
+        prescriptionTable.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal != null) {
+                // Load items for selected prescription
+                List<PrescriptionItem> items = PrescriptionItemService.getItemsByPrescription(newVal.getPrescriptionId());
+                itemsTable.getItems().setAll(items != null ? items : new java.util.ArrayList<>());
+            } else {
+                itemsTable.getItems().clear();
+            }
+        });
+
+        // Now set the addBtn action after refreshBtn is defined
+        addBtn.setOnAction(e -> {
+            try {
+                if (patientCombo.getValue() == null || doctorCombo.getValue() == null) {
+                    showAlert("Error", "Please select Patient and Doctor");
+                    return;
+                }
+                Integer patientId = extractIdFromCombo(patientCombo.getValue());
+                Integer doctorId = extractIdFromCombo(doctorCombo.getValue());
+                Integer appointmentId = null;
+                if (appointmentCombo.getValue() != null) {
+                    appointmentId = extractIdFromCombo(appointmentCombo.getValue());
+                }
+                Prescription prescription = new Prescription(
+                    patientId,
+                    doctorId,
+                    appointmentId != null ? appointmentId : 0,
+                    datePicker.getValue(),
+                    diagnosisField.getText(),
+                    notesArea.getText()
+                );
+                if (PrescriptionService.createPrescription(prescription)) {
+                    showAlert("Success", "Prescription added!");
+                    patientCombo.setValue(null);
+                    doctorCombo.setValue(null);
+                    appointmentCombo.setValue(null);
+                    diagnosisField.clear();
+                    notesArea.clear();
+                    refreshBtn.fire();
+                } else {
+                    showAlert("Error", "Failed to add prescription");
+                }
+            } catch (NumberFormatException ex) {
+                showAlert("Error", "Invalid input format");
+            }
+        });
+
+        HBox inputBox1 = new HBox(10);
+        inputBox1.getChildren().addAll(patientCombo, doctorCombo, appointmentCombo, datePicker);
+        HBox inputBox2 = new HBox(10);
+        inputBox2.getChildren().addAll(diagnosisField, addBtn);
+        VBox inputSection = new VBox(10);
+        inputSection.getChildren().addAll(inputBox1, inputBox2, notesArea);
+        
+        HBox prescriptionButtonBox = new HBox(10);
+        prescriptionButtonBox.getChildren().addAll(refreshBtn, deleteBtn);
+
+        HBox itemInputBox = new HBox(10);
+        itemInputBox.getChildren().addAll(inventoryIdField, dosageField, frequencyField, durationField, itemQuantityField, addItemBtn);
+        
+        HBox itemButtonBox = new HBox(10);
+        itemButtonBox.getChildren().addAll(deleteItemBtn);
+
+        root.getChildren().addAll(
+            titleLabel,
+            new Separator(),
+            new Label("Add New Prescription:"),
+            inputSection,
+            new Separator(),
+            new Label("Prescription List:"),
+            prescriptionButtonBox,
+            prescriptionTable,
+            new Separator(),
+            itemsLabel,
+            itemInputBox,
+            itemButtonBox,
+            itemsTable
+        );
+
+        tab.setContent(root);
+        return tab;
+    }
+
+    private Tab createPatientFeedbackTab() {
+        Tab tab = new Tab("Patient Feedback");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+
+        Label titleLabel = new Label("Patient Feedback Management");
+        titleLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        ComboBox<String> patientCombo = new ComboBox<>();
+        patientCombo.setPromptText("Select Patient");
+        patientCombo.setPrefWidth(150);
+        populatePatientCombo(patientCombo);
+        
+        ComboBox<String> doctorCombo = new ComboBox<>();
+        doctorCombo.setPromptText("Select Doctor (Optional)");
+        doctorCombo.setPrefWidth(150);
+        populateDoctorCombo(doctorCombo);
+        
+        ComboBox<String> appointmentCombo = new ComboBox<>();
+        appointmentCombo.setPromptText("Select Appointment (Optional)");
+        appointmentCombo.setPrefWidth(200);
+        populateAppointmentCombo(appointmentCombo);
+        ComboBox<Integer> ratingCombo = new ComboBox<>();
+        ratingCombo.getItems().addAll(1, 2, 3, 4, 5);
+        ratingCombo.setPromptText("Rating (1-5)");
+        TextArea commentsArea = new TextArea();
+        commentsArea.setPromptText("Comments");
+        commentsArea.setPrefRowCount(3);
+        DatePicker datePicker = new DatePicker(LocalDate.now());
+
+        feedbackTable = new TableView<>();
+        feedbackTable.setPrefHeight(400);
+        
+        TableColumn<PatientFeedback, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("feedbackId"));
+        idCol.setPrefWidth(60);
+        
+        TableColumn<PatientFeedback, String> patientCol = new TableColumn<>("Patient Name");
+        patientCol.setCellValueFactory(cellData -> {
+            int patientId = cellData.getValue().getPatientId();
+            Patient patient = PatientService.getPatient(patientId);
+            String name = patient != null ? patient.getFirstName() + " " + patient.getLastName() : "Unknown";
+            return new javafx.beans.property.SimpleStringProperty(name);
+        });
+        patientCol.setPrefWidth(150);
+        
+        TableColumn<PatientFeedback, String> doctorCol = new TableColumn<>("Doctor Name");
+        doctorCol.setCellValueFactory(cellData -> {
+            int doctorId = cellData.getValue().getDoctorId();
+            if (doctorId == 0) {
+                return new javafx.beans.property.SimpleStringProperty("N/A");
+            }
+            Doctor doctor = DoctorService.getDoctor(doctorId);
+            String name = doctor != null ? "Dr. " + doctor.getFirstName() + " " + doctor.getLastName() : "Unknown";
+            return new javafx.beans.property.SimpleStringProperty(name);
+        });
+        doctorCol.setPrefWidth(150);
+        
+        TableColumn<PatientFeedback, Integer> ratingCol = new TableColumn<>("Rating");
+        ratingCol.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        ratingCol.setPrefWidth(80);
+        
+        TableColumn<PatientFeedback, String> commentsCol = new TableColumn<>("Comments");
+        commentsCol.setCellValueFactory(new PropertyValueFactory<>("comments"));
+        commentsCol.setPrefWidth(300);
+        
+        TableColumn<PatientFeedback, LocalDate> dateCol = new TableColumn<>("Date");
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("feedbackDate"));
+        dateCol.setPrefWidth(120);
+        
+        feedbackTable.getColumns().addAll(idCol, patientCol, doctorCol, ratingCol, commentsCol, dateCol);
+
+        Button refreshBtn = new Button("Refresh List");
+        refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        refreshBtn.setOnAction(e -> {
+            feedbackTable.getItems().clear();
+            List<PatientFeedback> feedbacks = PatientFeedbackService.getAllFeedback();
+            if (feedbacks != null) {
+                feedbackTable.getItems().addAll(feedbacks);
+            }
+        });
+
+        Button addBtn = new Button("Add Feedback");
+        addBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        addBtn.setOnAction(e -> {
+            try {
+                if (patientCombo.getValue() == null || ratingCombo.getValue() == null) {
+                    showAlert("Error", "Please select Patient and Rating");
+                    return;
+                }
+                Integer patientId = extractIdFromCombo(patientCombo.getValue());
+                Integer doctorId = null;
+                Integer appointmentId = null;
+                if (doctorCombo.getValue() != null) {
+                    doctorId = extractIdFromCombo(doctorCombo.getValue());
+                }
+                if (appointmentCombo.getValue() != null) {
+                    appointmentId = extractIdFromCombo(appointmentCombo.getValue());
+                }
+                PatientFeedback feedback = new PatientFeedback(
+                    patientId,
+                    doctorId != null ? doctorId : 0,
+                    appointmentId != null ? appointmentId : 0,
+                    ratingCombo.getValue(),
+                    commentsArea.getText(),
+                    datePicker.getValue()
+                );
+                if (PatientFeedbackService.createFeedback(feedback)) {
+                    showAlert("Success", "Feedback added!");
+                    patientCombo.setValue(null);
+                    doctorCombo.setValue(null);
+                    appointmentCombo.setValue(null);
+                    ratingCombo.setValue(null);
+                    commentsArea.clear();
+                    refreshBtn.fire();
+                } else {
+                    showAlert("Error", "Failed to add feedback");
+                }
+            } catch (Exception ex) {
+                showAlert("Error", "Invalid input: " + ex.getMessage());
+            }
+        });
+
+        Button deleteBtn = new Button("Delete Selected");
+        deleteBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        deleteBtn.setOnAction(e -> {
+            PatientFeedback selected = feedbackTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                if (PatientFeedbackService.deleteFeedback(selected.getFeedbackId())) {
+                    showAlert("Success", "Feedback deleted!");
+                    feedbackTable.getItems().remove(selected);
+                } else {
+                    showAlert("Error", "Failed to delete");
+                }
+            }
+        });
+
+        HBox inputBox = new HBox(10);
+        inputBox.getChildren().addAll(patientCombo, doctorCombo, appointmentCombo, ratingCombo, datePicker, addBtn);
+        
+        HBox buttonBox = new HBox(10);
+        buttonBox.getChildren().addAll(refreshBtn, deleteBtn);
+
+        root.getChildren().addAll(
+            titleLabel,
+            new Separator(),
+            new Label("Add New Feedback:"),
+            inputBox,
+            commentsArea,
+            new Separator(),
+            new Label("Feedback List:"),
+            buttonBox,
+            feedbackTable
+        );
+
+        tab.setContent(root);
+        return tab;
+    }
+
+    private Tab createMedicalInventoryTab() {
+        Tab tab = new Tab("Medical Inventory");
+        VBox root = new VBox(15);
+        root.setPadding(new Insets(20));
+
+        Label titleLabel = new Label("Medical Inventory Management");
+        titleLabel.setStyle("-fx-font-size: 18; -fx-font-weight: bold;");
+
+        TextField itemNameField = new TextField();
+        itemNameField.setPromptText("Item Name");
+        TextField categoryField = new TextField();
+        categoryField.setPromptText("Category");
+        TextField quantityField = new TextField();
+        quantityField.setPromptText("Quantity");
+        TextField priceField = new TextField();
+        priceField.setPromptText("Unit Price");
+        TextField supplierField = new TextField();
+        supplierField.setPromptText("Supplier");
+        DatePicker expiryPicker = new DatePicker();
+        expiryPicker.setPromptText("Expiry Date");
+
+        Button addBtn = new Button("Add Item");
+        addBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        addBtn.setOnAction(e -> {
+            try {
+                MedicalInventory item = new MedicalInventory(
+                    itemNameField.getText(),
+                    categoryField.getText(),
+                    Integer.parseInt(quantityField.getText()),
+                    Double.parseDouble(priceField.getText()),
+                    expiryPicker.getValue(),
+                    supplierField.getText()
+                );
+                if (MedicalInventoryService.createInventoryItem(item)) {
+                    showAlert("Success", "Item added!");
+                    itemNameField.clear();
+                    categoryField.clear();
+                    quantityField.clear();
+                    priceField.clear();
+                    supplierField.clear();
+                    expiryPicker.setValue(null);
+                } else {
+                    showAlert("Error", "Failed to add item");
+                }
+            } catch (Exception ex) {
+                showAlert("Error", "Invalid input: " + ex.getMessage());
+            }
+        });
+
+        inventoryTable = new TableView<>();
+        inventoryTable.setPrefHeight(400);
+        
+        TableColumn<MedicalInventory, Integer> idCol = new TableColumn<>("ID");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("inventoryId"));
+        idCol.setPrefWidth(60);
+        
+        TableColumn<MedicalInventory, String> nameCol = new TableColumn<>("Item Name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        nameCol.setPrefWidth(200);
+        
+        TableColumn<MedicalInventory, String> categoryCol = new TableColumn<>("Category");
+        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+        categoryCol.setPrefWidth(120);
+        
+        TableColumn<MedicalInventory, Integer> quantityCol = new TableColumn<>("Quantity");
+        quantityCol.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        quantityCol.setPrefWidth(100);
+        
+        TableColumn<MedicalInventory, Double> priceCol = new TableColumn<>("Unit Price");
+        priceCol.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        priceCol.setPrefWidth(100);
+        
+        TableColumn<MedicalInventory, LocalDate> expiryCol = new TableColumn<>("Expiry Date");
+        expiryCol.setCellValueFactory(new PropertyValueFactory<>("expiryDate"));
+        expiryCol.setPrefWidth(120);
+        
+        TableColumn<MedicalInventory, String> supplierCol = new TableColumn<>("Supplier");
+        supplierCol.setCellValueFactory(new PropertyValueFactory<>("supplier"));
+        supplierCol.setPrefWidth(150);
+        
+        inventoryTable.getColumns().addAll(idCol, nameCol, categoryCol, quantityCol, priceCol, expiryCol, supplierCol);
+
+        TextField searchField = new TextField();
+        searchField.setPromptText("Search by name or category...");
+        searchField.setPrefWidth(300);
+        
+        Button refreshBtn = new Button("Refresh List");
+        refreshBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        refreshBtn.setOnAction(e -> {
+            inventoryTable.getItems().clear();
+            List<MedicalInventory> items = MedicalInventoryService.getAllInventoryItems();
+            if (items != null) {
+                inventoryTable.getItems().addAll(items);
+            }
+        });
+        
+        Button editBtn = new Button("Edit Selected");
+        editBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        editBtn.setOnAction(e -> {
+            MedicalInventory selected = inventoryTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                itemNameField.setText(selected.getItemName());
+                categoryField.setText(selected.getCategory());
+                quantityField.setText(String.valueOf(selected.getQuantity()));
+                priceField.setText(String.valueOf(selected.getUnitPrice()));
+                supplierField.setText(selected.getSupplier());
+                expiryPicker.setValue(selected.getExpiryDate());
+                addBtn.setText("Update Item");
+                addBtn.setOnAction(evt -> {
+                    try {
+                        selected.setItemName(itemNameField.getText());
+                        selected.setCategory(categoryField.getText());
+                        selected.setQuantity(Integer.parseInt(quantityField.getText()));
+                        selected.setUnitPrice(Double.parseDouble(priceField.getText()));
+                        selected.setSupplier(supplierField.getText());
+                        selected.setExpiryDate(expiryPicker.getValue());
+                        if (MedicalInventoryService.updateInventoryItem(selected)) {
+                            showAlert("Success", "Item updated!");
+                            inventoryTable.refresh();
+                            itemNameField.clear();
+                            categoryField.clear();
+                            quantityField.clear();
+                            priceField.clear();
+                            supplierField.clear();
+                            expiryPicker.setValue(null);
+                            addBtn.setText("Add Item");
+                            refreshBtn.fire();
+                        } else {
+                            showAlert("Error", "Failed to update");
+                        }
+                    } catch (Exception ex) {
+                        showAlert("Error", "Invalid input: " + ex.getMessage());
+                    }
+                });
+            } else {
+                showAlert("Error", "Please select an item");
+            }
+        });
+        
+        Button deleteBtn = new Button("Delete Selected");
+        deleteBtn.setStyle("-fx-font-size: 12; -fx-padding: 8;");
+        deleteBtn.setOnAction(e -> {
+            MedicalInventory selected = inventoryTable.getSelectionModel().getSelectedItem();
+            if (selected != null) {
+                if (MedicalInventoryService.deleteInventoryItem(selected.getInventoryId())) {
+                    showAlert("Success", "Item deleted!");
+                    inventoryTable.getItems().remove(selected);
+                } else {
+                    showAlert("Error", "Failed to delete");
+                }
+            }
+        });
+
+        HBox inputBox1 = new HBox(10);
+        inputBox1.getChildren().addAll(itemNameField, categoryField, quantityField);
+        HBox inputBox2 = new HBox(10);
+        inputBox2.getChildren().addAll(priceField, supplierField, expiryPicker, addBtn);
+        VBox inputSection = new VBox(10);
+        inputSection.getChildren().addAll(inputBox1, inputBox2);
+        
+        HBox buttonBox = new HBox(10);
+        buttonBox.getChildren().addAll(searchField, refreshBtn, editBtn, deleteBtn);
+
+        root.getChildren().addAll(
+            titleLabel,
+            new Separator(),
+            new Label("Add New Inventory Item:"),
+            inputSection,
+            new Separator(),
+            new Label("Inventory List:"),
+            buttonBox,
+            inventoryTable
+        );
+
+        tab.setContent(root);
+        return tab;
+    }
+
+
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(title);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    
+    /**
+     * Validate name input - only letters, spaces, and hyphens allowed
+     * @param name The name to validate
+     * @return true if valid, false otherwise
+     */
+    private boolean isValidName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+        // Allow only letters, spaces, hyphens, and apostrophes
+        return name.matches("^[a-zA-Z\\s'-]+$");
+    }
+    
+    /**
+     * Validate phone number - only digits, spaces, hyphens, and parentheses
+     * @param phone The phone number to validate
+     * @return true if valid, false otherwise
+     */
+    private boolean isValidPhone(String phone) {
+        if (phone == null || phone.trim().isEmpty()) {
+            return true; // Phone is optional
+        }
+        // Allow only digits, spaces, hyphens, parentheses, and plus sign
+        return phone.matches("^[0-9\\s()+-]+$");
+    }
+    
+    /**
+     * Validate email format
+     * @param email The email to validate
+     * @return true if valid, false otherwise
+     */
+    private boolean isValidEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return true; // Email is optional
+        }
+        return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
